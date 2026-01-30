@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terrace Buddy - Transform Your Urban Space Into a Green Paradise</title>
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Custom Tailwind Configuration -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            200: '#bbf7d0',
+                            300: '#86efac',
+                            400: '#4ade80',
+                            500: '#22c55e',
+                            600: '#16a34a',
+                            700: '#15803d',
+                            800: '#166534',
+                            900: '#14532d',
+                        }
+                    },
+                    fontFamily: {
+                        'sans': ['Inter', 'system-ui', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Inter Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        .hero-pattern {
+            background-image:
+                linear-gradient(135deg, rgba(34, 197, 94, 0.95) 0%, rgba(22, 163, 74, 0.9) 100%),
+                url('https://images.unsplash.com/photo-1466692476868-aef1dfb1e735?q=80&w=2070');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+
+        .feature-card {
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .stat-card {
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
+        .float-animation {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #22c55e 0%, #15803d 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-50 font-sans">
+    <!-- Navigation -->
+    <nav id="navbar" class="bg-white shadow-md fixed w-full top-0 z-50">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo -->
+                <div class="flex items-center">
+                    <a href="index.html" class="flex items-center space-x-2">
+                        <i class="fas fa-seedling text-primary-600 text-2xl"></i>
+                        <span class="text-xl font-bold text-gray-800">Terrace Buddy</span>
+                    </a>
+                </div>
+
+                <!-- Desktop Navigation -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#features" class="text-gray-700 hover:text-primary-600 font-medium transition">Features</a>
+                    <a href="#how-it-works" class="text-gray-700 hover:text-primary-600 font-medium transition">How It
+                        Works</a>
+                    <a href="#community"
+                        class="text-gray-700 hover:text-primary-600 font-medium transition">Community</a>
+
+                    <!-- Dynamic Auth Links -->
+                    <div id="authLinks" class="flex items-center space-x-4">
+                        <a href="login.html" class="text-gray-700 hover:text-primary-600 font-medium transition">
+                            Login
+                        </a>
+                        <a href="register.html"
+                            class="bg-gradient-to-r from-primary-600 to-primary-700 text-white px-6 py-2.5 rounded-lg hover:from-primary-700 hover:to-primary-800 font-medium transition duration-300 shadow-lg hover:shadow-xl">
+                            Get Started Free
+                        </a>
+                    </div>
+
+                    <!-- User Menu (Hidden by default) -->
+                    <div id="userMenu" class="hidden">
+                        <div class="relative">
+                            <button id="userMenuButton"
+                                class="flex items-center space-x-2 text-gray-700 hover:text-primary-600 font-medium">
+                                <i class="fas fa-user-circle text-xl"></i>
+                                <span id="userName">User</span>
+                                <i class="fas fa-chevron-down text-sm"></i>
+                            </button>
+
+                            <!-- Dropdown Menu -->
+                            <div id="dropdownMenu"
+                                class="hidden absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-10 border">
+                                <a href="dashboard.html" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
+                                    <i class="fas fa-tachometer-alt mr-2"></i>Dashboard
+                                </a>
+                                <a href="profile.html" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
+                                    <i class="fas fa-user mr-2"></i>Profile
+                                </a>
+                                <hr class="my-1">
+                                <button id="logoutButton"
+                                    class="block w-full text-left px-4 py-2 text-red-600 hover:bg-gray-100">
+                                    <i class="fas fa-sign-out-alt mr-2"></i>Logout
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <button id="mobileMenuButton" class="md:hidden text-gray-700">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+            </div>
+
+            <!-- Mobile Menu -->
+            <div id="mobileMenu" class="hidden md:hidden py-4 border-t">
+                <div class="flex flex-col space-y-4">
+                    <a href="#features" class="text-gray-700 hover:text-primary-600 font-medium">Features</a>
+                    <a href="#how-it-works" class="text-gray-700 hover:text-primary-600 font-medium">How It Works</a>
+                    <a href="#community" class="text-gray-700 hover:text-primary-600 font-medium">Community</a>
+
+                    <!-- Mobile Auth Links -->
+                    <div id="mobileAuthLinks" class="flex flex-col space-y-2 pt-4 border-t">
+                        <a href="login.html" class="text-gray-700 hover:text-primary-600 font-medium">
+                            Login
+                        </a>
+                        <a href="register.html"
+                            class="bg-primary-600 text-white px-4 py-2 rounded-lg hover:bg-primary-700 font-medium text-center">
+                            Get Started Free
+                        </a>
+                    </div>
+
+                    <!-- Mobile User Menu (Hidden by default) -->
+                    <div id="mobileUserMenu" class="hidden pt-4 border-t">
+                        <a href="dashboard.html" class="block text-gray-700 hover:text-primary-600 font-medium mb-2">
+                            <i class="fas fa-tachometer-alt mr-2"></i>Dashboard
+                        </a>
+                        <a href="profile.html" class="block text-gray-700 hover:text-primary-600 font-medium mb-2">
+                            <i class="fas fa-user mr-2"></i>Profile
+                        </a>
+                        <button id="mobileLogoutButton" class="text-red-600 hover:text-red-700 font-medium">
+                            <i class="fas fa-sign-out-alt mr-2"></i>Logout
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section with Background Image -->
+    <section class="hero-pattern pt-32 pb-24 relative overflow-hidden mt-16">
+        <!-- Decorative Elements -->
+        <div class="absolute top-20 left-10 text-white opacity-20 float-animation" style="animation-delay: 0s;">
+            <i class="fas fa-leaf text-6xl"></i>
+        </div>
+        <div class="absolute bottom-20 right-10 text-white opacity-20 float-animation" style="animation-delay: 2s;">
+            <i class="fas fa-flower text-5xl"></i>
+        </div>
+
+        <div class="container mx-auto px-4 relative z-10">
+            <div class="max-w-5xl mx-auto">
+                <!-- Main Hero Content -->
+                <div class="text-center mb-12">
+                    <div
+                        class="inline-block bg-white/20 backdrop-blur-sm text-white px-4 py-2 rounded-full text-sm font-semibold mb-6 border border-white/30">
+                        <i class="fas fa-sparkles mr-2"></i>Join 10,000+ Urban Gardeners
+                    </div>
+
+                    <h1 class="text-4xl md:text-6xl lg:text-7xl font-extrabold text-white mb-6 leading-tight">
+                        Transform Your Terrace<br />
+                        Into a <span class="text-yellow-300">Green Paradise</span>
+                    </h1>
+
+                    <p class="text-xl md:text-2xl text-white/90 mb-10 max-w-3xl mx-auto leading-relaxed">
+                        Connect with fellow gardeners, track your plants with AI, and build a thriving urban garden—all
+                        in one platform
+                    </p>
+
+                    <div class="flex flex-col sm:flex-row justify-center gap-4 mb-12">
+                        <a href="register.html"
+                            class="group bg-white text-primary-700 px-8 py-4 rounded-xl hover:bg-gray-100 font-bold text-lg shadow-2xl hover:shadow-3xl transition duration-300 flex items-center justify-center">
+                            <i class="fas fa-rocket mr-2 group-hover:animate-bounce"></i>
+                            Start Growing Today
+                        </a>
+                        <a href="#features"
+                            class="bg-transparent text-white px-8 py-4 rounded-xl font-bold text-lg border-2 border-white hover:bg-white/10 transition duration-300 flex items-center justify-center">
+                            <i class="fas fa-play-circle mr-2"></i>
+                            See How It Works
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Stats Cards -->
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div class="stat-card rounded-xl p-6 text-center">
+                        <div class="text-3xl font-bold text-white mb-2">10K+</div>
+                        <div class="text-white/80 text-sm">Active Gardeners</div>
+                    </div>
+                    <div class="stat-card rounded-xl p-6 text-center">
+                        <div class="text-3xl font-bold text-white mb-2">50K+</div>
+                        <div class="text-white/80 text-sm">Plants Tracked</div>
+                    </div>
+                    <div class="stat-card rounded-xl p-6 text-center">
+                        <div class="text-3xl font-bold text-white mb-2">200+</div>
+                        <div class="text-white/80 text-sm">Communities</div>
+                    </div>
+                    <div class="stat-card rounded-xl p-6 text-center">
+                        <div class="text-3xl font-bold text-white mb-2">1000+</div>
+                        <div class="text-white/80 text-sm">Expert Guides</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section with Cards -->
+    <section id="features" class="py-20 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <div
+                    class="inline-block bg-primary-100 text-primary-700 px-4 py-2 rounded-full text-sm font-semibold mb-4">
+                    <i class="fas fa-star mr-2"></i>POWERFUL FEATURES
+                </div>
+                <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+                    Everything You Need for<br />
+                    <span class="gradient-text">Successful Terrace Gardening</span>
+                </h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                    From plant tracking to community support, we've got all the tools to help your garden thrive
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Feature 1 -->
+                <div class="feature-card bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl border border-gray-100">
+                    <div
+                        class="bg-gradient-to-br from-green-400 to-green-600 w-16 h-16 rounded-2xl flex items-center justify-center mb-6 shadow-lg">
+                        <i class="fas fa-seedling text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-900 mb-4">Smart Plant Tracking</h3>
+                    <p class="text-gray-600 mb-4 leading-relaxed">
+                        Monitor growth, set watering reminders, and maintain a digital garden journal with photo
+                        timeline. Get AI-powered insights for optimal plant care.
+                    </p>
+                    <a href="#" class="text-primary-600 font-semibold inline-flex items-center group">
+                        Learn more
+                        <i class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition"></i>
+                    </a>
+                </div>
+
+                <!-- Feature 2 -->
+                <div class="feature-card bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl border border-gray-100">
+                    <div
+                        class="bg-gradient-to-br from-blue-400 to-blue-600 w-16 h-16 rounded-2xl flex items-center justify-center mb-6 shadow-lg">
+                        <i class="fas fa-users text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-900 mb-4">Vibrant Community</h3>
+                    <p class="text-gray-600 mb-4 leading-relaxed">
+                        Join specialized communities, share experiences in real-time chat, and get expert advice.
+                        Connect with gardeners in your area.
+                    </p>
+                    <a href="#" class="text-primary-600 font-semibold inline-flex items-center group">
+                        Explore communities
+                        <i class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition"></i>
+                    </a>
+                </div>
+
+                <!-- Feature 3 -->
+                <div class="feature-card bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl border border-gray-100">
+                    <div
+                        class="bg-gradient-to-br from-purple-400 to-purple-600 w-16 h-16 rounded-2xl flex items-center justify-center mb-6 shadow-lg">
+                        <i class="fas fa-store text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-900 mb-4">Local Marketplace</h3>
+                    <p class="text-gray-600 mb-4 leading-relaxed">
+                        Buy, sell, or exchange plants, seeds, and tools. Support local gardeners and find rare varieties
+                        in your neighborhood.
+                    </p>
+                    <a href="#" class="text-primary-600 font-semibold inline-flex items-center group">
+                        Browse marketplace
+                        <i class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition"></i>
+                    </a>
+                </div>
+
+                <!-- Feature 4 -->
+                <div class="feature-card bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl border border-gray-100">
+                    <div
+                        class="bg-gradient-to-br from-yellow-400 to-yellow-600 w-16 h-16 rounded-2xl flex items-center justify-center mb-6 shadow-lg">
+                        <i class="fas fa-book-open text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-900 mb-4">Expert Knowledge Hub</h3>
+                    <p class="text-gray-600 mb-4 leading-relaxed">
+                        Access 1000+ step-by-step guides, seasonal calendars, and expert tips. Learn everything from
+                        seed to harvest.
+                    </p>
+                    <a href="#" class="text-primary-600 font-semibold inline-flex items-center group">
+                        Start learning
+                        <i class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition"></i>
+                    </a>
+                </div>
+
+                <!-- Feature 5 -->
+                <div class="feature-card bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl border border-gray-100">
+                    <div
+                        class="bg-gradient-to-br from-cyan-400 to-cyan-600 w-16 h-16 rounded-2xl flex items-center justify-center mb-6 shadow-lg">
+                        <i class="fas fa-cloud-sun text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-900 mb-4">Weather Intelligence</h3>
+                    <p class="text-gray-600 mb-4 leading-relaxed">
+                        Get real-time weather alerts, seasonal recommendations, and automatic task adjustments based on
+                        forecast.
+                    </p>
+                    <a href="#" class="text-primary-600 font-semibold inline-flex items-center group">
+                        View weather
+                        <i class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition"></i>
+                    </a>
+                </div>
+
+                <!-- Feature 6 -->
+                <div class="feature-card bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl border border-gray-100">
+                    <div
+                        class="bg-gradient-to-br from-pink-400 to-pink-600 w-16 h-16 rounded-2xl flex items-center justify-center mb-6 shadow-lg">
+                        <i class="fas fa-robot text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-900 mb-4">AI Garden Assistant</h3>
+                    <p class="text-gray-600 mb-4 leading-relaxed">
+                        24/7 AI chatbot answers questions, diagnoses plant issues, and provides personalized care
+                        recommendations instantly.
+                    </p>
+                    <a href="#" class="text-primary-600 font-semibold inline-flex items-center group">
+                        Ask assistant
+                        <i class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section id="how-it-works" class="py-20 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <div
+                    class="inline-block bg-primary-100 text-primary-700 px-4 py-2 rounded-full text-sm font-semibold mb-4">
+                    <i class="fas fa-lightbulb mr-2"></i>SIMPLE PROCESS
+                </div>
+                <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+                    Start Your Garden in <span class="gradient-text">3 Easy Steps</span>
+                </h2>
+                <p class="text-xl text-gray-600 max-w-2xl mx-auto">
+                    From signup to harvest, we'll be with you every step of the way
+                </p>
+            </div>
+
+            <div class="max-w-5xl mx-auto">
+                <div class="grid md:grid-cols-3 gap-12">
+                    <!-- Step 1 -->
+                    <div class="text-center relative">
+                        <div
+                            class="bg-gradient-to-br from-primary-400 to-primary-600 w-20 h-20 rounded-full flex items-center justify-center mb-6 mx-auto shadow-xl">
+                            <span class="text-white text-3xl font-bold">1</span>
+                        </div>
+                        <div class="absolute top-10 left-1/2 w-full h-0.5 bg-primary-200 hidden md:block"></div>
+                        <h3 class="text-2xl font-bold text-gray-900 mb-4">Sign Up Free</h3>
+                        <p class="text-gray-600">
+                            Create your account in seconds. No credit card required. Start tracking your first plant
+                            immediately.
+                        </p>
+                    </div>
+
+                    <!-- Step 2 -->
+                    <div class="text-center relative">
+                        <div
+                            class="bg-gradient-to-br from-primary-400 to-primary-600 w-20 h-20 rounded-full flex items-center justify-center mb-6 mx-auto shadow-xl">
+                            <span class="text-white text-3xl font-bold">2</span>
+                        </div>
+                        <div class="absolute top-10 left-1/2 w-full h-0.5 bg-primary-200 hidden md:block"></div>
+                        <h3 class="text-2xl font-bold text-gray-900 mb-4">Add Your Plants</h3>
+                        <p class="text-gray-600">
+                            Catalog your existing plants or browse our database of 10,000+ species. Get instant care
+                            guides and tips.
+                        </p>
+                    </div>
+
+                    <!-- Step 3 -->
+                    <div class="text-center">
+                        <div
+                            class="bg-gradient-to-br from-primary-400 to-primary-600 w-20 h-20 rounded-full flex items-center justify-center mb-6 mx-auto shadow-xl">
+                            <span class="text-white text-3xl font-bold">3</span>
+                        </div>
+                        <h3 class="text-2xl font-bold text-gray-900 mb-4">Watch Them Grow</h3>
+                        <p class="text-gray-600">
+                            Follow your personalized care schedule, connect with community, and celebrate your harvests
+                            together!
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Community Section -->
+    <section id="community" class="py-20 bg-gradient-to-br from-primary-50 to-green-50">
+        <div class="container mx-auto px-4">
+            <div class="max-w-6xl mx-auto">
+                <div class="grid md:grid-cols-2 gap-12 items-center">
+                    <!-- Left Content -->
+                    <div>
+                        <div
+                            class="inline-block bg-primary-600 text-white px-4 py-2 rounded-full text-sm font-semibold mb-4">
+                            <i class="fas fa-heart mr-2"></i>GROWING TOGETHER
+                        </div>
+                        <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+                            Join a Community That <span class="gradient-text">Grows Together</span>
+                        </h2>
+                        <p class="text-xl text-gray-600 mb-8 leading-relaxed">
+                            Connect with passionate gardeners, share your successes, learn from challenges, and build
+                            lasting friendships through your shared love of plants.
+                        </p>
+
+                        <div class="space-y-4">
+                            <div class="flex items-start space-x-4">
+                                <div class="bg-primary-100 rounded-full p-3">
+                                    <i class="fas fa-comments text-primary-600"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-gray-900 mb-1">Real-Time Chat</h4>
+                                    <p class="text-gray-600">Instant messaging in specialized channels for different
+                                        topics and interests</p>
+                                </div>
+                            </div>
+
+                            <div class="flex items-start space-x-4">
+                                <div class="bg-primary-100 rounded-full p-3">
+                                    <i class="fas fa-camera text-primary-600"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-gray-900 mb-1">Share Your Progress</h4>
+                                    <p class="text-gray-600">Post photos, celebrate milestones, and inspire others with
+                                        your garden journey</p>
+                                </div>
+                            </div>
+
+                            <div class="flex items-start space-x-4">
+                                <div class="bg-primary-100 rounded-full p-3">
+                                    <i class="fas fa-hands-helping text-primary-600"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-gray-900 mb-1">Get Expert Help</h4>
+                                    <p class="text-gray-600">Experienced gardeners ready to answer questions and
+                                        troubleshoot issues</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <a href="communities.html"
+                            class="inline-block mt-8 bg-primary-600 text-white px-8 py-4 rounded-xl hover:bg-primary-700 font-bold text-lg shadow-lg hover:shadow-xl transition duration-300">
+                            <i class="fas fa-users mr-2"></i>Explore Communities
+                        </a>
+                    </div>
+
+                    <!-- Right Image Cards -->
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="space-y-4">
+                            <div class="bg-white rounded-2xl p-6 shadow-lg">
+                                <div class="bg-green-100 w-12 h-12 rounded-full flex items-center justify-center mb-4">
+                                    <i class="fas fa-leaf text-green-600 text-xl"></i>
+                                </div>
+                                <h4 class="font-bold text-gray-900 mb-2">Beginner's Garden</h4>
+                                <p class="text-sm text-gray-600">2,450 members</p>
+                            </div>
+                            <div class="bg-white rounded-2xl p-6 shadow-lg">
+                                <div class="bg-purple-100 w-12 h-12 rounded-full flex items-center justify-center mb-4">
+                                    <i class="fas fa-pepper-hot text-purple-600 text-xl"></i>
+                                </div>
+                                <h4 class="font-bold text-gray-900 mb-2">Vegetable Growers</h4>
+                                <p class="text-sm text-gray-600">3,890 members</p>
+                            </div>
+                        </div>
+                        <div class="space-y-4 mt-8">
+                            <div class="bg-white rounded-2xl p-6 shadow-lg">
+                                <div class="bg-yellow-100 w-12 h-12 rounded-full flex items-center justify-center mb-4">
+                                    <i class="fas fa-sun text-yellow-600 text-xl"></i>
+                                </div>
+                                <h4 class="font-bold text-gray-900 mb-2">Urban Farmers</h4>
+                                <p class="text-sm text-gray-600">1,780 members</p>
+                            </div>
+                            <div class="bg-white rounded-2xl p-6 shadow-lg">
+                                <div class="bg-pink-100 w-12 h-12 rounded-full flex items-center justify-center mb-4">
+                                    <i class="fas fa-flower text-pink-600 text-xl"></i>
+                                </div>
+                                <h4 class="font-bold text-gray-900 mb-2">Flower Lovers</h4>
+                                <p class="text-sm text-gray-600">4,320 members</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="bg-gradient-to-r from-primary-600 to-primary-800 py-20 relative overflow-hidden">
+        <!-- Decorative Elements -->
+        <div class="absolute inset-0 opacity-10">
+            <div class="absolute top-10 right-10"><i class="fas fa-seedling text-white text-9xl"></i></div>
+            <div class="absolute bottom-10 left-10"><i class="fas fa-leaf text-white text-9xl"></i></div>
+        </div>
+
+        <div class="container mx-auto px-4 text-center relative z-10">
+            <h2 class="text-4xl md:text-5xl font-bold text-white mb-6">
+                Ready to Start Your<br />Urban Garden Journey?
+            </h2>
+            <p class="text-primary-100 text-xl mb-10 max-w-2xl mx-auto leading-relaxed">
+                Join 10,000+ urban gardeners who are growing fresh food, beautifying their spaces, and building
+                sustainable communities.
+            </p>
+            <div class="flex flex-col sm:flex-row justify-center gap-4">
+                <a href="register.html"
+                    class="inline-block bg-white text-primary-700 px-10 py-5 rounded-xl hover:bg-gray-100 font-bold text-lg shadow-2xl hover:shadow-3xl transition duration-300">
+                    <i class="fas fa-rocket mr-2"></i>Join Terrace Buddy Free
+                </a>
+                <a href="#features"
+                    class="inline-block bg-transparent border-2 border-white text-white px-10 py-5 rounded-xl hover:bg-white/10 font-bold text-lg transition duration-300">
+                    <i class="fas fa-info-circle mr-2"></i>Learn More
+                </a>
+            </div>
+
+            <!-- Trust Badges -->
+            <div class="mt-12 flex flex-wrap justify-center items-center gap-8 text-white/80">
+                <div class="flex items-center">
+                    <i class="fas fa-check-circle mr-2"></i>
+                    <span>100% Free Forever</span>
+                </div>
+                <div class="flex items-center">
+                    <i class="fas fa-lock mr-2"></i>
+                    <span>Secure & Private</span>
+                </div>
+                <div class="flex items-center">
+                    <i class="fas fa-users mr-2"></i>
+                    <span>10K+ Active Users</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid md:grid-cols-4 gap-8 mb-8">
+                <!-- Logo & Description -->
+                <div class="md:col-span-2">
+                    <a href="index.html" class="flex items-center space-x-2 mb-4">
+                        <i class="fas fa-seedling text-primary-400 text-2xl"></i>
+                        <span class="text-xl font-bold">Terrace Buddy</span>
+                    </a>
+                    <p class="text-gray-400 mb-4 max-w-md">
+                        Your complete platform for urban terrace gardening. Connect, learn, and grow with a community of
+                        passionate gardeners.
+                    </p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-primary-400 transition">
+                            <i class="fab fa-facebook text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-primary-400 transition">
+                            <i class="fab fa-twitter text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-primary-400 transition">
+                            <i class="fab fa-instagram text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-primary-400 transition">
+                            <i class="fab fa-youtube text-xl"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Quick Links -->
+                <div>
+                    <h4 class="font-bold text-white mb-4">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#features" class="text-gray-400 hover:text-primary-400 transition">Features</a>
+                        </li>
+                        <li><a href="#how-it-works" class="text-gray-400 hover:text-primary-400 transition">How It
+                                Works</a></li>
+                        <li><a href="communities.html"
+                                class="text-gray-400 hover:text-primary-400 transition">Communities</a></li>
+                        <li><a href="knowledge.html" class="text-gray-400 hover:text-primary-400 transition">Knowledge
+                                Hub</a></li>
+                    </ul>
+                </div>
+
+                <!-- Support -->
+                <div>
+                    <h4 class="font-bold text-white mb-4">Support</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-primary-400 transition">Help Center</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-primary-400 transition">Contact Us</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-primary-400 transition">Privacy Policy</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-primary-400 transition">Terms of Service</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center">
+                <p class="text-gray-400 mb-4 md:mb-0">
+                    © 2024 Terrace Buddy. All rights reserved.
+                </p>
+                <p class="text-gray-400">
+                    Made with <i class="fas fa-heart text-red-400"></i> for gardeners everywhere
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="./js/utils.js"></script>
+    <script src="./js/api.js"></script>
+    <script src="./js/auth.js"></script>
+
+    <script>
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', function () {
+            // Check authentication status
+            checkAuthStatus();
+
+            // Initialize mobile menu toggle
+            const mobileMenuButton = document.getElementById('mobileMenuButton');
+            const mobileMenu = document.getElementById('mobileMenu');
+
+            if (mobileMenuButton && mobileMenu) {
+                mobileMenuButton.addEventListener('click', function () {
+                    mobileMenu.classList.toggle('hidden');
+                });
+            }
+
+            // Initialize user dropdown
+            const userMenuButton = document.getElementById('userMenuButton');
+            const dropdownMenu = document.getElementById('dropdownMenu');
+
+            if (userMenuButton && dropdownMenu) {
+                userMenuButton.addEventListener('click', function (e) {
+                    e.stopPropagation();
+                    dropdownMenu.classList.toggle('hidden');
+                });
+
+                // Close dropdown when clicking outside
+                document.addEventListener('click', function () {
+                    dropdownMenu.classList.add('hidden');
+                });
+            }
+
+            //Smooth scrolling for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>

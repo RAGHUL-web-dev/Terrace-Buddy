@@ -1,0 +1,1396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Community Chat - Terrace Buddy</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Custom Tailwind Configuration -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            200: '#bbf7d0',
+                            300: '#86efac',
+                            400: '#4ade80',
+                            500: '#22c55e',
+                            600: '#16a34a',
+                            700: '#15803d',
+                            800: '#166534',
+                            900: '#14532d',
+                        }
+                    },
+                    fontFamily: {
+                        'sans': ['Inter', 'system-ui', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Inter Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Socket.io -->
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+    
+    <style>
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-radius: 50%;
+            border-top-color: #22c55e;
+            animation: spin 1s ease-in-out infinite;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        .image-preview {
+            max-width: 300px;
+            max-height: 300px;
+            object-fit: contain;
+            border-radius: 8px;
+            margin-top: 8px;
+        }
+        .message-image {
+            max-width: 300px;
+            max-height: 300px;
+            border-radius: 8px;
+            margin-top: 4px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .message-image:hover {
+            transform: scale(1.02);
+        }
+        .image-modal {
+            background-color: rgba(0, 0, 0, 0.9);
+        }
+        .image-modal img {
+            max-width: 90vw;
+            max-height: 90vh;
+            object-fit: contain;
+        }
+    </style>
+</head>
+<body class="font-sans bg-gray-50 min-h-screen">
+    <!-- Navigation -->
+    <nav id="navbar" class="bg-white shadow-md">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center h-16">
+                <!-- Back Button and Community Name -->
+                <div class="flex items-center space-x-4">
+                    <a href="communities.html" class="text-gray-700 hover:text-primary-600">
+                        <i class="fas fa-arrow-left"></i>
+                    </a>
+                    <div>
+                        <h1 id="communityName" class="text-lg font-bold text-gray-900">Loading...</h1>
+                        <p id="communityInfo" class="text-sm text-gray-600"></p>
+                    </div>
+                </div>
+
+                <!-- User Menu -->
+                <div class="relative">
+                    <button id="userMenuButton" 
+                            class="flex items-center space-x-2 text-gray-700 hover:text-primary-600 font-medium">
+                        <i class="fas fa-user-circle text-2xl"></i>
+                        <span id="userName">Loading...</span>
+                        <i class="fas fa-chevron-down text-sm"></i>
+                    </button>
+                    
+                    <!-- Dropdown Menu -->
+                    <div id="dropdownMenu" 
+                         class="hidden absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-10 border">
+                        <a href="dashboard.html" 
+                           class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
+                           <i class="fas fa-tachometer-alt mr-2"></i>Dashboard
+                        </a>
+                        <a href="communities.html" 
+                           class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
+                           <i class="fas fa-users mr-2"></i>Communities
+                        </a>
+                        <hr class="my-1">
+                        <button id="leaveCommunityBtn" 
+                                class="block w-full text-left px-4 py-2 text-red-600 hover:bg-gray-100">
+                           <i class="fas fa-sign-out-alt mr-2"></i>Leave Community
+                        </button>
+                        <button id="logoutButton" 
+                                class="block w-full text-left px-4 py-2 text-red-600 hover:bg-gray-100">
+                           <i class="fas fa-sign-out-alt mr-2"></i>Logout
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="flex h-[calc(100vh-4rem)]">
+        <!-- Sidebar (Channels & Members) -->
+        <div class="w-64 bg-white border-r flex flex-col">
+            <!-- Channels Section -->
+            <div class="p-4 border-b">
+                <div class="flex items-center justify-between mb-3">
+                    <h3 class="font-bold text-gray-900">Channels</h3>
+                    <button id="createChannelBtn" 
+                            class="text-gray-600 hover:text-primary-600"
+                            title="Create Channel">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                </div>
+                <div id="channelsList" class="space-y-1">
+                    <!-- Channels will be loaded here -->
+                </div>
+            </div>
+            
+            <!-- Members Section -->
+            <div class="p-4 flex-1 overflow-y-auto">
+                <h3 class="font-bold text-gray-900 mb-3">Members</h3>
+                <div id="membersList" class="space-y-2">
+                    <!-- Members will be loaded here -->
+                </div>
+            </div>
+            
+            <!-- Community Info -->
+            <div class="p-4 border-t bg-gray-50">
+                <button id="communityInfoBtn" 
+                        class="text-gray-700 hover:text-primary-600 text-sm font-medium">
+                    <i class="fas fa-info-circle mr-2"></i>Community Info
+                </button>
+            </div>
+        </div>
+
+        <!-- Main Chat Area -->
+        <div class="flex-1 flex flex-col">
+            <!-- Channel Header -->
+            <div class="bg-white border-b p-4">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h2 id="currentChannel" class="text-xl font-bold text-gray-900">
+                            <i class="fas fa-hashtag text-gray-400 mr-2"></i>
+                            <span>general</span>
+                        </h2>
+                        <p id="channelDescription" class="text-sm text-gray-600">General discussions</p>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <div id="typingIndicator" class="text-sm text-gray-500 hidden">
+                            <i class="fas fa-pencil-alt mr-1"></i>
+                            <span>Someone is typing...</span>
+                        </div>
+                        <button id="membersToggle" class="md:hidden text-gray-700">
+                            <i class="fas fa-users"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Messages Container -->
+            <div id="messagesContainer" 
+                 class="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50">
+                <!-- Messages will be loaded here -->
+                <div id="messagesLoading" class="text-center py-12">
+                    <div class="spinner mx-auto mb-4"></div>
+                    <p class="text-gray-600">Loading messages...</p>
+                </div>
+            </div>
+
+            <!-- Message Input -->
+            <div class="bg-white border-t p-4">
+                <!-- Image Upload Preview -->
+                <div id="imagePreviewContainer" class="mb-3 hidden">
+                    <div class="flex items-center justify-between bg-gray-100 p-3 rounded-lg">
+                        <div class="flex items-center space-x-3">
+                            <i class="fas fa-image text-primary-600"></i>
+                            <div>
+                                <p class="text-sm font-medium text-gray-900" id="imageFileName">image.png</p>
+                                <p class="text-xs text-gray-500" id="imageFileSize">2.4 MB</p>
+                            </div>
+                        </div>
+                        <button type="button" id="removeImageBtn" class="text-red-600 hover:text-red-800">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <img id="imagePreview" class="image-preview hidden">
+                </div>
+                
+                <form id="messageForm" class="flex items-end space-x-4">
+                    <!-- File Upload Button -->
+                    <div class="relative">
+                        <input type="file" 
+                               id="imageUpload" 
+                               accept="image/*" 
+                               class="hidden"
+                               onchange="handleImageUpload(event)">
+                        <button type="button" 
+                                id="uploadImageBtn"
+                                class="bg-gray-100 text-gray-700 p-3 rounded-lg hover:bg-gray-200 transition duration-300"
+                                title="Upload image">
+                            <i class="fas fa-image"></i>
+                        </button>
+                    </div>
+                    
+                    <!-- Message Input -->
+                    <div class="flex-1">
+                        <textarea id="messageInput" 
+                                  rows="1"
+                                  placeholder="Type your message here..."
+                                  class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent resize-none max-h-32"
+                                  oninput="autoResize(this)"></textarea>
+                    </div>
+                    
+                    <!-- Send Button -->
+                    <button type="submit" 
+                            id="sendMessageBtn"
+                            class="bg-primary-600 text-white p-3 rounded-lg hover:bg-primary-700 transition duration-300">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Mobile Members Sidebar -->
+        <div id="mobileMembersSidebar" 
+             class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden md:hidden">
+            <div class="absolute right-0 top-0 h-full w-64 bg-white transform translate-x-full transition-transform duration-300">
+                <div class="p-4 border-b">
+                    <div class="flex justify-between items-center">
+                        <h3 class="font-bold text-gray-900">Members</h3>
+                        <button id="closeMobileMembers" class="text-gray-600">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+                <div id="mobileMembersList" class="p-4 space-y-2">
+                    <!-- Mobile members list -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Create Channel Modal -->
+    <div id="createChannelModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-xl shadow-2xl max-w-md w-full p-6">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl font-bold text-gray-900">Create Channel</h3>
+                <button id="closeChannelModal" class="text-gray-400 hover:text-gray-600">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            
+            <form id="createChannelForm" class="space-y-6">
+                <div>
+                    <label for="channelName" class="block text-sm font-medium text-gray-700 mb-2">
+                        Channel Name *
+                    </label>
+                    <input type="text" 
+                           id="channelName" 
+                           name="name"
+                           required
+                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition duration-300"
+                           placeholder="e.g., help, announcements">
+                    <div id="channelNameError" class="text-red-600 text-sm mt-1 hidden"></div>
+                </div>
+                
+                <div>
+                    <label for="channelDescription" class="block text-sm font-medium text-gray-700 mb-2">
+                        Description
+                    </label>
+                    <input type="text" 
+                           id="channelDescription" 
+                           name="description"
+                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition duration-300"
+                           placeholder="What's this channel about?">
+                </div>
+                
+                <div>
+                    <label for="channelType" class="block text-sm font-medium text-gray-700 mb-2">
+                        Channel Type
+                    </label>
+                    <select id="channelType" 
+                            name="type"
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                        <option value="text">Text Channel</option>
+                        <option value="announcements">Announcements</option>
+                        <option value="help">Help Channel</option>
+                        <option value="general">General</option>
+                    </select>
+                </div>
+                
+                <div id="createChannelMessage" class="hidden p-3 rounded-lg text-center"></div>
+                
+                <div class="flex space-x-4">
+                    <button type="submit" 
+                            id="createChannelSubmit"
+                            class="flex-1 bg-primary-600 text-white py-3 rounded-lg font-semibold hover:bg-primary-700 transition duration-300">
+                        Create Channel
+                    </button>
+                    <button type="button" 
+                            id="cancelCreateChannel"
+                            class="flex-1 bg-white text-gray-700 py-3 rounded-lg font-semibold border border-gray-300 hover:bg-gray-50 transition duration-300">
+                        Cancel
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Community Info Modal -->
+    <div id="communityInfoModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-xl shadow-2xl max-w-lg w-full p-6">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl font-bold text-gray-900">Community Information</h3>
+                <button id="closeInfoModal" class="text-gray-400 hover:text-gray-600">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            
+            <div id="communityInfoContent">
+                <!-- Community info will be loaded here -->
+            </div>
+            
+            <!-- Leave Community Button in Info Modal -->
+            <div class="mt-6 pt-6 border-t">
+                <button id="leaveCommunityFromInfoBtn"
+                        class="w-full bg-red-100 text-red-700 py-3 rounded-lg font-semibold hover:bg-red-200 transition duration-300 flex items-center justify-center">
+                    <i class="fas fa-sign-out-alt mr-2"></i>Leave Community
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirm Leave Community Modal -->
+    <div id="confirmLeaveModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-xl shadow-2xl max-w-md w-full p-6">
+            <div class="text-center mb-6">
+                <div class="mx-auto w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mb-4">
+                    <i class="fas fa-exclamation-triangle text-red-600 text-2xl"></i>
+                </div>
+                <h3 class="text-xl font-bold text-gray-900 mb-2">Leave Community</h3>
+                <p class="text-gray-600" id="leaveConfirmText">
+                    Are you sure you want to leave this community? You will lose access to all channels and messages.
+                </p>
+            </div>
+            
+            <div class="flex space-x-4">
+                <button id="confirmLeaveBtn"
+                        class="flex-1 bg-red-600 text-white py-3 rounded-lg font-semibold hover:bg-red-700 transition duration-300">
+                    Yes, Leave Community
+                </button>
+                <button id="cancelLeaveBtn"
+                        class="flex-1 bg-white text-gray-700 py-3 rounded-lg font-semibold border border-gray-300 hover:bg-gray-50 transition duration-300">
+                    Cancel
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Image Preview Modal -->
+    <div id="imageModal" class="hidden fixed inset-0 bg-black bg-opacity-90 z-50 flex items-center justify-center p-4">
+        <div class="relative max-w-full max-h-full">
+            <button id="closeImageModal" 
+                    class="absolute -top-10 right-0 text-white hover:text-gray-300">
+                <i class="fas fa-times text-2xl"></i>
+            </button>
+            <img id="modalImage" src="" alt="Full size image" class="rounded-lg">
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="./js/utils.js"></script>
+    <script src="./js/api.js"></script>
+    <script src="./js/auth.js"></script>
+<script>
+    let socket = null;
+    let currentCommunity = null;
+    let currentChannel = null;
+    let channels = [];
+    let members = [];
+    let messages = [];
+    let typingUsers = new Set();
+    let typingTimeout = null;
+    let selectedImage = null;
+    
+    document.addEventListener('DOMContentLoaded', async function() {
+        // Check authentication
+        if (!checkAuthStatus()) {
+            window.location.href = 'login.html';
+            return;
+        }
+        
+        // Get community ID from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const communityId = urlParams.get('community');
+        
+        if (!communityId) {
+            window.location.href = 'communities.html';
+            return;
+        }
+        
+        // Load user data
+        const user = getUserData();
+        if (user && user.name) {
+            document.getElementById('userName').textContent = user.name;
+        }
+        
+        // Initialize user dropdown
+        const userMenuButton = document.getElementById('userMenuButton');
+        const dropdownMenu = document.getElementById('dropdownMenu');
+        
+        if (userMenuButton && dropdownMenu) {
+            userMenuButton.addEventListener('click', function(e) {
+                e.stopPropagation();
+                dropdownMenu.classList.toggle('hidden');
+            });
+            
+            document.addEventListener('click', function() {
+                dropdownMenu.classList.add('hidden');
+            });
+        }
+        
+        // Logout functionality
+        const logoutButton = document.getElementById('logoutButton');
+        if (logoutButton) {
+            logoutButton.addEventListener('click', function() {
+                logoutUser();
+            });
+        }
+        
+        // Leave Community functionality
+        const leaveCommunityBtn = document.getElementById('leaveCommunityBtn');
+        const leaveCommunityFromInfoBtn = document.getElementById('leaveCommunityFromInfoBtn');
+        
+        if (leaveCommunityBtn) {
+            leaveCommunityBtn.addEventListener('click', () => {
+                showLeaveCommunityModal();
+            });
+        }
+        
+        if (leaveCommunityFromInfoBtn) {
+            leaveCommunityFromInfoBtn.addEventListener('click', () => {
+                document.getElementById('communityInfoModal').classList.add('hidden');
+                showLeaveCommunityModal();
+            });
+        }
+        
+        // Initialize modals
+        initializeModals();
+        
+        // Initialize socket connection
+        await initializeSocket();
+        
+        // Load community data
+        await loadCommunityData(communityId);
+        
+        // Load channels
+        await loadChannels(communityId);
+        
+        // Load members
+        await loadMembers(communityId);
+        
+        // Set up message form - IMPORTANT: Prevent default form submission
+        const messageForm = document.getElementById('messageForm');
+        const messageInput = document.getElementById('messageInput');
+        
+        // Prevent form from submitting and refreshing the page
+        messageForm.addEventListener('submit', function(e) {
+            e.preventDefault(); // This prevents page refresh
+            sendMessage();
+        });
+        
+        // Image upload button
+        const uploadImageBtn = document.getElementById('uploadImageBtn');
+        const imageUpload = document.getElementById('imageUpload');
+        const removeImageBtn = document.getElementById('removeImageBtn');
+        
+        uploadImageBtn.addEventListener('click', () => {
+            imageUpload.click();
+        });
+        
+        removeImageBtn.addEventListener('click', () => {
+            clearImageUpload();
+        });
+        
+        // Typing indicator
+        messageInput.addEventListener('input', function() {
+            if (socket && currentCommunity && currentChannel) {
+                socket.emit('typing', {
+                    communityId: currentCommunity._id,
+                    channelId: currentChannel._id
+                });
+                
+                clearTimeout(typingTimeout);
+                typingTimeout = setTimeout(() => {
+                    socket.emit('stop-typing', {
+                        communityId: currentCommunity._id,
+                        channelId: currentChannel._id
+                    });
+                }, 1000);
+            }
+        });
+        
+        // Mobile members toggle
+        const membersToggle = document.getElementById('membersToggle');
+        const mobileMembersSidebar = document.getElementById('mobileMembersSidebar');
+        const closeMobileMembers = document.getElementById('closeMobileMembers');
+        
+        if (membersToggle) {
+            membersToggle.addEventListener('click', () => {
+                mobileMembersSidebar.classList.remove('hidden');
+                setTimeout(() => {
+                    mobileMembersSidebar.querySelector('div').classList.remove('translate-x-full');
+                }, 10);
+            });
+        }
+        
+        if (closeMobileMembers) {
+            closeMobileMembers.addEventListener('click', () => {
+                mobileMembersSidebar.querySelector('div').classList.add('translate-x-full');
+                setTimeout(() => {
+                    mobileMembersSidebar.classList.add('hidden');
+                }, 300);
+            });
+        }
+        
+        // Auto-resize textarea
+        function autoResize(textarea) {
+            textarea.style.height = 'auto';
+            textarea.style.height = Math.min(textarea.scrollHeight, 128) + 'px';
+        }
+        
+        // Image modal
+        const imageModal = document.getElementById('imageModal');
+        const closeImageModal = document.getElementById('closeImageModal');
+        const modalImage = document.getElementById('modalImage');
+        
+        if (closeImageModal) {
+            closeImageModal.addEventListener('click', () => {
+                imageModal.classList.add('hidden');
+            });
+        }
+        
+        if (imageModal) {
+            imageModal.addEventListener('click', (e) => {
+                if (e.target === imageModal) {
+                    imageModal.classList.add('hidden');
+                }
+            });
+        }
+    });
+    
+    function handleImageUpload(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+        
+        // Check file type
+        if (!file.type.startsWith('image/')) {
+            showNotification('Please select an image file', 'error');
+            return;
+        }
+        
+        // Check file size (max 5MB)
+        const maxSize = 5 * 1024 * 1024; // 5MB in bytes
+        if (file.size > maxSize) {
+            showNotification('Image size should be less than 5MB', 'error');
+            return;
+        }
+        
+        selectedImage = file;
+        
+        // Show preview
+        const previewContainer = document.getElementById('imagePreviewContainer');
+        const imagePreview = document.getElementById('imagePreview');
+        const imageFileName = document.getElementById('imageFileName');
+        const imageFileSize = document.getElementById('imageFileSize');
+        
+        previewContainer.classList.remove('hidden');
+        imageFileName.textContent = file.name;
+        imageFileSize.textContent = formatFileSize(file.size);
+        
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            imagePreview.src = e.target.result;
+            imagePreview.classList.remove('hidden');
+        };
+        reader.readAsDataURL(file);
+    }
+    
+    function formatFileSize(bytes) {
+        if (bytes === 0) return '0 Bytes';
+        const k = 1024;
+        const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    }
+    
+    function clearImageUpload() {
+        selectedImage = null;
+        const previewContainer = document.getElementById('imagePreviewContainer');
+        const imagePreview = document.getElementById('imagePreview');
+        const imageUpload = document.getElementById('imageUpload');
+        
+        previewContainer.classList.add('hidden');
+        imagePreview.classList.add('hidden');
+        imagePreview.src = '';
+        imageUpload.value = '';
+    }
+    
+    async function initializeSocket() {
+        const token = getToken();
+        if (!token) {
+            showNotification('Authentication required', 'error');
+            return;
+        }
+        
+        try {
+            // Connect to socket server
+            socket = io('http://localhost:5000', {
+                auth: { token },
+                transports: ['websocket', 'polling']
+            });
+            
+            socket.on('connect', () => {
+                console.log('Socket connected');
+            });
+            
+            socket.on('connect_error', (error) => {
+                console.error('Socket connection error:', error);
+                showNotification('Connection error. Some features may not work.', 'warning');
+            });
+            
+            // Listen for new messages
+            socket.on('new-message', (message) => {
+                console.log('New message received:', message);
+                if (currentChannel && message.channel === currentChannel._id) {
+                    addMessageToUI(message);
+                    scrollToBottom();
+                }
+            });
+            
+            // Listen for typing indicators
+            socket.on('user-typing', (data) => {
+                if (currentChannel && data.channelId === currentChannel._id) {
+                    typingUsers.add(data.username);
+                    updateTypingIndicator();
+                }
+            });
+            
+            socket.on('user-stop-typing', (data) => {
+                if (currentChannel && data.channelId === currentChannel._id) {
+                    typingUsers.delete(data.username);
+                    updateTypingIndicator();
+                }
+            });
+            
+        } catch (error) {
+            console.error('Socket initialization error:', error);
+        }
+    }
+    
+    async function loadCommunityData(communityId) {
+        try {
+            const response = await api.getCommunity(communityId);
+            
+            if (response.success) {
+                currentCommunity = response.community;
+                
+                // Update UI
+                document.getElementById('communityName').textContent = currentCommunity.name;
+                document.getElementById('communityInfo').textContent = 
+                    `${currentCommunity.members?.length || 0} members • ${currentCommunity.category}`;
+            } else {
+                showNotification('Failed to load community', 'error');
+                window.location.href = 'communities.html';
+            }
+        } catch (error) {
+            console.error('Error loading community:', error);
+            showNotification('Failed to load community', 'error');
+            window.location.href = 'communities.html';
+        }
+    }
+    
+    async function loadChannels(communityId) {
+        if (!currentCommunity || !currentCommunity.channels) return;
+        
+        const channelsList = document.getElementById('channelsList');
+        channelsList.innerHTML = '';
+        
+        try {
+            // Get channel details (in real app, you'd fetch from API)
+            channels = currentCommunity.channels;
+            
+            if (channels.length === 0) {
+                // Create default channels if none exist
+                channels = [
+                    { _id: 'general', name: 'general', description: 'General discussions', type: 'general' },
+                    { _id: 'announcements', name: 'announcements', description: 'Community announcements', type: 'announcements' },
+                    { _id: 'help', name: 'help', description: 'Get help with gardening', type: 'help' }
+                ];
+            }
+            
+            // Render channels
+            channels.forEach(channel => {
+                const channelElement = document.createElement('button');
+                channelElement.className = 'w-full text-left px-3 py-2 rounded hover:bg-gray-100 text-gray-700 flex items-center';
+                channelElement.innerHTML = `
+                    <i class="fas fa-hashtag text-gray-400 mr-2"></i>
+                    <span>${channel.name}</span>
+                    <span class="ml-auto text-xs text-gray-500">${getChannelIcon(channel.type)}</span>
+                `;
+                
+                channelElement.addEventListener('click', () => switchChannel(channel));
+                
+                channelsList.appendChild(channelElement);
+            });
+            
+            // Switch to first channel
+            if (channels.length > 0) {
+                await switchChannel(channels[0]);
+            }
+            
+        } catch (error) {
+            console.error('Error loading channels:', error);
+        }
+    }
+    
+    async function loadMembers(communityId) {
+        if (!currentCommunity || !currentCommunity.members) return;
+        
+        const membersList = document.getElementById('membersList');
+        const mobileMembersList = document.getElementById('mobileMembersList');
+        membersList.innerHTML = '';
+        mobileMembersList.innerHTML = '';
+        
+        try {
+            // In real app, you'd fetch member details from API
+            members = currentCommunity.members.map(member => ({
+                _id: member._id || member,
+                name: member.name || 'Member',
+                profileImage: member.profileImage || '',
+                role: member._id === currentCommunity.admin ? 'admin' : 'member'
+            }));
+            
+            // Render members
+            members.forEach(member => {
+                const memberElement = createMemberElement(member);
+                membersList.appendChild(memberElement.cloneNode(true));
+                mobileMembersList.appendChild(memberElement);
+            });
+            
+        } catch (error) {
+            console.error('Error loading members:', error);
+        }
+    }
+    
+    function createMemberElement(member) {
+        const element = document.createElement('div');
+        element.className = 'flex items-center space-x-3';
+        element.innerHTML = `
+            <div class="relative">
+                <div class="w-8 h-8 rounded-full bg-primary-100 flex items-center justify-center">
+                    <i class="fas fa-user text-primary-600"></i>
+                </div>
+                <div class="absolute bottom-0 right-0 w-2 h-2 bg-green-500 rounded-full border border-white"></div>
+            </div>
+            <div>
+                <p class="text-sm font-medium text-gray-900">${member.name}</p>
+                <p class="text-xs text-gray-500">${member.role}</p>
+            </div>
+        `;
+        return element;
+    }
+    
+    async function switchChannel(channel) {
+        currentChannel = channel;
+        messages = [];
+        
+        // Update UI
+        document.getElementById('currentChannel').innerHTML = `
+            <i class="fas fa-hashtag text-gray-400 mr-2"></i>
+            <span>${channel.name}</span>
+        `;
+        document.getElementById('channelDescription').textContent = channel.description || '';
+        
+        // Join socket room
+        if (socket && currentCommunity) {
+            socket.emit('join-community', currentCommunity._id);
+        }
+        
+        // Clear typing indicators
+        typingUsers.clear();
+        updateTypingIndicator();
+        
+        // Clear messages container
+        const messagesContainer = document.getElementById('messagesContainer');
+        messagesContainer.innerHTML = '<div id="messagesLoading" class="text-center py-12"><div class="spinner mx-auto mb-4"></div><p class="text-gray-600">Loading messages...</p></div>';
+        
+        // Load messages
+        await loadMessages();
+    }
+    
+    async function loadMessages() {
+        if (!currentCommunity || !currentChannel) return;
+        
+        try {
+            const response = await api.getChannelMessages(
+                currentCommunity._id,
+                currentChannel._id,
+                { limit: 50 }
+            );
+            
+            if (response.success) {
+                messages = response.messages || [];
+                renderMessages();
+            }
+            
+            // Hide loading
+            document.getElementById('messagesLoading')?.remove();
+            
+            // Scroll to bottom
+            scrollToBottom();
+            
+        } catch (error) {
+            console.error('Error loading messages:', error);
+            const loadingEl = document.getElementById('messagesLoading');
+            if (loadingEl) {
+                loadingEl.innerHTML = `
+                    <p class="text-red-600">Failed to load messages</p>
+                `;
+            }
+        }
+    }
+    
+    function renderMessages() {
+        const messagesContainer = document.getElementById('messagesContainer');
+        messagesContainer.innerHTML = '';
+        
+        if (messages.length === 0) {
+            messagesContainer.innerHTML = `
+                <div class="text-center py-12">
+                    <i class="fas fa-comments text-gray-300 text-4xl mb-4"></i>
+                    <h3 class="text-lg font-semibold text-gray-900 mb-2">No messages yet</h3>
+                    <p class="text-gray-600">Be the first to send a message in this channel!</p>
+                </div>
+            `;
+            return;
+        }
+        
+        messages.forEach(message => {
+            addMessageToUI(message);
+        });
+    }
+    
+    function addMessageToUI(message) {
+        const messagesContainer = document.getElementById('messagesContainer');
+        
+        // Remove empty state if present
+        const emptyState = messagesContainer.querySelector('.text-center');
+        if (emptyState) emptyState.remove();
+        
+        const messageElement = document.createElement('div');
+        messageElement.className = 'flex space-x-3';
+        
+        const time = new Date(message.timestamp).toLocaleTimeString([], { 
+            hour: '2-digit', 
+            minute: '2-digit' 
+        });
+        
+        let contentHtml = '';
+        
+        if (message.imageUrl) {
+            // Fix image URL - make sure it's absolute
+            const imageUrl = message.imageUrl.startsWith('http') ? 
+                message.imageUrl : 
+                `http://localhost:5000${message.imageUrl}`;
+            
+            // Image message
+            contentHtml = `
+                <div class="bg-white p-3 rounded-lg shadow-sm border">
+                    ${message.content ? `<p class="text-gray-800 mb-2">${message.content}</p>` : ''}
+                    <img src="${imageUrl}" 
+                         alt="Shared image" 
+                         class="message-image"
+                         onclick="openImageModal('${imageUrl}')">
+                    <p class="text-xs text-gray-500 mt-1">
+                        <i class="fas fa-image mr-1"></i>Image shared
+                    </p>
+                </div>
+            `;
+        } else {
+            // Text message
+            contentHtml = `
+                <div class="bg-white p-3 rounded-lg shadow-sm border">
+                    <p class="text-gray-800">${message.content}</p>
+                </div>
+            `;
+        }
+        
+        messageElement.innerHTML = `
+            <div class="flex-shrink-0">
+                <div class="w-10 h-10 rounded-full bg-primary-100 flex items-center justify-center">
+                    ${message.sender?.profileImage ? 
+                        `<img src="${message.sender.profileImage}" alt="${message.sender.name}" class="w-full h-full rounded-full object-cover">` :
+                        `<i class="fas fa-user text-primary-600"></i>`
+                    }
+                </div>
+            </div>
+            <div class="flex-1">
+                <div class="flex items-baseline space-x-2 mb-1">
+                    <span class="font-bold text-gray-900">${message.sender?.name || 'User'}</span>
+                    <span class="text-sm text-gray-500">${time}</span>
+                </div>
+                ${contentHtml}
+            </div>
+        `;
+        
+        messagesContainer.appendChild(messageElement);
+    }
+    
+    async function sendMessage() {
+        const messageInput = document.getElementById('messageInput');
+        const content = messageInput.value.trim();
+        
+        if (!content && !selectedImage) {
+            showNotification('Please enter a message or select an image', 'warning');
+            return;
+        }
+        
+        // Show loading state on send button
+        const sendBtn = document.getElementById('sendMessageBtn');
+        const originalBtnHTML = sendBtn.innerHTML;
+        sendBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+        sendBtn.disabled = true;
+        
+        try {
+            if (selectedImage) {
+                // Send image message
+                await sendImageMessage(content);
+            } else {
+                // Send text message via socket
+                if (socket && socket.connected) {
+                    socket.emit('send-message', {
+                        communityId: currentCommunity._id,
+                        channelId: currentChannel._id,
+                        content: content
+                    });
+                    
+                    // Clear input immediately for better UX
+                    messageInput.value = '';
+                    messageInput.style.height = 'auto';
+                    showNotification('Message sent', 'success');
+                } else {
+                    showNotification('Connection lost. Please try again.', 'error');
+                    await initializeSocket();
+                }
+            }
+            
+            // Clear input and image
+            messageInput.value = '';
+            messageInput.style.height = 'auto';
+            clearImageUpload();
+            
+            // Stop typing indicator
+            if (socket && currentCommunity && currentChannel) {
+                socket.emit('stop-typing', {
+                    communityId: currentCommunity._id,
+                    channelId: currentChannel._id
+                });
+            }
+            
+        } catch (error) {
+            console.error('Error sending message:', error);
+            showNotification('Failed to send message: ' + error.message, 'error');
+        } finally {
+            // Restore send button
+            sendBtn.innerHTML = originalBtnHTML;
+            sendBtn.disabled = false;
+        }
+    }
+    
+    async function sendImageMessage(textContent) {
+        if (!selectedImage) return;
+        
+        const formData = new FormData();
+        formData.append('image', selectedImage);
+        if (textContent) {
+            formData.append('content', textContent);
+        }
+        formData.append('communityId', currentCommunity._id);
+        formData.append('channelId', currentChannel._id);
+        
+        try {
+            const token = getToken();
+            const response = await fetch(`${window.API_BASE_URL || 'http://localhost:5000/api'}/chat/upload-image`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                    // Don't set Content-Type for FormData, browser will set it automatically with boundary
+                },
+                body: formData
+            });
+            
+            const result = await response.json();
+            
+            if (result.success) {
+                showNotification('Image sent successfully', 'success');
+                
+                // Add the message to UI immediately
+                if (result.message) {
+                    addMessageToUI(result.message);
+                    scrollToBottom();
+                }
+                
+                // Emit socket event for the new message to other users
+                if (socket && result.message) {
+                    socket.emit('new-message', result.message);
+                }
+            } else {
+                throw new Error(result.message || 'Failed to upload image');
+            }
+        } catch (error) {
+            console.error('Error uploading image:', error);
+            throw error;
+        }
+    }
+    
+    function openImageModal(imageUrl) {
+        const modal = document.getElementById('imageModal');
+        const modalImage = document.getElementById('modalImage');
+        
+        modalImage.src = imageUrl;
+        modal.classList.remove('hidden');
+    }
+    
+    function updateTypingIndicator() {
+        const typingIndicator = document.getElementById('typingIndicator');
+        
+        if (typingUsers.size > 0) {
+            const names = Array.from(typingUsers);
+            let text = '';
+            
+            if (names.length === 1) {
+                text = `${names[0]} is typing...`;
+            } else if (names.length === 2) {
+                text = `${names[0]} and ${names[1]} are typing...`;
+            } else {
+                text = `${names[0]} and ${names.length - 1} others are typing...`;
+            }
+            
+            typingIndicator.querySelector('span').textContent = text;
+            typingIndicator.classList.remove('hidden');
+        } else {
+            typingIndicator.classList.add('hidden');
+        }
+    }
+    
+    function scrollToBottom() {
+        const messagesContainer = document.getElementById('messagesContainer');
+        if (messagesContainer) {
+            // Small delay to ensure DOM is updated
+            setTimeout(() => {
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            }, 100);
+        }
+    }
+    
+    function getChannelIcon(type) {
+        switch(type) {
+            case 'announcements': return '📢';
+            case 'help': return '❓';
+            case 'general': return '💬';
+            default: return '#';
+        }
+    }
+    
+    function showLeaveCommunityModal() {
+        const modal = document.getElementById('confirmLeaveModal');
+        const text = document.getElementById('leaveConfirmText');
+        
+        if (currentCommunity) {
+            text.textContent = `Are you sure you want to leave "${currentCommunity.name}"? You will lose access to all channels and messages.`;
+        }
+        
+        modal.classList.remove('hidden');
+        
+        // Setup event listeners for modal buttons
+        const confirmBtn = document.getElementById('confirmLeaveBtn');
+        const cancelBtn = document.getElementById('cancelLeaveBtn');
+        
+        const confirmHandler = async () => {
+            await leaveCommunity();
+            modal.classList.add('hidden');
+        };
+        
+        const cancelHandler = () => {
+            modal.classList.add('hidden');
+        };
+        
+        confirmBtn.addEventListener('click', confirmHandler, { once: true });
+        cancelBtn.addEventListener('click', cancelHandler, { once: true });
+    }
+    
+    async function leaveCommunity() {
+        if (!currentCommunity) return;
+        
+        try {
+            const user = getUserData();
+            const response = await api.removeMember(currentCommunity._id, user.id);
+            
+            if (response.success) {
+                showNotification('You have left the community', 'success');
+                
+                // Redirect to communities page after 1 second
+                setTimeout(() => {
+                    window.location.href = 'communities.html';
+                }, 1000);
+            } else {
+                showNotification(response.message || 'Failed to leave community', 'error');
+            }
+        } catch (error) {
+            console.error('Error leaving community:', error);
+            showNotification('Failed to leave community', 'error');
+        }
+    }
+    
+    function initializeModals() {
+        // Create Channel Modal
+        const createChannelBtn = document.getElementById('createChannelBtn');
+        const createChannelModal = document.getElementById('createChannelModal');
+        const closeChannelModal = document.getElementById('closeChannelModal');
+        const cancelCreateChannel = document.getElementById('cancelCreateChannel');
+        
+        if (createChannelBtn) {
+            createChannelBtn.addEventListener('click', () => {
+                createChannelModal.classList.remove('hidden');
+            });
+        }
+        
+        if (closeChannelModal) {
+            closeChannelModal.addEventListener('click', () => {
+                createChannelModal.classList.add('hidden');
+            });
+        }
+        
+        if (cancelCreateChannel) {
+            cancelCreateChannel.addEventListener('click', () => {
+                createChannelModal.classList.add('hidden');
+            });
+        }
+        
+        // Create Channel Form
+        const createChannelForm = document.getElementById('createChannelForm');
+        if (createChannelForm) {
+            createChannelForm.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                const name = document.getElementById('channelName').value;
+                const description = document.getElementById('channelDescription').value;
+                const type = document.getElementById('channelType').value;
+                
+                if (!name) {
+                    showError('channelNameError', 'Channel name is required');
+                    return;
+                }
+                
+                try {
+                    const response = await api.createChannel(currentCommunity._id, {
+                        name,
+                        description,
+                        type
+                    });
+                    
+                    if (response.success) {
+                        createChannelModal.classList.add('hidden');
+                        createChannelForm.reset();
+                        await loadChannels(currentCommunity._id);
+                        showNotification('Channel created successfully', 'success');
+                    } else {
+                        showMessage('createChannelMessage', response.message, 'error');
+                    }
+                } catch (error) {
+                    showMessage('createChannelMessage', error.message, 'error');
+                }
+            });
+        }
+        
+        // Community Info Modal
+        const communityInfoBtn = document.getElementById('communityInfoBtn');
+        const communityInfoModal = document.getElementById('communityInfoModal');
+        const closeInfoModal = document.getElementById('closeInfoModal');
+        
+        if (communityInfoBtn) {
+            communityInfoBtn.addEventListener('click', () => {
+                if (currentCommunity) {
+                    renderCommunityInfo();
+                    communityInfoModal.classList.remove('hidden');
+                }
+            });
+        }
+        
+        if (closeInfoModal) {
+            closeInfoModal.addEventListener('click', () => {
+                communityInfoModal.classList.add('hidden');
+            });
+        }
+        
+        // Confirm Leave Modal
+        const cancelLeaveBtn = document.getElementById('cancelLeaveBtn');
+        if (cancelLeaveBtn) {
+            cancelLeaveBtn.addEventListener('click', () => {
+                document.getElementById('confirmLeaveModal').classList.add('hidden');
+            });
+        }
+    }
+    
+    function renderCommunityInfo() {
+        const content = document.getElementById('communityInfoContent');
+        
+        if (!currentCommunity) return;
+        
+        const memberCount = currentCommunity.members?.length || 0;
+        const rules = currentCommunity.rules || [];
+        
+        content.innerHTML = `
+            <div class="space-y-6">
+                <div>
+                    <h4 class="font-bold text-gray-900 mb-2">Description</h4>
+                    <p class="text-gray-700">${currentCommunity.description}</p>
+                </div>
+                
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <h4 class="font-bold text-gray-900 mb-2">Category</h4>
+                        <p class="text-gray-700 capitalize">${currentCommunity.category}</p>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-gray-900 mb-2">Members</h4>
+                        <p class="text-gray-700">${memberCount} members</p>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-gray-900 mb-2">Visibility</h4>
+                        <p class="text-gray-700 capitalize">${currentCommunity.visibility}</p>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-gray-900 mb-2">Created</h4>
+                        <p class="text-gray-700">${new Date(currentCommunity.createdAt).toLocaleDateString()}</p>
+                    </div>
+                </div>
+                
+                ${rules.length > 0 ? `
+                    <div>
+                        <h4 class="font-bold text-gray-900 mb-2">Community Rules</h4>
+                        <ul class="list-disc list-inside text-gray-700 space-y-1">
+                            ${rules.map(rule => `<li>${rule}</li>`).join('')}
+                        </ul>
+                    </div>
+                ` : ''}
+            </div>
+        `;
+    }
+    
+    function showError(elementId, message) {
+        const element = document.getElementById(elementId);
+        if (element) {
+            element.textContent = message;
+            element.classList.remove('hidden');
+        }
+    }
+    
+    function showMessage(elementId, message, type) {
+        const element = document.getElementById(elementId);
+        if (element) {
+            element.textContent = message;
+            element.className = 'p-3 rounded-lg text-center';
+            
+            if (type === 'success') {
+                element.classList.add('bg-green-100', 'text-green-700');
+            } else if (type === 'error') {
+                element.classList.add('bg-red-100', 'text-red-700');
+            }
+            
+            element.classList.remove('hidden');
+        }
+    }
+    
+    function showNotification(message, type = 'info') {
+        // Create notification element
+        const notification = document.createElement('div');
+        notification.className = `fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg max-w-sm transform transition-transform duration-300 translate-x-full`;
+        
+        // Set styles based on type
+        if (type === 'success') {
+            notification.classList.add('bg-green-100', 'text-green-800', 'border', 'border-green-200');
+        } else if (type === 'error') {
+            notification.classList.add('bg-red-100', 'text-red-800', 'border', 'border-red-200');
+        } else if (type === 'warning') {
+            notification.classList.add('bg-yellow-100', 'text-yellow-800', 'border', 'border-yellow-200');
+        } else {
+            notification.classList.add('bg-blue-100', 'text-blue-800', 'border', 'border-blue-200');
+        }
+        
+        // Add content
+        notification.innerHTML = `
+            <div class="flex items-start">
+                <div class="flex-shrink-0">
+                    ${type === 'success' ? '✅' : type === 'error' ? '❌' : type === 'warning' ? '⚠️' : 'ℹ️'}
+                </div>
+                <div class="ml-3">
+                    <p class="text-sm font-medium">${message}</p>
+                </div>
+                <button class="close-notification ml-auto -mx-1.5 -my-1.5 rounded-lg p-1.5 hover:bg-opacity-30 focus:outline-none">
+                    <span class="sr-only">Dismiss</span>
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                    </svg>
+                </button>
+            </div>
+        `;
+        
+        // Add to DOM
+        document.body.appendChild(notification);
+        
+        // Animate in
+        setTimeout(() => {
+            notification.classList.remove('translate-x-full');
+        }, 10);
+        
+        // Add dismiss button functionality
+        const dismissButton = notification.querySelector('.close-notification');
+        if (dismissButton) {
+            dismissButton.addEventListener('click', () => {
+                notification.classList.add('translate-x-full');
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.remove();
+                    }
+                }, 300);
+            });
+        }
+        
+        // Auto dismiss after 5 seconds
+        setTimeout(() => {
+            if (notification.parentNode) {
+                notification.classList.add('translate-x-full');
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.remove();
+                    }
+                }, 300);
+            }
+        }, 5000);
+    }
+</script>
+</body>
+</html>

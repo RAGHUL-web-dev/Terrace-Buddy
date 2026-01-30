@@ -1,0 +1,1579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Plants - Terrace Buddy</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Custom Tailwind Configuration -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            200: '#bbf7d0',
+                            300: '#86efac',
+                            400: '#4ade80',
+                            500: '#22c55e',
+                            600: '#16a34a',
+                            700: '#15803d',
+                            800: '#166534',
+                            900: '#14532d',
+                        }
+                    },
+                    fontFamily: {
+                        'sans': ['Inter', 'system-ui', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Inter Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="font-sans bg-gray-50 min-h-screen">
+    <!-- Navigation -->
+    <nav id="navbar" class="bg-white shadow-md">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo -->
+                <div class="flex items-center space-x-2">
+                    <a href="dashboard.html" class="flex items-center space-x-2">
+                        <i class="fas fa-seedling text-primary-600 text-2xl"></i>
+                        <span class="text-xl font-bold text-gray-800">Terrace Buddy</span>
+                    </a>
+                </div>
+
+                <!-- User Menu -->
+                <div class="relative">
+                    <button id="userMenuButton" 
+                            class="flex items-center space-x-2 text-gray-700 hover:text-primary-600 font-medium">
+                        <i class="fas fa-user-circle text-2xl"></i>
+                        <span id="userName">Loading...</span>
+                        <i class="fas fa-chevron-down text-sm"></i>
+                    </button>
+                    
+                    <!-- Dropdown Menu -->
+                    <div id="dropdownMenu" 
+                         class="hidden absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-10 border">
+                        <a href="dashboard.html" 
+                           class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
+                           <i class="fas fa-tachometer-alt mr-2"></i>Dashboard
+                        </a>
+                        <a href="communities.html" 
+                           class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
+                           <i class="fas fa-users mr-2"></i>Communities
+                        </a>
+                        <a href="marketplace.html" 
+                           class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
+                           <i class="fas fa-store mr-2"></i>Marketplace
+                        </a>
+                        <a href="knowledge.html" 
+                           class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
+                           <i class="fas fa-book mr-2"></i>Knowledge Hub
+                        </a>
+                        <a href="plants.html" 
+                           class="block px-4 py-2 text-gray-700 hover:bg-gray-100 bg-primary-50">
+                           <i class="fas fa-plant mr-2"></i>My Plants
+                        </a>
+                        <hr class="my-1">
+                        <button id="logoutButton" 
+                                class="block w-full text-left px-4 py-2 text-red-600 hover:bg-gray-100">
+                           <i class="fas fa-sign-out-alt mr-2"></i>Logout
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8">
+        <div class="max-w-7xl mx-auto">
+            <!-- Header -->
+            <div class="mb-8">
+                <div class="flex flex-col md:flex-row md:items-center justify-between mb-6">
+                    <div>
+                        <h1 class="text-3xl font-bold text-gray-900 mb-2">My Plants</h1>
+                        <p class="text-gray-600">Track and manage your terrace garden plants</p>
+                    </div>
+                    <button id="addPlantBtn" 
+                            class="mt-4 md:mt-0 bg-primary-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-700 transition duration-300 flex items-center">
+                        <i class="fas fa-plus mr-2"></i> Add New Plant
+                    </button>
+                </div>
+                
+                <!-- Stats Summary -->
+                <div class="bg-white rounded-xl shadow-md p-6 mb-6">
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        <div class="text-center p-4">
+                            <div class="text-3xl font-bold text-primary-600 mb-2" id="totalPlants">0</div>
+                            <p class="text-gray-600">Total Plants</p>
+                        </div>
+                        <div class="text-center p-4">
+                            <div class="text-3xl font-bold text-green-600 mb-2" id="healthyPlants">0</div>
+                            <p class="text-gray-600">Healthy</p>
+                        </div>
+                        <div class="text-center p-4">
+                            <div class="text-3xl font-bold text-blue-600 mb-2" id="needsAttention">0</div>
+                            <p class="text-gray-600">Needs Attention</p>
+                        </div>
+                        <div class="text-center p-4">
+                            <div class="text-3xl font-bold text-yellow-600 mb-2" id="upcomingTasks">0</div>
+                            <p class="text-gray-600">Upcoming Tasks</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Search and Filter -->
+                <div class="bg-white rounded-xl shadow-md p-6 mb-6">
+                    <div class="flex flex-col md:flex-row md:items-center space-y-4 md:space-y-0 md:space-x-4">
+                        <!-- Search -->
+                        <div class="flex-1">
+                            <div class="relative">
+                                <input type="text" 
+                                       id="plantSearch"
+                                       placeholder="Search plants..."
+                                       class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                                <i class="fas fa-search absolute left-3 top-3.5 text-gray-400"></i>
+                            </div>
+                        </div>
+                        
+                        <!-- Status Filter -->
+                        <div>
+                            <select id="statusFilter" 
+                                    class="w-full md:w-auto px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                                <option value="">All Status</option>
+                                <option value="seed">Seed</option>
+                                <option value="seedling">Seedling</option>
+                                <option value="growing">Growing</option>
+                                <option value="flowering">Flowering</option>
+                                <option value="fruiting">Fruiting</option>
+                                <option value="harvested">Harvested</option>
+                                <option value="dormant">Dormant</option>
+                                <option value="deceased">Deceased</option>
+                            </select>
+                        </div>
+                        
+                        <!-- Location Filter -->
+                        <div>
+                            <select id="locationFilter" 
+                                    class="w-full md:w-auto px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                                <option value="">All Locations</option>
+                                <option value="terrace">Terrace</option>
+                                <option value="balcony">Balcony</option>
+                                <option value="indoor">Indoor</option>
+                                <option value="window">Window</option>
+                                <option value="garden">Garden</option>
+                            </select>
+                        </div>
+                        
+                        <!-- Clear Filters -->
+                        <button id="clearFilters" 
+                                class="text-gray-600 hover:text-primary-600 font-medium">
+                            Clear Filters
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Tabs -->
+            <div class="border-b mb-8">
+                <nav class="flex space-x-8">
+                    <button id="allPlantsTab" 
+                            class="px-4 py-3 font-medium text-primary-600 border-b-2 border-primary-600">
+                        All Plants
+                    </button>
+                    <button id="needsCareTab" 
+                            class="px-4 py-3 font-medium text-gray-600 hover:text-primary-600">
+                        Needs Care
+                    </button>
+                    <button id="plantJournalTab" 
+                            class="px-4 py-3 font-medium text-gray-600 hover:text-primary-600">
+                        Growth Journal
+                    </button>
+                    <button id="plantStatsTab" 
+                            class="px-4 py-3 font-medium text-gray-600 hover:text-primary-600">
+                        Statistics
+                    </button>
+                </nav>
+            </div>
+            
+            <!-- Content Area -->
+            <div>
+                <!-- All Plants Tab -->
+                <div id="allPlantsContent">
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <!-- Plant cards will be loaded here -->
+                    </div>
+                    
+                    <!-- Loading State -->
+                    <div id="plantsLoading" class="text-center py-12">
+                        <div class="spinner mx-auto mb-4"></div>
+                        <p class="text-gray-600">Loading your plants...</p>
+                    </div>
+                    
+                    <!-- Empty State -->
+                    <div id="noPlants" class="text-center py-12 hidden">
+                        <i class="fas fa-seedling text-gray-300 text-6xl mb-4"></i>
+                        <h3 class="text-xl font-semibold text-gray-900 mb-2">No plants found</h3>
+                        <p class="text-gray-600 mb-6">Start your gardening journey by adding your first plant</p>
+                        <button id="addFirstPlant" 
+                                class="bg-primary-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-700 transition duration-300">
+                            Add Your First Plant
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Needs Care Tab -->
+                <div id="needsCareContent" class="hidden">
+                    <div id="needsCareList" class="space-y-4">
+                        <!-- Plants needing care will be loaded here -->
+                    </div>
+                    
+                    <div id="noNeedsCare" class="text-center py-12 hidden">
+                        <i class="fas fa-check-circle text-gray-300 text-6xl mb-4"></i>
+                        <h3 class="text-xl font-semibold text-gray-900 mb-2">All plants are healthy!</h3>
+                        <p class="text-gray-600">Great job taking care of your plants</p>
+                    </div>
+                </div>
+                
+                <!-- Plant Journal Tab -->
+                <div id="plantJournalContent" class="hidden">
+                    <div class="bg-white rounded-xl shadow-md p-6">
+                        <h3 class="text-xl font-bold text-gray-900 mb-6">Growth Journal</h3>
+                        <div id="journalEntries" class="space-y-6">
+                            <!-- Journal entries will be loaded here -->
+                        </div>
+                        <div id="noJournalEntries" class="text-center py-12 hidden">
+                            <i class="fas fa-book text-gray-300 text-6xl mb-4"></i>
+                            <p class="text-gray-600">No journal entries yet. Add notes to track your plants' progress.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Plant Statistics Tab -->
+                <div id="plantStatsContent" class="hidden">
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                        <!-- Stats Charts -->
+                        <div class="bg-white rounded-xl shadow-md p-6">
+                            <h3 class="text-xl font-bold text-gray-900 mb-6">Plant Distribution</h3>
+                            <div id="statsChart" class="h-64 flex items-center justify-center">
+                                <!-- Chart will be rendered here -->
+                                <p class="text-gray-500">Loading chart...</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Quick Stats -->
+                        <div class="space-y-6">
+                            <div class="bg-white rounded-xl shadow-md p-6">
+                                <h3 class="text-xl font-bold text-gray-900 mb-4">Quick Stats</h3>
+                                <div class="space-y-4">
+                                    <div class="flex justify-between items-center">
+                                        <span class="text-gray-700">Average Plant Age</span>
+                                        <span class="font-bold text-gray-900" id="avgAge">0 days</span>
+                                    </div>
+                                    <div class="flex justify-between items-center">
+                                        <span class="text-gray-700">Most Common Type</span>
+                                        <span class="font-bold text-gray-900" id="commonType">-</span>
+                                    </div>
+                                    <div class="flex justify-between items-center">
+                                        <span class="text-gray-700">Favorite Location</span>
+                                        <span class="font-bold text-gray-900" id="favLocation">-</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Care Tips -->
+                            <div class="bg-primary-50 rounded-xl p-6">
+                                <h3 class="text-lg font-bold text-gray-900 mb-3">Care Tips</h3>
+                                <ul class="space-y-2 text-gray-700">
+                                    <li class="flex items-start">
+                                        <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                                        <span>Water plants early morning for best absorption</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                                        <span>Check soil moisture before watering</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                                        <span>Rotate plants for even sunlight exposure</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Add Plant Modal -->
+    <div id="addPlantModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div class="p-6">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-2xl font-bold text-gray-900">Add New Plant</h3>
+                    <button id="closePlantModal" class="text-gray-400 hover:text-gray-600">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+                
+                <form id="addPlantForm" class="space-y-6">
+                    <!-- Basic Information -->
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <label for="plantName" class="block text-sm font-medium text-gray-700 mb-2">
+                                Plant Name *
+                            </label>
+                            <input type="text" 
+                                   id="plantName" 
+                                   name="name"
+                                   required
+                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition duration-300"
+                                   placeholder="e.g., Tomato, Basil, Rose">
+                            <div id="plantNameError" class="text-red-600 text-sm mt-1 hidden"></div>
+                        </div>
+                        
+                        <div>
+                            <label for="plantType" class="block text-sm font-medium text-gray-700 mb-2">
+                                Plant Type *
+                            </label>
+                            <input type="text" 
+                                   id="plantType" 
+                                   name="type"
+                                   required
+                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition duration-300"
+                                   placeholder="e.g., Vegetable, Herb, Flower">
+                            <div id="plantTypeError" class="text-red-600 text-sm mt-1 hidden"></div>
+                        </div>
+                    </div>
+                    
+                    <!-- Planting Details -->
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <label for="plantDate" class="block text-sm font-medium text-gray-700 mb-2">
+                                Planting Date *
+                            </label>
+                            <input type="date" 
+                                   id="plantDate" 
+                                   name="datePlanted"
+                                   required
+                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition duration-300">
+                            <div id="plantDateError" class="text-red-600 text-sm mt-1 hidden"></div>
+                        </div>
+                        
+                        <div>
+                            <label for="plantStatus" class="block text-sm font-medium text-gray-700 mb-2">
+                                Current Status *
+                            </label>
+                            <select id="plantStatus" 
+                                    name="status"
+                                    required
+                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                                <option value="">Select Status</option>
+                                <option value="seed">Seed</option>
+                                <option value="seedling">Seedling</option>
+                                <option value="growing" selected>Growing</option>
+                                <option value="flowering">Flowering</option>
+                                <option value="fruiting">Fruiting</option>
+                                <option value="harvested">Harvested</option>
+                                <option value="dormant">Dormant</option>
+                            </select>
+                            <div id="plantStatusError" class="text-red-600 text-sm mt-1 hidden"></div>
+                        </div>
+                    </div>
+                    
+                    <!-- Location and Sunlight -->
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <label for="plantLocation" class="block text-sm font-medium text-gray-700 mb-2">
+                                Location *
+                            </label>
+                            <select id="plantLocation" 
+                                    name="location"
+                                    required
+                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                                <option value="">Select Location</option>
+                                <option value="terrace">Terrace</option>
+                                <option value="balcony">Balcony</option>
+                                <option value="indoor">Indoor</option>
+                                <option value="window">Window</option>
+                                <option value="garden">Garden</option>
+                            </select>
+                            <div id="plantLocationError" class="text-red-600 text-sm mt-1 hidden"></div>
+                        </div>
+                        
+                        <div>
+                            <label for="plantSunlight" class="block text-sm font-medium text-gray-700 mb-2">
+                                Sunlight Requirements *
+                            </label>
+                            <select id="plantSunlight" 
+                                    name="sunlight"
+                                    required
+                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                                <option value="">Select Sunlight</option>
+                                <option value="full">Full Sun</option>
+                                <option value="partial">Partial Sun</option>
+                                <option value="shade">Shade</option>
+                            </select>
+                            <div id="plantSunlightError" class="text-red-600 text-sm mt-1 hidden"></div>
+                        </div>
+                    </div>
+                    
+                    <!-- Images -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                            Plant Photos (Optional)
+                        </label>
+                        <div class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
+                            <div id="plantImagePreview" class="grid grid-cols-4 gap-2 mb-4"></div>
+                            <input type="file" 
+                                   id="plantImages"
+                                   name="images"
+                                   accept="image/*"
+                                   multiple
+                                   class="hidden"
+                                   onchange="previewPlantImages(this)">
+                            <button type="button" 
+                                    onclick="document.getElementById('plantImages').click()"
+                                    class="bg-gray-100 text-gray-700 px-4 py-2 rounded-lg font-medium hover:bg-gray-200 transition duration-300">
+                                <i class="fas fa-camera mr-2"></i>Upload Photos
+                            </button>
+                            <p class="text-sm text-gray-500 mt-2">Upload plant photos to track growth</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Initial Notes -->
+                    <div>
+                        <label for="plantNotes" class="block text-sm font-medium text-gray-700 mb-2">
+                            Initial Notes (Optional)
+                        </label>
+                        <textarea id="plantNotes" 
+                                  name="notes"
+                                  rows="3"
+                                  class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition duration-300"
+                                  placeholder="Add any initial observations or care instructions..."></textarea>
+                    </div>
+                    
+                    <!-- Message -->
+                    <div id="addPlantMessage" class="hidden p-3 rounded-lg text-center"></div>
+                    
+                    <!-- Submit Buttons -->
+                    <div class="flex space-x-4">
+                        <button type="submit" 
+                                id="addPlantSubmit"
+                                class="flex-1 bg-primary-600 text-white py-3 rounded-lg font-semibold hover:bg-primary-700 transition duration-300">
+                            Add Plant
+                        </button>
+                        <button type="button" 
+                                id="cancelAddPlant"
+                                class="flex-1 bg-white text-gray-700 py-3 rounded-lg font-semibold border border-gray-300 hover:bg-gray-50 transition duration-300">
+                            Cancel
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Plant Detail Modal -->
+    <div id="plantDetailModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+            <!-- Plant details will be loaded here -->
+        </div>
+    </div>
+
+    <!-- Add Note Modal -->
+    <div id="addNoteModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-xl shadow-2xl max-w-md w-full p-6">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl font-bold text-gray-900">Add Note</h3>
+                <button id="closeNoteModal" class="text-gray-400 hover:text-gray-600">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            
+            <form id="addNoteForm" class="space-y-6">
+                <input type="hidden" id="notePlantId">
+                
+                <div>
+                    <label for="noteType" class="block text-sm font-medium text-gray-700 mb-2">
+                        Note Type
+                    </label>
+                    <select id="noteType" 
+                            name="type"
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                        <option value="observation">Observation</option>
+                        <option value="milestone">Milestone</option>
+                        <option value="issue">Issue</option>
+                        <option value="care">Care Activity</option>
+                    </select>
+                </div>
+                
+                <div>
+                    <label for="noteContent" class="block text-sm font-medium text-gray-700 mb-2">
+                        Note *
+                    </label>
+                    <textarea id="noteContent" 
+                              name="content"
+                              required
+                              rows="4"
+                              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition duration-300"
+                              placeholder="Describe your observation..."></textarea>
+                </div>
+                
+                <div id="addNoteMessage" class="hidden p-3 rounded-lg text-center"></div>
+                
+                <div class="flex space-x-4">
+                    <button type="submit" 
+                            id="addNoteSubmit"
+                            class="flex-1 bg-primary-600 text-white py-3 rounded-lg font-semibold hover:bg-primary-700 transition duration-300">
+                        Add Note
+                    </button>
+                    <button type="button" 
+                            id="cancelAddNote"
+                            class="flex-1 bg-white text-gray-700 py-3 rounded-lg font-semibold border border-gray-300 hover:bg-gray-50 transition duration-300">
+                        Cancel
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-8">
+        <div class="container mx-auto px-4 text-center">
+            <p class="text-gray-400">© 2024 Terrace Buddy. Urban Gardening Made Easy.</p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="./js/utils.js"></script>
+    <script src="./js/api.js"></script>
+    <script src="./js/auth.js"></script>
+    
+    <script>
+        let plants = [];
+        let plantImages = [];
+        
+        document.addEventListener('DOMContentLoaded', async function() {
+            // Check authentication
+            if (!checkAuthStatus()) {
+                window.location.href = 'login.html';
+                return;
+            }
+            
+            // Load user data
+            const user = getUserData();
+            if (user && user.name) {
+                document.getElementById('userName').textContent = user.name;
+            }
+            
+            // Initialize user dropdown
+            const userMenuButton = document.getElementById('userMenuButton');
+            const dropdownMenu = document.getElementById('dropdownMenu');
+            
+            if (userMenuButton && dropdownMenu) {
+                userMenuButton.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    dropdownMenu.classList.toggle('hidden');
+                });
+                
+                document.addEventListener('click', function() {
+                    dropdownMenu.classList.add('hidden');
+                });
+            }
+            
+            // Logout functionality
+            const logoutButton = document.getElementById('logoutButton');
+            if (logoutButton) {
+                logoutButton.addEventListener('click', function() {
+                    logoutUser();
+                });
+            }
+            
+            // Tab functionality
+            const allPlantsTab = document.getElementById('allPlantsTab');
+            const needsCareTab = document.getElementById('needsCareTab');
+            const plantJournalTab = document.getElementById('plantJournalTab');
+            const plantStatsTab = document.getElementById('plantStatsTab');
+            
+            allPlantsTab.addEventListener('click', () => switchTab('allPlants'));
+            needsCareTab.addEventListener('click', () => switchTab('needsCare'));
+            plantJournalTab.addEventListener('click', () => switchTab('plantJournal'));
+            plantStatsTab.addEventListener('click', () => switchTab('plantStats'));
+            
+            // Add plant modal
+            const addPlantBtn = document.getElementById('addPlantBtn');
+            const addPlantModal = document.getElementById('addPlantModal');
+            const closePlantModal = document.getElementById('closePlantModal');
+            const cancelAddPlant = document.getElementById('cancelAddPlant');
+            
+            addPlantBtn.addEventListener('click', () => {
+                addPlantModal.classList.remove('hidden');
+                resetPlantForm();
+                // Set default date to today
+                document.getElementById('plantDate').valueAsDate = new Date();
+            });
+            
+            closePlantModal.addEventListener('click', () => {
+                addPlantModal.classList.add('hidden');
+            });
+            
+            cancelAddPlant.addEventListener('click', () => {
+                addPlantModal.classList.add('hidden');
+            });
+            
+            // Add plant form
+            const addPlantForm = document.getElementById('addPlantForm');
+            addPlantForm.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                const name = document.getElementById('plantName').value;
+                const type = document.getElementById('plantType').value;
+                const datePlanted = document.getElementById('plantDate').value;
+                const status = document.getElementById('plantStatus').value;
+                const location = document.getElementById('plantLocation').value;
+                const sunlight = document.getElementById('plantSunlight').value;
+                const notes = document.getElementById('plantNotes').value;
+                
+                // Reset errors
+                resetErrors();
+                hideMessage('addPlantMessage');
+                
+                // Validate
+                let valid = true;
+                
+                if (!name) {
+                    showError('plantNameError', 'Plant name is required');
+                    valid = false;
+                }
+                
+                if (!type) {
+                    showError('plantTypeError', 'Plant type is required');
+                    valid = false;
+                }
+                
+                if (!datePlanted) {
+                    showError('plantDateError', 'Planting date is required');
+                    valid = false;
+                }
+                
+                if (!status) {
+                    showError('plantStatusError', 'Status is required');
+                    valid = false;
+                }
+                
+                if (!location) {
+                    showError('plantLocationError', 'Location is required');
+                    valid = false;
+                }
+                
+                if (!sunlight) {
+                    showError('plantSunlightError', 'Sunlight requirement is required');
+                    valid = false;
+                }
+                
+                if (!valid) return;
+                
+                // Prepare data
+                const plantData = {
+                    name,
+                    type,
+                    datePlanted,
+                    status,
+                    location,
+                    sunlight
+                };
+                
+                if (notes) {
+                    plantData.notes = [{
+                        content: notes,
+                        type: 'observation',
+                        date: new Date().toISOString()
+                    }];
+                }
+                
+                // Add images
+                if (plantImages.length > 0) {
+                    plantData.images = plantImages;
+                }
+                
+                try {
+                    // Show loading
+                    const submitBtn = document.getElementById('addPlantSubmit');
+                    submitBtn.disabled = true;
+                    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Adding...';
+                    
+                    // Create plant
+                    const response = await api.createPlant(plantData);
+                    
+                    if (response.success) {
+                        showMessage('addPlantMessage', 'Plant added successfully!', 'success');
+                        
+                        // Close modal and reload plants after 1 second
+                        setTimeout(() => {
+                            addPlantModal.classList.add('hidden');
+                            addPlantForm.reset();
+                            plantImages = [];
+                            document.getElementById('plantImagePreview').innerHTML = '';
+                            loadAllPlants();
+                            loadPlantStats();
+                        }, 1000);
+                    } else {
+                        showMessage('addPlantMessage', response.message || 'Failed to add plant', 'error');
+                    }
+                } catch (error) {
+                    showMessage('addPlantMessage', error.message || 'An error occurred', 'error');
+                } finally {
+                    const submitBtn = document.getElementById('addPlantSubmit');
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Add Plant';
+                }
+            });
+            
+            // Search and filter
+            const searchInput = document.getElementById('plantSearch');
+            const statusFilter = document.getElementById('statusFilter');
+            const locationFilter = document.getElementById('locationFilter');
+            const clearFiltersBtn = document.getElementById('clearFilters');
+            
+            const debouncedSearch = debounce(loadAllPlants, 500);
+            
+            searchInput.addEventListener('input', debouncedSearch);
+            statusFilter.addEventListener('change', loadAllPlants);
+            locationFilter.addEventListener('change', loadAllPlants);
+            
+            clearFiltersBtn.addEventListener('click', () => {
+                searchInput.value = '';
+                statusFilter.value = '';
+                locationFilter.value = '';
+                loadAllPlants();
+            });
+            
+            // Add first plant button
+            document.getElementById('addFirstPlant').addEventListener('click', () => {
+                addPlantModal.classList.remove('hidden');
+            });
+            
+            // Add note modal
+            const closeNoteModal = document.getElementById('closeNoteModal');
+            const cancelAddNote = document.getElementById('cancelAddNote');
+            
+            closeNoteModal.addEventListener('click', () => {
+                document.getElementById('addNoteModal').classList.add('hidden');
+            });
+            
+            cancelAddNote.addEventListener('click', () => {
+                document.getElementById('addNoteModal').classList.add('hidden');
+            });
+            
+            // Add note form
+            document.getElementById('addNoteForm').addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                const plantId = document.getElementById('notePlantId').value;
+                const type = document.getElementById('noteType').value;
+                const content = document.getElementById('noteContent').value;
+                
+                if (!content) {
+                    showMessage('addNoteMessage', 'Note content is required', 'error');
+                    return;
+                }
+                
+                try {
+                    const response = await api.addPlantNote(plantId, {
+                        content,
+                        type
+                    });
+                    
+                    if (response.success) {
+                        document.getElementById('addNoteModal').classList.add('hidden');
+                        document.getElementById('addNoteForm').reset();
+                        showNotification('Note added successfully', 'success');
+                        
+                        // Refresh plant details if open
+                        const detailModal = document.getElementById('plantDetailModal');
+                        if (!detailModal.classList.contains('hidden')) {
+                            showPlantDetail(plantId);
+                        }
+                        
+                        // Refresh journal
+                        if (currentTab === 'plantJournal') {
+                            loadJournalEntries();
+                        }
+                    } else {
+                        showMessage('addNoteMessage', response.message || 'Failed to add note', 'error');
+                    }
+                } catch (error) {
+                    showMessage('addNoteMessage', error.message || 'An error occurred', 'error');
+                }
+            });
+            
+            // Initial load
+            await Promise.all([
+                loadAllPlants(),
+                loadPlantStats()
+            ]);
+            
+            switchTab('allPlants');
+        });
+        
+        function switchTab(tab) {
+            // Update tab headers
+            const tabs = ['allPlantsTab', 'needsCareTab', 'plantJournalTab', 'plantStatsTab'];
+            const contents = ['allPlantsContent', 'needsCareContent', 'plantJournalContent', 'plantStatsContent'];
+            
+            tabs.forEach(tabId => {
+                const tabElement = document.getElementById(tabId);
+                tabElement.classList.remove('text-primary-600', 'border-primary-600', 'border-b-2');
+                tabElement.classList.add('text-gray-600', 'hover:text-primary-600');
+            });
+            
+            contents.forEach(contentId => {
+                document.getElementById(contentId).classList.add('hidden');
+            });
+            
+            // Activate selected tab
+            document.getElementById(`${tab}Tab`).classList.add('text-primary-600', 'border-primary-600', 'border-b-2');
+            document.getElementById(`${tab}Content`).classList.remove('hidden');
+            
+            currentTab = tab;
+            
+            // Load data for tab if needed
+            if (tab === 'needsCare') {
+                loadNeedsCare();
+            } else if (tab === 'plantJournal') {
+                loadJournalEntries();
+            } else if (tab === 'plantStats') {
+                loadPlantStats();
+            }
+        }
+        
+        async function loadAllPlants() {
+            const loadingElement = document.getElementById('plantsLoading');
+            const noPlantsElement = document.getElementById('noPlants');
+            const plantsContainer = document.querySelector('#allPlantsContent .grid');
+            
+            loadingElement.classList.remove('hidden');
+            noPlantsElement.classList.add('hidden');
+            plantsContainer.innerHTML = '';
+            
+            try {
+                // Fetch plants
+                const response = await api.getPlants();
+                
+                if (response.success) {
+                    plants = response.plants || [];
+                    
+                    // Apply filters
+                    let filteredPlants = plants;
+                    const search = document.getElementById('plantSearch').value.toLowerCase();
+                    const status = document.getElementById('statusFilter').value;
+                    const location = document.getElementById('locationFilter').value;
+                    
+                    if (search) {
+                        filteredPlants = filteredPlants.filter(plant => 
+                            plant.name.toLowerCase().includes(search) || 
+                            plant.type.toLowerCase().includes(search)
+                        );
+                    }
+                    
+                    if (status) {
+                        filteredPlants = filteredPlants.filter(plant => plant.status === status);
+                    }
+                    
+                    if (location) {
+                        filteredPlants = filteredPlants.filter(plant => plant.location === location);
+                    }
+                    
+                    if (filteredPlants.length === 0) {
+                        noPlantsElement.classList.remove('hidden');
+                    } else {
+                        renderPlantCards(filteredPlants, plantsContainer);
+                    }
+                    
+                    // Update stats
+                    updatePlantStats(plants);
+                }
+            } catch (error) {
+                console.error('Error loading plants:', error);
+                showNotification('Failed to load plants', 'error');
+            } finally {
+                loadingElement.classList.add('hidden');
+            }
+        }
+        
+        function renderPlantCards(plants, container) {
+            container.innerHTML = '';
+            
+            plants.forEach(plant => {
+                const card = createPlantCard(plant);
+                container.appendChild(card);
+            });
+        }
+        
+        function createPlantCard(plant) {
+            const card = document.createElement('div');
+            card.className = 'bg-white rounded-xl shadow-md overflow-hidden hover-card';
+            card.dataset.id = plant._id;
+            
+            // Calculate plant age
+            const plantedDate = new Date(plant.datePlanted);
+            const today = new Date();
+            const ageInDays = Math.floor((today - plantedDate) / (1000 * 60 * 60 * 24));
+            
+            // Get first image or placeholder
+            const imageUrl = plant.images && plant.images.length > 0 && plant.images[0].url
+                ? plant.images[0].url
+                : 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgZmlsbD0iI2YwZmRmNCIvPjx0ZXh0IHg9IjIwMCIgeT0iMTUwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMjQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiMyMmM1NWUiPlBsYW50PC90ZXh0Pjwvc3ZnPg==';
+            
+            // Status colors
+            const statusColors = {
+                seed: 'bg-gray-100 text-gray-700',
+                seedling: 'bg-green-100 text-green-700',
+                growing: 'bg-blue-100 text-blue-700',
+                flowering: 'bg-purple-100 text-purple-700',
+                fruiting: 'bg-yellow-100 text-yellow-700',
+                harvested: 'bg-orange-100 text-orange-700',
+                dormant: 'bg-gray-100 text-gray-700',
+                deceased: 'bg-red-100 text-red-700'
+            };
+            
+            // Determine if plant needs care
+            const lastWatered = plant.lastWatered ? new Date(plant.lastWatered) : null;
+            const daysSinceWater = lastWatered ? Math.floor((today - lastWatered) / (1000 * 60 * 60 * 24)) : 999;
+            const needsWater = daysSinceWater > 2;
+            
+            card.innerHTML = `
+                <div class="relative">
+                    <img src="${imageUrl}" 
+                         alt="${plant.name}" 
+                         class="w-full h-48 object-cover cursor-pointer view-plant-btn">
+                    ${needsWater ? `
+                        <div class="absolute top-2 right-2">
+                            <span class="bg-red-100 text-red-700 px-2 py-1 rounded text-xs font-medium">
+                                <i class="fas fa-tint mr-1"></i>Needs Water
+                            </span>
+                        </div>
+                    ` : ''}
+                </div>
+                <div class="p-4">
+                    <div class="flex justify-between items-start mb-2">
+                        <h3 class="text-lg font-bold text-gray-900">${plant.name}</h3>
+                        <span class="${statusColors[plant.status] || 'bg-gray-100 text-gray-700'} px-2 py-1 rounded text-xs font-medium">
+                            ${plant.status}
+                        </span>
+                    </div>
+                    
+                    <p class="text-sm text-gray-600 mb-3">${plant.type} • ${ageInDays} days old</p>
+                    
+                    <div class="flex items-center justify-between text-sm text-gray-500 mb-4">
+                        <div class="flex items-center">
+                            <i class="fas fa-map-marker-alt mr-1"></i>
+                            <span class="capitalize">${plant.location}</span>
+                        </div>
+                        <div class="flex items-center">
+                            <i class="fas fa-sun mr-1"></i>
+                            <span class="capitalize">${plant.sunlight}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="flex space-x-2">
+                        <button class="flex-1 bg-primary-600 text-white py-2 rounded-lg text-sm font-medium hover:bg-primary-700 view-plant-btn">
+                            View Details
+                        </button>
+                        <button class="w-10 bg-gray-100 text-gray-700 py-2 rounded-lg text-sm font-medium hover:bg-gray-200 flex items-center justify-center add-note-btn"
+                                title="Add Note">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            // Add event listeners
+            const viewButtons = card.querySelectorAll('.view-plant-btn');
+            viewButtons.forEach(btn => {
+                btn.addEventListener('click', () => showPlantDetail(plant._id));
+            });
+            
+            const addNoteBtn = card.querySelector('.add-note-btn');
+            addNoteBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                openAddNoteModal(plant._id);
+            });
+            
+            return card;
+        }
+        
+        async function showPlantDetail(plantId) {
+            try {
+                const response = await api.getPlant(plantId);
+                
+                if (response.success) {
+                    const plant = response.plant;
+                    const modal = document.getElementById('plantDetailModal');
+                    const modalContent = modal.querySelector('div');
+                    
+                    // Calculate plant age
+                    const plantedDate = new Date(plant.datePlanted);
+                    const today = new Date();
+                    const ageInDays = Math.floor((today - plantedDate) / (1000 * 60 * 60 * 24));
+                    
+                    // Format dates
+                    const plantedDateStr = plantedDate.toLocaleDateString();
+                    const lastWateredStr = plant.lastWatered ? new Date(plant.lastWatered).toLocaleDateString() : 'Never';
+                    
+                    // Status colors
+                    const statusColors = {
+                        seed: 'bg-gray-100 text-gray-700',
+                        seedling: 'bg-green-100 text-green-700',
+                        growing: 'bg-blue-100 text-blue-700',
+                        flowering: 'bg-purple-100 text-purple-700',
+                        fruiting: 'bg-yellow-100 text-yellow-700',
+                        harvested: 'bg-orange-100 text-orange-700',
+                        dormant: 'bg-gray-100 text-gray-700',
+                        deceased: 'bg-red-100 text-red-700'
+                    };
+                    
+                    modalContent.innerHTML = `
+                        <div class="p-8">
+                            <div class="flex justify-between items-start mb-6">
+                                <div>
+                                    <h3 class="text-3xl font-bold text-gray-900 mb-2">${plant.name}</h3>
+                                    <div class="flex flex-wrap gap-2 mb-4">
+                                        <span class="${statusColors[plant.status] || 'bg-gray-100 text-gray-700'} px-3 py-1 rounded text-sm font-medium">
+                                            ${plant.status}
+                                        </span>
+                                        <span class="bg-primary-100 text-primary-700 px-3 py-1 rounded text-sm font-medium">
+                                            ${plant.type}
+                                        </span>
+                                        <span class="bg-blue-100 text-blue-700 px-3 py-1 rounded text-sm font-medium">
+                                            <i class="fas fa-map-marker-alt mr-1"></i>${plant.location}
+                                        </span>
+                                        <span class="bg-yellow-100 text-yellow-700 px-3 py-1 rounded text-sm font-medium">
+                                            <i class="fas fa-sun mr-1"></i>${plant.sunlight}
+                                        </span>
+                                    </div>
+                                </div>
+                                <button id="closePlantDetail" class="text-gray-400 hover:text-gray-600">
+                                    <i class="fas fa-times text-xl"></i>
+                                </button>
+                            </div>
+                            
+                            <!-- Plant Info -->
+                            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+                                <div class="bg-gray-50 rounded-lg p-4">
+                                    <p class="text-sm text-gray-600 mb-1">Age</p>
+                                    <p class="font-bold text-gray-900">${ageInDays} days</p>
+                                </div>
+                                <div class="bg-gray-50 rounded-lg p-4">
+                                    <p class="text-sm text-gray-600 mb-1">Planted On</p>
+                                    <p class="font-bold text-gray-900">${plantedDateStr}</p>
+                                </div>
+                                <div class="bg-gray-50 rounded-lg p-4">
+                                    <p class="text-sm text-gray-600 mb-1">Last Watered</p>
+                                    <p class="font-bold text-gray-900">${lastWateredStr}</p>
+                                </div>
+                                <div class="bg-gray-50 rounded-lg p-4">
+                                    <p class="text-sm text-gray-600 mb-1">Notes</p>
+                                    <p class="font-bold text-gray-900">${plant.notes?.length || 0}</p>
+                                </div>
+                            </div>
+                            
+                            <!-- Images -->
+                            ${plant.images && plant.images.length > 0 ? `
+                                <div class="mb-8">
+                                    <h4 class="font-bold text-gray-900 mb-4">Plant Photos</h4>
+                                    <div class="grid grid-cols-4 gap-2">
+                                        ${plant.images.map((img, index) => `
+                                            <img src="${img.url}" 
+                                                 alt="${plant.name} - Photo ${index + 1}" 
+                                                 class="w-full h-32 object-cover rounded-lg cursor-pointer"
+                                                 onclick="viewImage('${img.url}')">
+                                        `).join('')}
+                                    </div>
+                                </div>
+                            ` : ''}
+                            
+                            <!-- Notes -->
+                            <div class="mb-8">
+                                <div class="flex justify-between items-center mb-4">
+                                    <h4 class="font-bold text-gray-900">Growth Journal</h4>
+                                    <button class="bg-primary-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-primary-700 add-note-detail-btn">
+                                        <i class="fas fa-plus mr-1"></i>Add Note
+                                    </button>
+                                </div>
+                                
+                                ${plant.notes && plant.notes.length > 0 ? `
+                                    <div class="space-y-4">
+                                        ${plant.notes.map(note => `
+                                            <div class="bg-gray-50 rounded-lg p-4">
+                                                <div class="flex justify-between items-start mb-2">
+                                                    <span class="bg-${getNoteColor(note.type)}-100 text-${getNoteColor(note.type)}-700 px-2 py-1 rounded text-xs font-medium">
+                                                        ${note.type}
+                                                    </span>
+                                                    <span class="text-sm text-gray-500">
+                                                        ${new Date(note.date).toLocaleDateString()}
+                                                    </span>
+                                                </div>
+                                                <p class="text-gray-700">${note.content}</p>
+                                            </div>
+                                        `).join('')}
+                                    </div>
+                                ` : `
+                                    <p class="text-gray-500 text-center py-8">No notes yet. Add your first observation!</p>
+                                `}
+                            </div>
+                            
+                            <!-- Actions -->
+                            <div class="border-t pt-6">
+                                <div class="flex space-x-4">
+                                    <button class="flex-1 bg-green-600 text-white py-3 rounded-lg font-medium hover:bg-green-700 water-plant-btn">
+                                        <i class="fas fa-tint mr-2"></i>Mark as Watered
+                                    </button>
+                                    <button class="flex-1 bg-primary-600 text-white py-3 rounded-lg font-medium hover:bg-primary-700 update-status-btn">
+                                        <i class="fas fa-sync mr-2"></i>Update Status
+                                    </button>
+                                    <button class="flex-1 bg-red-600 text-white py-3 rounded-lg font-medium hover:bg-red-700 delete-plant-btn">
+                                        <i class="fas fa-trash mr-2"></i>Delete Plant
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    
+                    // Show modal
+                    modal.classList.remove('hidden');
+                    
+                    // Add event listeners
+                    modal.querySelector('#closePlantDetail').addEventListener('click', () => {
+                        modal.classList.add('hidden');
+                    });
+                    
+                    modal.querySelector('.add-note-detail-btn').addEventListener('click', () => {
+                        openAddNoteModal(plantId);
+                    });
+                    
+                    modal.querySelector('.water-plant-btn').addEventListener('click', () => {
+                        markAsWatered(plantId);
+                    });
+                    
+                    modal.querySelector('.update-status-btn').addEventListener('click', () => {
+                        updatePlantStatus(plantId);
+                    });
+                    
+                    modal.querySelector('.delete-plant-btn').addEventListener('click', () => {
+                        deletePlant(plantId, modal);
+                    });
+                }
+            } catch (error) {
+                console.error('Error loading plant details:', error);
+                showNotification('Failed to load plant details', 'error');
+            }
+        }
+        
+        function openAddNoteModal(plantId) {
+            document.getElementById('notePlantId').value = plantId;
+            document.getElementById('addNoteModal').classList.remove('hidden');
+            document.getElementById('addNoteForm').reset();
+            hideMessage('addNoteMessage');
+        }
+        
+        async function markAsWatered(plantId) {
+            try {
+                const response = await api.updatePlant(plantId, {
+                    lastWatered: new Date().toISOString()
+                });
+                
+                if (response.success) {
+                    showNotification('Plant marked as watered', 'success');
+                    
+                    // Refresh plant details
+                    const detailModal = document.getElementById('plantDetailModal');
+                    if (!detailModal.classList.contains('hidden')) {
+                        showPlantDetail(plantId);
+                    }
+                    
+                    // Refresh plants list
+                    loadAllPlants();
+                }
+            } catch (error) {
+                console.error('Error marking as watered:', error);
+                showNotification('Failed to update plant', 'error');
+            }
+        }
+        
+        async function updatePlantStatus(plantId) {
+            const status = prompt('Enter new status (seed, seedling, growing, flowering, fruiting, harvested, dormant):');
+            
+            if (status && ['seed', 'seedling', 'growing', 'flowering', 'fruiting', 'harvested', 'dormant'].includes(status)) {
+                try {
+                    const response = await api.updatePlant(plantId, { status });
+                    
+                    if (response.success) {
+                        showNotification('Plant status updated', 'success');
+                        
+                        // Refresh plant details
+                        const detailModal = document.getElementById('plantDetailModal');
+                        if (!detailModal.classList.contains('hidden')) {
+                            showPlantDetail(plantId);
+                        }
+                        
+                        // Refresh plants list
+                        loadAllPlants();
+                    }
+                } catch (error) {
+                    console.error('Error updating status:', error);
+                    showNotification('Failed to update plant', 'error');
+                }
+            }
+        }
+        
+        async function deletePlant(plantId, modal) {
+            if (!confirm('Are you sure you want to delete this plant? This action cannot be undone.')) return;
+            
+            try {
+                const response = await api.deletePlant(plantId);
+                
+                if (response.success) {
+                    modal.classList.add('hidden');
+                    showNotification('Plant deleted successfully', 'success');
+                    loadAllPlants();
+                    loadPlantStats();
+                }
+            } catch (error) {
+                console.error('Error deleting plant:', error);
+                showNotification('Failed to delete plant', 'error');
+            }
+        }
+        
+        function getNoteColor(type) {
+            switch(type) {
+                case 'milestone': return 'green';
+                case 'issue': return 'red';
+                case 'care': return 'blue';
+                default: return 'gray';
+            }
+        }
+        
+        async function loadNeedsCare() {
+            const container = document.getElementById('needsCareList');
+            const noNeedsElement = document.getElementById('noNeedsCare');
+            
+            container.innerHTML = '';
+            noNeedsElement.classList.add('hidden');
+            
+            try {
+                const response = await api.getPlants();
+                
+                if (response.success) {
+                    const plants = response.plants || [];
+                    const today = new Date();
+                    
+                    const needsCarePlants = plants.filter(plant => {
+                        const lastWatered = plant.lastWatered ? new Date(plant.lastWatered) : null;
+                        const daysSinceWater = lastWatered ? Math.floor((today - lastWatered) / (1000 * 60 * 60 * 24)) : 999;
+                        return daysSinceWater > 2 || plant.status === 'deceased';
+                    });
+                    
+                    if (needsCarePlants.length === 0) {
+                        noNeedsElement.classList.remove('hidden');
+                        return;
+                    }
+                    
+                    needsCarePlants.forEach(plant => {
+                        const element = document.createElement('div');
+                        element.className = 'bg-white rounded-xl shadow-md p-6';
+                        
+                        // Calculate days since last watered
+                        const lastWatered = plant.lastWatered ? new Date(plant.lastWatered) : null;
+                        const today = new Date();
+                        const daysSinceWater = lastWatered ? Math.floor((today - lastWatered) / (1000 * 60 * 60 * 24)) : 999;
+                        
+                        element.innerHTML = `
+                            <div class="flex items-center justify-between mb-4">
+                                <div>
+                                    <h4 class="font-bold text-gray-900">${plant.name}</h4>
+                                    <p class="text-sm text-gray-600">${plant.type}</p>
+                                </div>
+                                <span class="bg-red-100 text-red-700 px-3 py-1 rounded text-sm font-medium">
+                                    ${daysSinceWater > 2 ? 'Needs Water' : 'Needs Attention'}
+                                </span>
+                            </div>
+                            <div class="flex space-x-4">
+                                <button class="flex-1 bg-green-600 text-white py-2 rounded-lg text-sm font-medium hover:bg-green-700 water-now-btn"
+                                        data-id="${plant._id}">
+                                    <i class="fas fa-tint mr-1"></i>Water Now
+                                </button>
+                                <button class="flex-1 bg-primary-600 text-white py-2 rounded-lg text-sm font-medium hover:bg-primary-700 view-plant-btn"
+                                        data-id="${plant._id}">
+                                    View Details
+                                </button>
+                            </div>
+                        `;
+                        
+                        container.appendChild(element);
+                    });
+                    
+                    // Add event listeners
+                    container.querySelectorAll('.water-now-btn').forEach(btn => {
+                        btn.addEventListener('click', () => markAsWatered(btn.dataset.id));
+                    });
+                    
+                    container.querySelectorAll('.view-plant-btn').forEach(btn => {
+                        btn.addEventListener('click', () => showPlantDetail(btn.dataset.id));
+                    });
+                }
+            } catch (error) {
+                console.error('Error loading needs care plants:', error);
+            }
+        }
+        
+        async function loadJournalEntries() {
+            const container = document.getElementById('journalEntries');
+            const noEntriesElement = document.getElementById('noJournalEntries');
+            
+            container.innerHTML = '';
+            noEntriesElement.classList.add('hidden');
+            
+            try {
+                const response = await api.getPlants();
+                
+                if (response.success) {
+                    const plants = response.plants || [];
+                    let allNotes = [];
+                    
+                    plants.forEach(plant => {
+                        if (plant.notes && plant.notes.length > 0) {
+                            plant.notes.forEach(note => {
+                                allNotes.push({
+                                    ...note,
+                                    plantName: plant.name,
+                                    plantId: plant._id
+                                });
+                            });
+                        }
+                    });
+                    
+                    // Sort by date (newest first)
+                    allNotes.sort((a, b) => new Date(b.date) - new Date(a.date));
+                    
+                    if (allNotes.length === 0) {
+                        noEntriesElement.classList.remove('hidden');
+                        return;
+                    }
+                    
+                    allNotes.forEach(note => {
+                        const element = document.createElement('div');
+                        element.className = 'border-l-4 border-primary-500 pl-4 py-2';
+                        
+                        element.innerHTML = `
+                            <div class="flex justify-between items-start mb-2">
+                                <div>
+                                    <h4 class="font-bold text-gray-900">${note.plantName}</h4>
+                                    <span class="bg-${getNoteColor(note.type)}-100 text-${getNoteColor(note.type)}-700 px-2 py-1 rounded text-xs font-medium">
+                                        ${note.type}
+                                    </span>
+                                </div>
+                                <span class="text-sm text-gray-500">
+                                    ${new Date(note.date).toLocaleDateString()}
+                                </span>
+                            </div>
+                            <p class="text-gray-700 mb-2">${note.content}</p>
+                            <button class="text-primary-600 hover:text-primary-700 text-sm font-medium view-plant-journal-btn"
+                                    data-id="${note.plantId}">
+                                View Plant →
+                            </button>
+                        `;
+                        
+                        container.appendChild(element);
+                    });
+                    
+                    // Add event listeners
+                    container.querySelectorAll('.view-plant-journal-btn').forEach(btn => {
+                        btn.addEventListener('click', () => showPlantDetail(btn.dataset.id));
+                    });
+                }
+            } catch (error) {
+                console.error('Error loading journal entries:', error);
+            }
+        }
+        
+        async function loadPlantStats() {
+            try {
+                const response = await api.getPlantStats();
+                
+                if (response.success) {
+                    const stats = response.stats;
+                    
+                    // Update quick stats
+                    document.getElementById('totalPlants').textContent = stats.total || 0;
+                    document.getElementById('healthyPlants').textContent = stats.byStatus?.growing || 0;
+                    document.getElementById('needsAttention').textContent = '2'; // This would come from API
+                    document.getElementById('upcomingTasks').textContent = '3'; // This would come from API
+                    
+                    // Update detailed stats
+                    if (stats.byStatus) {
+                        document.getElementById('commonType').textContent = 
+                            Object.entries(stats.byType || {}).sort((a, b) => b[1] - a[1])[0]?.[0] || '-';
+                    }
+                    
+                    if (stats.byLocation) {
+                        document.getElementById('favLocation').textContent = 
+                            Object.entries(stats.byLocation).sort((a, b) => b[1] - a[1])[0]?.[0] || '-';
+                    }
+                    
+                    // Simple chart
+                    const chartContainer = document.getElementById('statsChart');
+                    if (stats.byStatus) {
+                        const chartData = Object.entries(stats.byStatus).map(([status, count]) => 
+                            `<div class="flex items-center mb-2">
+                                <div class="w-24 h-6 bg-primary-500 rounded" style="width: ${(count / stats.total) * 100}%"></div>
+                                <span class="ml-2 text-sm">${status}: ${count}</span>
+                            </div>`
+                        ).join('');
+                        
+                        chartContainer.innerHTML = chartData;
+                    }
+                }
+            } catch (error) {
+                console.error('Error loading plant stats:', error);
+            }
+        }
+        
+        function updatePlantStats(plants) {
+            const total = plants.length;
+            const healthy = plants.filter(p => p.status === 'growing' || p.status === 'flowering' || p.status === 'fruiting').length;
+            
+            document.getElementById('totalPlants').textContent = total;
+            document.getElementById('healthyPlants').textContent = healthy;
+            
+            // Simple calculations for demo
+            document.getElementById('needsAttention').textContent = Math.max(0, total - healthy);
+            document.getElementById('upcomingTasks').textContent = total * 2; // 2 tasks per plant
+        }
+        
+        function previewPlantImages(input) {
+            const preview = document.getElementById('plantImagePreview');
+            preview.innerHTML = '';
+            plantImages = [];
+            
+            if (input.files.length > 10) {
+                showNotification('Maximum 10 images allowed', 'error');
+                input.value = '';
+                return;
+            }
+            
+            Array.from(input.files).forEach((file, index) => {
+                if (file.size > 5 * 1024 * 1024) {
+                    showNotification(`Image ${index + 1} is too large (max 5MB)`, 'error');
+                    return;
+                }
+                
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.className = 'w-full h-20 object-cover rounded-lg';
+                    preview.appendChild(img);
+                    
+                    // Store file for upload
+                    plantImages.push(file);
+                }
+                reader.readAsDataURL(file);
+            });
+        }
+        
+        function resetPlantForm() {
+            document.getElementById('addPlantForm').reset();
+            plantImages = [];
+            document.getElementById('plantImagePreview').innerHTML = '';
+            resetErrors();
+            hideMessage('addPlantMessage');
+        }
+        
+        function showError(elementId, message) {
+            const element = document.getElementById(elementId);
+            if (element) {
+                element.textContent = message;
+                element.classList.remove('hidden');
+            }
+        }
+        
+        function resetErrors() {
+            const errorElements = document.querySelectorAll('[id$="Error"]');
+            errorElements.forEach(el => {
+                el.textContent = '';
+                el.classList.add('hidden');
+            });
+        }
+        
+        function showMessage(elementId, message, type) {
+            const element = document.getElementById(elementId);
+            if (element) {
+                element.textContent = message;
+                element.className = 'p-3 rounded-lg text-center';
+                
+                if (type === 'success') {
+                    element.classList.add('bg-green-100', 'text-green-700');
+                } else if (type === 'error') {
+                    element.classList.add('bg-red-100', 'text-red-700');
+                }
+                
+                element.classList.remove('hidden');
+            }
+        }
+        
+        function hideMessage(elementId) {
+            const element = document.getElementById(elementId);
+            if (element) {
+                element.classList.add('hidden');
+            }
+        }
+        
+        // Debounce function
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
+        
+        // Image viewer function
+        window.viewImage = function(src) {
+            const viewer = document.createElement('div');
+            viewer.className = 'fixed inset-0 bg-black bg-opacity-90 z-50 flex items-center justify-center';
+            viewer.innerHTML = `
+                <div class="relative max-w-4xl max-h-[90vh]">
+                    <img src="${src}" class="max-w-full max-h-[90vh] object-contain">
+                    <button onclick="this.parentElement.parentElement.remove()" 
+                            class="absolute top-4 right-4 text-white text-2xl">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            `;
+            document.body.appendChild(viewer);
+        };
+    </script>
+</body>
+</html>

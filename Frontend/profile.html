@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile - Terrace Buddy</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Custom Tailwind Configuration -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            200: '#bbf7d0',
+                            300: '#86efac',
+                            400: '#4ade80',
+                            500: '#22c55e',
+                            600: '#16a34a',
+                            700: '#15803d',
+                            800: '#166534',
+                            900: '#14532d',
+                        }
+                    },
+                    fontFamily: {
+                        'sans': ['Inter', 'system-ui', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Inter Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="font-sans bg-gray-50 min-h-screen">
+    <!-- Navigation (Same as Dashboard) -->
+    <nav id="navbar" class="bg-white shadow-md">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo -->
+                <div class="flex items-center space-x-2">
+                    <a href="index.html" class="flex items-center space-x-2">
+                        <i class="fas fa-seedling text-primary-600 text-2xl"></i>
+                        <span class="text-xl font-bold text-gray-800">Terrace Buddy</span>
+                    </a>
+                </div>
+
+                <!-- User Menu -->
+                <div class="relative">
+                    <button id="userMenuButton" 
+                            class="flex items-center space-x-2 text-gray-700 hover:text-primary-600 font-medium">
+                        <i class="fas fa-user-circle text-2xl"></i>
+                        <span id="userName">Loading...</span>
+                        <i class="fas fa-chevron-down text-sm"></i>
+                    </button>
+                    
+                    <!-- Dropdown Menu -->
+                    <div id="dropdownMenu" 
+                         class="hidden absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-10 border">
+                        <a href="dashboard.html" 
+                           class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
+                           <i class="fas fa-tachometer-alt mr-2"></i>Dashboard
+                        </a>
+                        <a href="profile.html" 
+                           class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
+                           <i class="fas fa-user mr-2"></i>Profile
+                        </a>
+                        <hr class="my-1">
+                        <button id="logoutButton" 
+                                class="block w-full text-left px-4 py-2 text-red-600 hover:bg-gray-100">
+                           <i class="fas fa-sign-out-alt mr-2"></i>Logout
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8">
+        <div class="max-w-4xl mx-auto">
+            <!-- Profile Header -->
+            <div class="bg-white rounded-xl shadow-md p-8 mb-8">
+                <div class="flex flex-col md:flex-row items-center md:items-start space-y-6 md:space-y-0 md:space-x-8">
+                    <!-- Profile Picture -->
+                    <div class="relative">
+                        <div class="w-32 h-32 rounded-full bg-primary-100 flex items-center justify-center">
+                            <i class="fas fa-user-circle text-primary-600 text-6xl"></i>
+                        </div>
+                        <button class="absolute bottom-0 right-0 bg-primary-600 text-white p-2 rounded-full hover:bg-primary-700">
+                            <i class="fas fa-camera"></i>
+                        </button>
+                    </div>
+                    
+                    <!-- Profile Info -->
+                    <div class="flex-1 text-center md:text-left">
+                        <h1 id="profileName" class="text-3xl font-bold text-gray-900 mb-2">Loading...</h1>
+                        <p id="profileEmail" class="text-gray-600 mb-4">loading...</p>
+                        <div class="flex flex-wrap gap-3 mb-4">
+                            <span id="profileLevel" class="bg-primary-100 text-primary-700 px-3 py-1 rounded-full text-sm font-medium">
+                                Loading...
+                            </span>
+                            <span class="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm font-medium">
+                                Member since: <span id="memberSince">Loading...</span>
+                            </span>
+                        </div>
+                        <div class="flex space-x-4">
+                            <button id="editProfileButton" 
+                                    class="bg-primary-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-primary-700 transition duration-300">
+                                Edit Profile
+                            </button>
+                            <button id="changePasswordButton" 
+                                    class="bg-white text-primary-600 px-6 py-2 rounded-lg font-medium border border-primary-600 hover:bg-primary-50 transition duration-300">
+                                Change Password
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Tabs -->
+            <div class="bg-white rounded-xl shadow-md overflow-hidden mb-8">
+                <!-- Tab Headers -->
+                <div class="border-b">
+                    <nav class="flex">
+                        <button id="profileTab" 
+                                class="px-6 py-4 font-medium text-primary-600 border-b-2 border-primary-600">
+                            <i class="fas fa-user mr-2"></i>Profile
+                        </button>
+                        <button id="settingsTab" 
+                                class="px-6 py-4 font-medium text-gray-600 hover:text-primary-600">
+                            <i class="fas fa-cog mr-2"></i>Settings
+                        </button>
+                        <button id="activityTab" 
+                                class="px-6 py-4 font-medium text-gray-600 hover:text-primary-600">
+                            <i class="fas fa-chart-line mr-2"></i>Activity
+                        </button>
+                    </nav>
+                </div>
+                
+                <!-- Tab Content -->
+                <div class="p-8">
+                    <!-- Profile Tab Content -->
+                    <div id="profileContent">
+                        <h2 class="text-2xl font-bold text-gray-900 mb-6">Personal Information</h2>
+                        
+                        <form id="profileForm" class="space-y-6">
+                            <div class="grid md:grid-cols-2 gap-6">
+                                <div>
+                                    <label for="editName" class="block text-sm font-medium text-gray-700 mb-2">
+                                        Full Name
+                                    </label>
+                                    <input type="text" 
+                                           id="editName" 
+                                           name="name"
+                                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition duration-300"
+                                           disabled>
+                                </div>
+                                
+                                <div>
+                                    <label for="editEmail" class="block text-sm font-medium text-gray-700 mb-2">
+                                        Email Address
+                                    </label>
+                                    <input type="email" 
+                                           id="editEmail" 
+                                           name="email"
+                                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition duration-300"
+                                           disabled>
+                                </div>
+                            </div>
+                            
+                            <div class="grid md:grid-cols-2 gap-6">
+                                <div>
+                                    <label for="editPhone" class="block text-sm font-medium text-gray-700 mb-2">
+                                        Phone Number
+                                    </label>
+                                    <input type="tel" 
+                                           id="editPhone" 
+                                           name="phone"
+                                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition duration-300"
+                                           disabled>
+                                </div>
+                                
+                                <div>
+                                    <label for="editLocation" class="block text-sm font-medium text-gray-700 mb-2">
+                                        Location
+                                    </label>
+                                    <input type="text" 
+                                           id="editLocation" 
+                                           name="location"
+                                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition duration-300"
+                                           placeholder="City, State"
+                                           disabled>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">
+                                    Gardening Experience Level
+                                </label>
+                                <div class="grid grid-cols-3 gap-4">
+                                    <div>
+                                        <input type="radio" 
+                                               id="editBeginner" 
+                                               name="editGardeningLevel" 
+                                               value="beginner" 
+                                               class="hidden peer"
+                                               disabled>
+                                        <label for="editBeginner" 
+                                               class="block p-4 border border-gray-300 rounded-lg text-center cursor-pointer peer-checked:border-primary-500 peer-checked:bg-primary-50 peer-checked:text-primary-700 hover:bg-gray-50 transition duration-300">
+                                            <i class="fas fa-seedling text-2xl mb-2"></i>
+                                            <div class="font-medium">Beginner</div>
+                                        </label>
+                                    </div>
+                                    
+                                    <div>
+                                        <input type="radio" 
+                                               id="editIntermediate" 
+                                               name="editGardeningLevel" 
+                                               value="intermediate" 
+                                               class="hidden peer"
+                                               disabled>
+                                        <label for="editIntermediate" 
+                                               class="block p-4 border border-gray-300 rounded-lg text-center cursor-pointer peer-checked:border-primary-500 peer-checked:bg-primary-50 peer-checked:text-primary-700 hover:bg-gray-50 transition duration-300">
+                                            <i class="fas fa-leaf text-2xl mb-2"></i>
+                                            <div class="font-medium">Intermediate</div>
+                                        </label>
+                                    </div>
+                                    
+                                    <div>
+                                        <input type="radio" 
+                                               id="editAdvanced" 
+                                               name="editGardeningLevel" 
+                                               value="advanced" 
+                                               class="hidden peer"
+                                               disabled>
+                                        <label for="editAdvanced" 
+                                               class="block p-4 border border-gray-300 rounded-lg text-center cursor-pointer peer-checked:border-primary-500 peer-checked:bg-primary-50 peer-checked:text-primary-700 hover:bg-gray-50 transition duration-300">
+                                            <i class="fas fa-tree text-2xl mb-2"></i>
+                                            <div class="font-medium">Advanced</div>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div id="profileMessage" class="hidden p-3 rounded-lg text-center"></div>
+                            
+                            <div class="flex space-x-4">
+                                <button type="button" 
+                                        id="saveProfileButton"
+                                        class="bg-primary-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-primary-700 transition duration-300 hidden">
+                                    Save Changes
+                                </button>
+                                <button type="button" 
+                                        id="cancelProfileButton"
+                                        class="bg-white text-gray-700 px-6 py-2 rounded-lg font-medium border border-gray-300 hover:bg-gray-50 transition duration-300 hidden">
+                                    Cancel
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                    
+                    <!-- Settings Tab Content -->
+                    <div id="settingsContent" class="hidden">
+                        <h2 class="text-2xl font-bold text-gray-900 mb-6">Account Settings</h2>
+                        
+                        <div class="space-y-8">
+                            <!-- Notification Settings -->
+                            <div>
+                                <h3 class="text-lg font-bold text-gray-900 mb-4">Notification Preferences</h3>
+                                <div class="space-y-4">
+                                    <div class="flex items-center justify-between">
+                                        <div>
+                                            <p class="font-medium text-gray-900">Email Notifications</p>
+                                            <p class="text-sm text-gray-600">Receive updates about your plants and community</p>
+                                        </div>
+                                        <label class="relative inline-flex items-center cursor-pointer">
+                                            <input type="checkbox" class="sr-only peer" checked>
+                                            <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary-600"></div>
+                                        </label>
+                                    </div>
+                                    
+                                    <div class="flex items-center justify-between">
+                                        <div>
+                                            <p class="font-medium text-gray-900">Community Messages</p>
+                                            <p class="text-sm text-gray-600">Get notified about new messages in communities</p>
+                                        </div>
+                                        <label class="relative inline-flex items-center cursor-pointer">
+                                            <input type="checkbox" class="sr-only peer" checked>
+                                            <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary-600"></div>
+                                        </label>
+                                    </div>
+                                    
+                                    <div class="flex items-center justify-between">
+                                        <div>
+                                            <p class="font-medium text-gray-900">Marketplace Updates</p>
+                                            <p class="text-sm text-gray-600">Notifications about your marketplace listings</p>
+                                        </div>
+                                        <label class="relative inline-flex items-center cursor-pointer">
+                                            <input type="checkbox" class="sr-only peer" checked>
+                                            <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary-600"></div>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Privacy Settings -->
+                            <div>
+                                <h3 class="text-lg font-bold text-gray-900 mb-4">Privacy Settings</h3>
+                                <div class="space-y-4">
+                                    <div class="flex items-center justify-between">
+                                        <div>
+                                            <p class="font-medium text-gray-900">Show Profile to Public</p>
+                                            <p class="text-sm text-gray-600">Allow other users to view your profile</p>
+                                        </div>
+                                        <label class="relative inline-flex items-center cursor-pointer">
+                                            <input type="checkbox" class="sr-only peer" checked>
+                                            <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary-600"></div>
+                                        </label>
+                                    </div>
+                                    
+                                    <div class="flex items-center justify-between">
+                                        <div>
+                                            <p class="font-medium text-gray-900">Show Plants Collection</p>
+                                            <p class="text-sm text-gray-600">Display your plants to other gardeners</p>
+                                        </div>
+                                                                                <label class="relative inline-flex items-center cursor-pointer">
+                                            <input type="checkbox" class="sr-only peer" checked>
+                                            <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary-600"></div>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Danger Zone -->
+                            <div class="border-t pt-8">
+                                <h3 class="text-lg font-bold text-gray-900 mb-4">Danger Zone</h3>
+                                <div class="space-y-4">
+                                    <button id="deleteAccountButton" 
+                                            class="bg-red-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-red-700 transition duration-300">
+                                        Delete Account
+                                    </button>
+                                    <p class="text-sm text-gray-600">
+                                        Once you delete your account, there is no going back. Please be certain.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Activity Tab Content -->
+                    <div id="activityContent" class="hidden">
+                        <h2 class="text-2xl font-bold text-gray-900 mb-6">Your Activity</h2>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+                            <div class="bg-primary-50 rounded-xl p-6">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="text-gray-600 text-sm">Total Plants</p>
+                                        <h3 class="text-3xl font-bold text-gray-900">5</h3>
+                                    </div>
+                                    <div class="bg-primary-100 p-3 rounded-full">
+                                        <i class="fas fa-plant text-primary-600 text-2xl"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-blue-50 rounded-xl p-6">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="text-gray-600 text-sm">Communities Joined</p>
+                                        <h3 class="text-3xl font-bold text-gray-900">3</h3>
+                                    </div>
+                                    <div class="bg-blue-100 p-3 rounded-full">
+                                        <i class="fas fa-users text-blue-600 text-2xl"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-green-50 rounded-xl p-6">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="text-gray-600 text-sm">Marketplace Items</p>
+                                        <h3 class="text-3xl font-bold text-gray-900">2</h3>
+                                    </div>
+                                    <div class="bg-green-100 p-3 rounded-full">
+                                        <i class="fas fa-store text-green-600 text-2xl"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <h3 class="text-lg font-bold text-gray-900 mb-4">Recent Activities</h3>
+                        <div class="space-y-4">
+                            <div class="flex items-start space-x-3 p-4 bg-gray-50 rounded-lg">
+                                <div class="bg-primary-100 p-2 rounded-full">
+                                    <i class="fas fa-plus text-primary-600"></i>
+                                </div>
+                                <div>
+                                    <p class="font-medium text-gray-900">Added Tomato plant to your garden</p>
+                                    <p class="text-sm text-gray-600">2 days ago</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start space-x-3 p-4 bg-gray-50 rounded-lg">
+                                <div class="bg-blue-100 p-2 rounded-full">
+                                    <i class="fas fa-comment text-blue-600"></i>
+                                </div>
+                                <div>
+                                    <p class="font-medium text-gray-900">Posted in Urban Gardeners community</p>
+                                    <p class="text-sm text-gray-600">3 days ago</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start space-x-3 p-4 bg-gray-50 rounded-lg">
+                                <div class="bg-green-100 p-2 rounded-full">
+                                    <i class="fas fa-book text-green-600"></i>
+                                </div>
+                                <div>
+                                    <p class="font-medium text-gray-900">Read article "Beginner's Guide to Composting"</p>
+                                    <p class="text-sm text-gray-600">1 week ago</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Change Password Modal -->
+            <div id="changePasswordModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+                <div class="bg-white rounded-xl shadow-2xl max-w-md w-full p-8">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-2xl font-bold text-gray-900">Change Password</h3>
+                        <button id="closePasswordModal" class="text-gray-400 hover:text-gray-600">
+                            <i class="fas fa-times text-xl"></i>
+                        </button>
+                    </div>
+                    
+                    <form id="passwordForm" class="space-y-6">
+                        <div>
+                            <label for="currentPassword" class="block text-sm font-medium text-gray-700 mb-2">
+                                Current Password
+                            </label>
+                            <input type="password" 
+                                   id="currentPassword" 
+                                   name="currentPassword"
+                                   required
+                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition duration-300"
+                                   placeholder="Enter current password">
+                            <div id="currentPasswordError" class="text-red-600 text-sm mt-1 hidden"></div>
+                        </div>
+                        
+                        <div>
+                            <label for="newPassword" class="block text-sm font-medium text-gray-700 mb-2">
+                                New Password
+                            </label>
+                            <input type="password" 
+                                   id="newPassword" 
+                                   name="newPassword"
+                                   required
+                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition duration-300"
+                                   placeholder="Enter new password">
+                            <div id="newPasswordError" class="text-red-600 text-sm mt-1 hidden"></div>
+                        </div>
+                        
+                        <div>
+                            <label for="confirmNewPassword" class="block text-sm font-medium text-gray-700 mb-2">
+                                Confirm New Password
+                            </label>
+                            <input type="password" 
+                                   id="confirmNewPassword" 
+                                   name="confirmNewPassword"
+                                   required
+                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition duration-300"
+                                   placeholder="Confirm new password">
+                            <div id="confirmNewPasswordError" class="text-red-600 text-sm mt-1 hidden"></div>
+                        </div>
+                        
+                        <div id="passwordMessage" class="hidden p-3 rounded-lg text-center"></div>
+                        
+                        <div class="flex space-x-4">
+                            <button type="submit" 
+                                    id="savePasswordButton"
+                                    class="flex-1 bg-primary-600 text-white py-3 rounded-lg font-medium hover:bg-primary-700 transition duration-300">
+                                Change Password
+                            </button>
+                            <button type="button" 
+                                    id="cancelPasswordButton"
+                                    class="flex-1 bg-white text-gray-700 py-3 rounded-lg font-medium border border-gray-300 hover:bg-gray-50 transition duration-300">
+                                Cancel
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-8">
+        <div class="container mx-auto px-4 text-center">
+            <p class="text-gray-400">© 2024 Terrace Buddy. Urban Gardening Made Easy.</p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="./js/utils.js"></script>
+    <script src="./js/api.js"></script>
+    <script src="./js/auth.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check authentication
+            if (!checkAuthStatus()) {
+                window.location.href = 'login.html';
+                return;
+            }
+            
+            // Load user data
+            loadUserData();
+            
+            // Initialize user dropdown
+            const userMenuButton = document.getElementById('userMenuButton');
+            const dropdownMenu = document.getElementById('dropdownMenu');
+            
+            if (userMenuButton && dropdownMenu) {
+                userMenuButton.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    dropdownMenu.classList.toggle('hidden');
+                });
+                
+                document.addEventListener('click', function() {
+                    dropdownMenu.classList.add('hidden');
+                });
+            }
+            
+            // Logout functionality
+            const logoutButton = document.getElementById('logoutButton');
+            if (logoutButton) {
+                logoutButton.addEventListener('click', function() {
+                    logoutUser();
+                });
+            }
+            
+            // Tab functionality
+            const profileTab = document.getElementById('profileTab');
+            const settingsTab = document.getElementById('settingsTab');
+            const activityTab = document.getElementById('activityTab');
+            const profileContent = document.getElementById('profileContent');
+            const settingsContent = document.getElementById('settingsContent');
+            const activityContent = document.getElementById('activityContent');
+            
+            profileTab.addEventListener('click', function() {
+                switchTab('profile');
+            });
+            
+            settingsTab.addEventListener('click', function() {
+                switchTab('settings');
+            });
+            
+            activityTab.addEventListener('click', function() {
+                switchTab('activity');
+            });
+            
+            // Edit profile functionality
+            const editProfileButton = document.getElementById('editProfileButton');
+            const saveProfileButton = document.getElementById('saveProfileButton');
+            const cancelProfileButton = document.getElementById('cancelProfileButton');
+            const profileForm = document.getElementById('profileForm');
+            const profileInputs = profileForm.querySelectorAll('input, select');
+            
+            let originalProfileData = {};
+            
+            editProfileButton.addEventListener('click', function() {
+                // Store original data
+                originalProfileData = {
+                    name: document.getElementById('editName').value,
+                    email: document.getElementById('editEmail').value,
+                    phone: document.getElementById('editPhone').value,
+                    location: document.getElementById('editLocation').value,
+                    gardeningLevel: document.querySelector('input[name="editGardeningLevel"]:checked')?.value
+                };
+                
+                // Enable inputs
+                profileInputs.forEach(input => {
+                    input.disabled = false;
+                });
+                
+                // Show save and cancel buttons
+                editProfileButton.classList.add('hidden');
+                saveProfileButton.classList.remove('hidden');
+                cancelProfileButton.classList.remove('hidden');
+            });
+            
+            cancelProfileButton.addEventListener('click', function() {
+                // Restore original data
+                document.getElementById('editName').value = originalProfileData.name;
+                document.getElementById('editEmail').value = originalProfileData.email;
+                document.getElementById('editPhone').value = originalProfileData.phone;
+                document.getElementById('editLocation').value = originalProfileData.location;
+                
+                if (originalProfileData.gardeningLevel) {
+                    document.getElementById(`edit${capitalizeFirst(originalProfileData.gardeningLevel)}`).checked = true;
+                }
+                
+                // Disable inputs
+                profileInputs.forEach(input => {
+                    input.disabled = true;
+                });
+                
+                // Hide save and cancel buttons
+                editProfileButton.classList.remove('hidden');
+                saveProfileButton.classList.add('hidden');
+                cancelProfileButton.classList.add('hidden');
+                
+                // Hide any messages
+                hideMessage('profileMessage');
+            });
+            
+            saveProfileButton.addEventListener('click', async function() {
+                // Get form data
+                const userData = {
+                    name: document.getElementById('editName').value,
+                    email: document.getElementById('editEmail').value,
+                    phone: document.getElementById('editPhone').value || undefined,
+                    location: document.getElementById('editLocation').value || undefined,
+                    gardeningLevel: document.querySelector('input[name="editGardeningLevel"]:checked')?.value
+                };
+                
+                // Validate
+                if (!userData.name || !userData.email || !userData.gardeningLevel) {
+                    showMessage('profileMessage', 'Please fill all required fields', 'error');
+                    return;
+                }
+                
+                try {
+                    // Call update profile API
+                    const response = await updateUserProfile(userData);
+                    
+                    if (response.success) {
+                        // Update local storage
+                        const currentUser = JSON.parse(localStorage.getItem('user') || '{}');
+                        const updatedUser = { ...currentUser, ...userData };
+                        localStorage.setItem('user', JSON.stringify(updatedUser));
+                        
+                        // Update UI
+                        loadUserData();
+                        
+                        // Disable inputs
+                        profileInputs.forEach(input => {
+                            input.disabled = true;
+                        });
+                        
+                        // Hide save and cancel buttons
+                        editProfileButton.classList.remove('hidden');
+                        saveProfileButton.classList.add('hidden');
+                        cancelProfileButton.classList.add('hidden');
+                        
+                        showMessage('profileMessage', 'Profile updated successfully!', 'success');
+                    } else {
+                        showMessage('profileMessage', response.message || 'Update failed', 'error');
+                    }
+                } catch (error) {
+                    showMessage('profileMessage', error.message || 'An error occurred', 'error');
+                }
+            });
+            
+            // Change password functionality
+            const changePasswordButton = document.getElementById('changePasswordButton');
+            const changePasswordModal = document.getElementById('changePasswordModal');
+            const closePasswordModal = document.getElementById('closePasswordModal');
+            const cancelPasswordButton = document.getElementById('cancelPasswordButton');
+            const passwordForm = document.getElementById('passwordForm');
+            
+            changePasswordButton.addEventListener('click', function() {
+                changePasswordModal.classList.remove('hidden');
+                resetPasswordForm();
+            });
+            
+            closePasswordModal.addEventListener('click', function() {
+                changePasswordModal.classList.add('hidden');
+            });
+            
+            cancelPasswordButton.addEventListener('click', function() {
+                changePasswordModal.classList.add('hidden');
+            });
+            
+            passwordForm.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                const currentPassword = document.getElementById('currentPassword').value;
+                const newPassword = document.getElementById('newPassword').value;
+                const confirmNewPassword = document.getElementById('confirmNewPassword').value;
+                
+                // Reset errors
+                resetPasswordErrors();
+                hideMessage('passwordMessage');
+                
+                // Validate
+                let valid = true;
+                
+                if (!currentPassword) {
+                    showError('currentPasswordError', 'Current password is required');
+                    valid = false;
+                }
+                
+                if (!newPassword) {
+                    showError('newPasswordError', 'New password is required');
+                    valid = false;
+                } else if (newPassword.length < 6) {
+                    showError('newPasswordError', 'Password must be at least 6 characters');
+                    valid = false;
+                }
+                
+                if (!confirmNewPassword) {
+                    showError('confirmNewPasswordError', 'Please confirm new password');
+                    valid = false;
+                } else if (newPassword !== confirmNewPassword) {
+                    showError('confirmNewPasswordError', 'Passwords do not match');
+                    valid = false;
+                }
+                
+                if (!valid) return;
+                
+                try {
+                    // Call change password API
+                    const response = await changePassword(currentPassword, newPassword);
+                    
+                    if (response.success) {
+                        showMessage('passwordMessage', 'Password changed successfully!', 'success');
+                        
+                        // Clear form and close modal after 2 seconds
+                        setTimeout(() => {
+                            changePasswordModal.classList.add('hidden');
+                            resetPasswordForm();
+                        }, 2000);
+                    } else {
+                        showMessage('passwordMessage', response.message || 'Password change failed', 'error');
+                    }
+                } catch (error) {
+                    showMessage('passwordMessage', error.message || 'An error occurred', 'error');
+                }
+            });
+            
+            // Delete account functionality
+            const deleteAccountButton = document.getElementById('deleteAccountButton');
+            deleteAccountButton.addEventListener('click', function() {
+                if (confirm('Are you sure you want to delete your account? This action cannot be undone.')) {
+                    // Call delete account API
+                    deleteAccountButton.textContent = 'Deleting...';
+                    deleteAccountButton.disabled = true;
+                    
+                    // In real implementation, you would call deleteAccount() function
+                    setTimeout(() => {
+                        alert('Account deletion would be implemented here. For now, logging out.');
+                        logoutUser();
+                    }, 1000);
+                }
+            });
+            
+            // Helper functions
+            function switchTab(tabName) {
+                // Update tab headers
+                [profileTab, settingsTab, activityTab].forEach(tab => {
+                    tab.classList.remove('text-primary-600', 'border-primary-600');
+                    tab.classList.add('text-gray-600', 'hover:text-primary-600');
+                    tab.classList.remove('border-b-2');
+                });
+                
+                // Show selected tab
+                const selectedTab = document.getElementById(`${tabName}Tab`);
+                selectedTab.classList.add('text-primary-600', 'border-primary-600', 'border-b-2');
+                selectedTab.classList.remove('text-gray-600', 'hover:text-primary-600');
+                
+                // Update content
+                [profileContent, settingsContent, activityContent].forEach(content => {
+                    content.classList.add('hidden');
+                });
+                document.getElementById(`${tabName}Content`).classList.remove('hidden');
+            }
+            
+            function resetPasswordForm() {
+                passwordForm.reset();
+                resetPasswordErrors();
+                hideMessage('passwordMessage');
+            }
+            
+            function resetPasswordErrors() {
+                ['currentPasswordError', 'newPasswordError', 'confirmNewPasswordError'].forEach(id => {
+                    const element = document.getElementById(id);
+                    if (element) {
+                        element.textContent = '';
+                        element.classList.add('hidden');
+                    }
+                });
+            }
+            
+            function showError(elementId, message) {
+                const element = document.getElementById(elementId);
+                if (element) {
+                    element.textContent = message;
+                    element.classList.remove('hidden');
+                }
+            }
+            
+            function showMessage(elementId, message, type) {
+                const element = document.getElementById(elementId);
+                if (element) {
+                    element.textContent = message;
+                    element.className = 'p-3 rounded-lg text-center';
+                    
+                    if (type === 'success') {
+                        element.classList.add('bg-green-100', 'text-green-700');
+                    } else if (type === 'error') {
+                        element.classList.add('bg-red-100', 'text-red-700');
+                    }
+                    
+                    element.classList.remove('hidden');
+                }
+            }
+            
+            function hideMessage(elementId) {
+                const element = document.getElementById(elementId);
+                if (element) {
+                    element.classList.add('hidden');
+                }
+            }
+            
+            function capitalizeFirst(string) {
+                return string.charAt(0).toUpperCase() + string.slice(1);
+            }
+        });
+        
+        function loadUserData() {
+            const user = JSON.parse(localStorage.getItem('user') || '{}');
+            
+            // Update profile page
+            if (user.name) {
+                document.getElementById('userName').textContent = user.name;
+                document.getElementById('profileName').textContent = user.name;
+                document.getElementById('editName').value = user.name;
+            }
+            
+            if (user.email) {
+                document.getElementById('profileEmail').textContent = user.email;
+                document.getElementById('editEmail').value = user.email;
+            }
+            
+            if (user.phone) {
+                document.getElementById('editPhone').value = user.phone;
+            }
+            
+            if (user.location) {
+                document.getElementById('editLocation').value = user.location;
+            }
+            
+            if (user.gardeningLevel) {
+                const levelText = user.gardeningLevel.charAt(0).toUpperCase() + user.gardeningLevel.slice(1);
+                document.getElementById('profileLevel').textContent = levelText;
+                
+                // Set radio button
+                const radioButton = document.getElementById(`edit${capitalizeFirst(user.gardeningLevel)}`);
+                if (radioButton) {
+                    radioButton.checked = true;
+                }
+            }
+            
+            // Set member since (using current date for demo)
+            const memberSince = user.createdAt ? new Date(user.createdAt).toLocaleDateString() : new Date().toLocaleDateString();
+            document.getElementById('memberSince').textContent = memberSince;
+        }
+        
+        function capitalizeFirst(string) {
+            return string.charAt(0).toUpperCase() + string.slice(1);
+        }
+    </script>
+</body>
+</html>

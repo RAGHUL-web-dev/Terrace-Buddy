@@ -1,0 +1,1238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Communities - Terrace Buddy</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Custom Tailwind Configuration -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            200: '#bbf7d0',
+                            300: '#86efac',
+                            400: '#4ade80',
+                            500: '#22c55e',
+                            600: '#16a34a',
+                            700: '#15803d',
+                            800: '#166534',
+                            900: '#14532d',
+                        }
+                    },
+                    fontFamily: {
+                        'sans': ['Inter', 'system-ui', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Inter Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        .hover-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .hover-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        .line-clamp-2 {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-radius: 50%;
+            border-top-color: #22c55e;
+            animation: spin 1s ease-in-out infinite;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+
+<body class="font-sans bg-gray-50 min-h-screen">
+    <!-- Navigation -->
+    <nav id="navbar" class="bg-white shadow-md">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo -->
+                <div class="flex items-center space-x-2">
+                    <a href="dashboard.html" class="flex items-center space-x-2">
+                        <i class="fas fa-seedling text-primary-600 text-2xl"></i>
+                        <span class="text-xl font-bold text-gray-800">Terrace Buddy</span>
+                    </a>
+                </div>
+
+                <!-- User Menu -->
+                <div class="relative">
+                    <button id="userMenuButton"
+                        class="flex items-center space-x-2 text-gray-700 hover:text-primary-600 font-medium">
+                        <i class="fas fa-user-circle text-2xl"></i>
+                        <span id="userName">Loading...</span>
+                        <i class="fas fa-chevron-down text-sm"></i>
+                    </button>
+
+                    <!-- Dropdown Menu -->
+                    <div id="dropdownMenu"
+                        class="hidden absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-10 border">
+                        <a href="dashboard.html" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
+                            <i class="fas fa-tachometer-alt mr-2"></i>Dashboard
+                        </a>
+                        <a href="profile.html" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
+                            <i class="fas fa-user mr-2"></i>Profile
+                        </a>
+                        <a href="communities.html"
+                            class="block px-4 py-2 text-gray-700 hover:bg-gray-100 bg-primary-50">
+                            <i class="fas fa-users mr-2"></i>Communities
+                        </a>
+                        <a href="marketplace.html" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
+                            <i class="fas fa-store mr-2"></i>Marketplace
+                        </a>
+                        <a href="knowledge.html" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
+                            <i class="fas fa-book mr-2"></i>Knowledge Hub
+                        </a>
+                        <a href="plants.html" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
+                            <i class="fas fa-plant mr-2"></i>My Plants
+                        </a>
+                        <hr class="my-1">
+                        <button id="logoutButton"
+                            class="block w-full text-left px-4 py-2 text-red-600 hover:bg-gray-100">
+                            <i class="fas fa-sign-out-alt mr-2"></i>Logout
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8">
+        <div class="max-w-7xl mx-auto">
+            <!-- Header -->
+            <div class="mb-8">
+                <div class="flex flex-col md:flex-row md:items-center justify-between mb-6">
+                    <div>
+                        <h1 class="text-3xl font-bold text-gray-900 mb-2">Communities</h1>
+                        <p class="text-gray-600">Connect with fellow gardeners, share experiences, and learn together</p>
+                    </div>
+                    <button id="createCommunityBtn"
+                        class="mt-4 md:mt-0 bg-primary-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-700 transition duration-300 flex items-center">
+                        <i class="fas fa-plus mr-2"></i> Create Community
+                    </button>
+                </div>
+
+                <!-- Search and Filter -->
+                <div class="bg-white rounded-xl shadow-md p-6 mb-6">
+                    <div class="flex flex-col md:flex-row md:items-center space-y-4 md:space-y-0 md:space-x-4">
+                        <!-- Search -->
+                        <div class="flex-1">
+                            <div class="relative">
+                                <input type="text" id="communitySearch" placeholder="Search communities..."
+                                    class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                                <i class="fas fa-search absolute left-3 top-3.5 text-gray-400"></i>
+                            </div>
+                        </div>
+
+                        <!-- Category Filter -->
+                        <div>
+                            <select id="categoryFilter"
+                                class="w-full md:w-auto px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                                <option value="">All Categories</option>
+                                <option value="general">General</option>
+                                <option value="vegetables">Vegetables</option>
+                                <option value="herbs">Herbs</option>
+                                <option value="flowers">Flowers</option>
+                                <option value="organic">Organic</option>
+                                <option value="tools">Tools</option>
+                                <option value="regional">Regional</option>
+                            </select>
+                        </div>
+
+                        <!-- Visibility Filter -->
+                        <div>
+                            <select id="visibilityFilter"
+                                class="w-full md:w-auto px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                                <option value="">All Communities</option>
+                                <option value="public">Public</option>
+                                <option value="private">Private</option>
+                            </select>
+                        </div>
+
+                        <!-- Clear Filters -->
+                        <button id="clearFilters" class="text-gray-600 hover:text-primary-600 font-medium">
+                            Clear Filters
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tabs -->
+            <div class="border-b mb-8">
+                <nav class="flex space-x-8">
+                    <button id="allCommunitiesTab"
+                        class="px-4 py-3 font-medium text-primary-600 border-b-2 border-primary-600">
+                        All Communities
+                    </button>
+                    <button id="myCommunitiesTab" class="px-4 py-3 font-medium text-gray-600 hover:text-primary-600">
+                        My Communities
+                    </button>
+                    <button id="pendingRequestsTab"
+                        class="px-4 py-3 font-medium text-gray-600 hover:text-primary-600 relative">
+                        Pending Requests
+                        <span id="pendingBadge"
+                            class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center hidden">0</span>
+                    </button>
+                </nav>
+            </div>
+
+            <!-- Content Area -->
+            <div>
+                <!-- All Communities Tab -->
+                <div id="allCommunitiesContent" class="tab-content">
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="allCommunitiesGrid">
+                        <!-- Community cards will be loaded here -->
+                    </div>
+
+                    <!-- Loading State -->
+                    <div id="communitiesLoading" class="text-center py-12">
+                        <div class="spinner mx-auto mb-4"></div>
+                        <p class="text-gray-600">Loading communities...</p>
+                    </div>
+
+                    <!-- Empty State -->
+                    <div id="noCommunities" class="text-center py-12 hidden">
+                        <i class="fas fa-users text-gray-300 text-6xl mb-4"></i>
+                        <h3 class="text-xl font-semibold text-gray-900 mb-2">No communities found</h3>
+                        <p class="text-gray-600 mb-6">Try adjusting your search or filters</p>
+                        <button id="createFirstCommunity"
+                            class="bg-primary-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-700 transition duration-300">
+                            Create First Community
+                        </button>
+                    </div>
+                </div>
+
+                <!-- My Communities Tab -->
+                <div id="myCommunitiesContent" class="tab-content hidden">
+                    <!-- My communities will be loaded here -->
+                    <div id="myCommunitiesLoading" class="text-center py-12">
+                        <div class="spinner mx-auto mb-4"></div>
+                        <p class="text-gray-600">Loading your communities...</p>
+                    </div>
+
+                    <div id="myCommunitiesList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+
+                    <div id="noMyCommunities" class="text-center py-12 hidden">
+                        <i class="fas fa-user-friends text-gray-300 text-6xl mb-4"></i>
+                        <h3 class="text-xl font-semibold text-gray-900 mb-2">You haven't joined any communities yet</h3>
+                        <p class="text-gray-600 mb-6">Join communities to connect with other gardeners</p>
+                    </div>
+                </div>
+
+                <!-- Pending Requests Tab -->
+                <div id="pendingRequestsContent" class="tab-content hidden">
+                    <div class="bg-white rounded-xl shadow-md p-6">
+                        <h3 class="text-lg font-semibold text-gray-900 mb-4">Join Requests for Your Communities</h3>
+                        <div id="pendingRequestsList"></div>
+                        <div id="noPendingRequests" class="text-center py-12 hidden">
+                            <i class="fas fa-check-circle text-gray-300 text-6xl mb-4"></i>
+                            <p class="text-gray-600">No pending join requests</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Create Community Modal -->
+    <div id="createCommunityModal"
+        class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-xl shadow-2xl max-w-md w-full max-h-[90vh] overflow-y-auto">
+            <div class="p-6">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-2xl font-bold text-gray-900">Create Community</h3>
+                    <button id="closeCreateModal" class="text-gray-400 hover:text-gray-600">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+
+                <form id="createCommunityForm" class="space-y-6">
+                    <div>
+                        <label for="communityName" class="block text-sm font-medium text-gray-700 mb-2">
+                            Community Name *
+                        </label>
+                        <input type="text" id="communityName" name="name" required
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition duration-300"
+                            placeholder="e.g., Urban Vegetable Growers">
+                        <div id="nameError" class="text-red-600 text-sm mt-1 hidden"></div>
+                    </div>
+
+                    <div>
+                        <label for="communityDescription" class="block text-sm font-medium text-gray-700 mb-2">
+                            Description *
+                        </label>
+                        <textarea id="communityDescription" name="description" required rows="3"
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition duration-300"
+                            placeholder="Describe your community..."></textarea>
+                        <div id="descriptionError" class="text-red-600 text-sm mt-1 hidden"></div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label for="communityVisibility" class="block text-sm font-medium text-gray-700 mb-2">
+                                Visibility
+                            </label>
+                            <select id="communityVisibility" name="visibility"
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                                <option value="public">Public</option>
+                                <option value="private">Private</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label for="communityCategory" class="block text-sm font-medium text-gray-700 mb-2">
+                                Category
+                            </label>
+                            <select id="communityCategory" name="category"
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                                <option value="general">General</option>
+                                <option value="vegetables">Vegetables</option>
+                                <option value="herbs">Herbs</option>
+                                <option value="flowers">Flowers</option>
+                                <option value="organic">Organic</option>
+                                <option value="tools">Tools</option>
+                                <option value="regional">Regional</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label for="communityRules" class="block text-sm font-medium text-gray-700 mb-2">
+                            Community Rules (Optional)
+                        </label>
+                        <textarea id="communityRules" name="rules" rows="2"
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition duration-300"
+                            placeholder="One rule per line..."></textarea>
+                        <p class="text-sm text-gray-500 mt-1">Separate rules with commas or new lines</p>
+                    </div>
+
+                    <div id="createCommunityMessage" class="hidden p-3 rounded-lg text-center"></div>
+
+                    <div class="flex space-x-4">
+                        <button type="submit" id="createCommunitySubmit"
+                            class="flex-1 bg-primary-600 text-white py-3 rounded-lg font-semibold hover:bg-primary-700 transition duration-300">
+                            Create Community
+                        </button>
+                        <button type="button" id="cancelCreateCommunity"
+                            class="flex-1 bg-white text-gray-700 py-3 rounded-lg font-semibold border border-gray-300 hover:bg-gray-50 transition duration-300">
+                            Cancel
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-8">
+        <div class="container mx-auto px-4 text-center">
+            <p class="text-gray-400">© 2024 Terrace Buddy. Urban Gardening Made Easy.</p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="./js/utils.js"></script>
+    <script src="./js/api.js"></script>
+    <script src="./js/auth.js"></script>
+
+    <script>
+        let allCommunities = [];
+        let myCommunities = [];
+        let pendingRequests = [];
+
+        document.addEventListener('DOMContentLoaded', async function () {
+            // Check authentication
+            if (!checkAuthStatus()) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            // Load user data
+            const user = getUserData();
+            if (user && user.name) {
+                document.getElementById('userName').textContent = user.name;
+            }
+
+            // Initialize user dropdown
+            const userMenuButton = document.getElementById('userMenuButton');
+            const dropdownMenu = document.getElementById('dropdownMenu');
+
+            if (userMenuButton && dropdownMenu) {
+                userMenuButton.addEventListener('click', function (e) {
+                    e.stopPropagation();
+                    dropdownMenu.classList.toggle('hidden');
+                });
+
+                document.addEventListener('click', function () {
+                    dropdownMenu.classList.add('hidden');
+                });
+            }
+
+            // Logout functionality
+            const logoutButton = document.getElementById('logoutButton');
+            if (logoutButton) {
+                logoutButton.addEventListener('click', function () {
+                    logoutUser();
+                });
+            }
+
+            // Tab functionality - Fixed the selector issue
+            const allCommunitiesTab = document.getElementById('allCommunitiesTab');
+            const myCommunitiesTab = document.getElementById('myCommunitiesTab');
+            const pendingRequestsTab = document.getElementById('pendingRequestsTab');
+
+            if (allCommunitiesTab) {
+                allCommunitiesTab.addEventListener('click', () => switchTab('all'));
+            }
+            if (myCommunitiesTab) {
+                myCommunitiesTab.addEventListener('click', () => switchTab('my'));
+            }
+            if (pendingRequestsTab) {
+                pendingRequestsTab.addEventListener('click', () => switchTab('pending'));
+            }
+
+            // Create community modal
+            const createCommunityBtn = document.getElementById('createCommunityBtn');
+            const createCommunityModal = document.getElementById('createCommunityModal');
+            const closeCreateModal = document.getElementById('closeCreateModal');
+            const cancelCreateCommunity = document.getElementById('cancelCreateCommunity');
+
+            if (createCommunityBtn) {
+                createCommunityBtn.addEventListener('click', () => {
+                    createCommunityModal.classList.remove('hidden');
+                });
+            }
+
+            if (closeCreateModal) {
+                closeCreateModal.addEventListener('click', () => {
+                    createCommunityModal.classList.add('hidden');
+                });
+            }
+
+            if (cancelCreateCommunity) {
+                cancelCreateCommunity.addEventListener('click', () => {
+                    createCommunityModal.classList.add('hidden');
+                });
+            }
+
+            // Create community form
+            const createCommunityForm = document.getElementById('createCommunityForm');
+            if (createCommunityForm) {
+                createCommunityForm.addEventListener('submit', async function (e) {
+                    e.preventDefault();
+
+                    const name = document.getElementById('communityName').value;
+                    const description = document.getElementById('communityDescription').value;
+                    const visibility = document.getElementById('communityVisibility').value;
+                    const category = document.getElementById('communityCategory').value;
+                    const rules = document.getElementById('communityRules').value;
+
+                    // Reset errors
+                    resetErrors();
+                    hideMessage('createCommunityMessage');
+
+                    // Validate
+                    if (!name) {
+                        showError('nameError', 'Community name is required');
+                        return;
+                    }
+
+                    if (!description) {
+                        showError('descriptionError', 'Description is required');
+                        return;
+                    }
+
+                    // Prepare data
+                    const communityData = {
+                        name,
+                        description,
+                        visibility,
+                        category,
+                        rules: rules ? rules.split(/[\n,]/).map(r => r.trim()).filter(r => r) : []
+                    };
+
+                    try {
+                        // Show loading
+                        const submitBtn = document.getElementById('createCommunitySubmit');
+                        const originalText = submitBtn.textContent;
+                        submitBtn.disabled = true;
+                        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Creating...';
+
+                        // Create community
+                        const response = await api.createCommunity(communityData);
+
+                        if (response.success) {
+                            showMessage('createCommunityMessage', 'Community created successfully!', 'success');
+
+                            // Close modal and reload communities after 1 second
+                            setTimeout(() => {
+                                createCommunityModal.classList.add('hidden');
+                                createCommunityForm.reset();
+                                loadAllCommunities();
+                                loadMyCommunities();
+                            }, 1000);
+                        } else {
+                            showMessage('createCommunityMessage', response.message || 'Failed to create community', 'error');
+                        }
+                    } catch (error) {
+                        console.error('Create community error:', error);
+                        showMessage('createCommunityMessage', error.message || 'An error occurred', 'error');
+                    } finally {
+                        const submitBtn = document.getElementById('createCommunitySubmit');
+                        if (submitBtn) {
+                            submitBtn.disabled = false;
+                            submitBtn.textContent = 'Create Community';
+                        }
+                    }
+                });
+            }
+
+            // Search and filter
+            const searchInput = document.getElementById('communitySearch');
+            const categoryFilter = document.getElementById('categoryFilter');
+            const visibilityFilter = document.getElementById('visibilityFilter');
+            const clearFiltersBtn = document.getElementById('clearFilters');
+
+            const debouncedSearch = debounce(loadAllCommunities, 500);
+
+            if (searchInput) searchInput.addEventListener('input', debouncedSearch);
+            if (categoryFilter) categoryFilter.addEventListener('change', loadAllCommunities);
+            if (visibilityFilter) visibilityFilter.addEventListener('change', loadAllCommunities);
+
+            if (clearFiltersBtn) {
+                clearFiltersBtn.addEventListener('click', () => {
+                    if (searchInput) searchInput.value = '';
+                    if (categoryFilter) categoryFilter.value = '';
+                    if (visibilityFilter) visibilityFilter.value = '';
+                    loadAllCommunities();
+                });
+            }
+
+            // Create first community button
+            const createFirstCommunityBtn = document.getElementById('createFirstCommunity');
+            if (createFirstCommunityBtn) {
+                createFirstCommunityBtn.addEventListener('click', () => {
+                    createCommunityModal.classList.remove('hidden');
+                });
+            }
+
+            // Initial load
+            await Promise.all([
+                loadAllCommunities(),
+                loadMyCommunities(),
+                loadPendingRequests()
+            ]);
+
+            switchTab('all');
+        });
+
+        function switchTab(tab) {
+            // Update tab headers
+            const tabs = {
+                'all': 'allCommunitiesTab',
+                'my': 'myCommunitiesTab',
+                'pending': 'pendingRequestsTab'
+            };
+
+            const contents = {
+                'all': 'allCommunitiesContent',
+                'my': 'myCommunitiesContent',
+                'pending': 'pendingRequestsContent'
+            };
+
+            // Reset all tabs
+            Object.values(tabs).forEach(tabId => {
+                const tabElement = document.getElementById(tabId);
+                if (tabElement) {
+                    tabElement.classList.remove('text-primary-600', 'border-primary-600', 'border-b-2');
+                    tabElement.classList.add('text-gray-600', 'hover:text-primary-600');
+                }
+            });
+
+            // Hide all contents
+            Object.values(contents).forEach(contentId => {
+                const contentElement = document.getElementById(contentId);
+                if (contentElement) {
+                    contentElement.classList.add('hidden');
+                }
+            });
+
+            // Activate selected tab
+            const selectedTab = tabs[tab];
+            const selectedContent = contents[tab];
+
+            const tabElement = document.getElementById(selectedTab);
+            const contentElement = document.getElementById(selectedContent);
+
+            if (tabElement) {
+                tabElement.classList.remove('text-gray-600', 'hover:text-primary-600');
+                tabElement.classList.add('text-primary-600', 'border-primary-600', 'border-b-2');
+            }
+
+            if (contentElement) {
+                contentElement.classList.remove('hidden');
+            }
+
+            // Load data for tab if needed
+            if (tab === 'pending') {
+                loadPendingRequests();
+            }
+        }
+
+        async function loadAllCommunities() {
+            const loadingElement = document.getElementById('communitiesLoading');
+            const noCommunitiesElement = document.getElementById('noCommunities');
+            const communitiesContainer = document.getElementById('allCommunitiesGrid');
+
+            if (loadingElement) loadingElement.classList.remove('hidden');
+            if (noCommunitiesElement) noCommunitiesElement.classList.add('hidden');
+            if (communitiesContainer) communitiesContainer.innerHTML = '';
+
+            try {
+                // Get filters
+                const filters = {};
+                const searchInput = document.getElementById('communitySearch');
+                const categoryFilter = document.getElementById('categoryFilter');
+                const visibilityFilter = document.getElementById('visibilityFilter');
+
+                if (searchInput && searchInput.value) filters.search = searchInput.value;
+                if (categoryFilter && categoryFilter.value) filters.category = categoryFilter.value;
+                if (visibilityFilter && visibilityFilter.value) filters.visibility = visibilityFilter.value;
+
+                // Fetch communities
+                const response = await api.getCommunities(filters);
+
+                if (response.success) {
+                    allCommunities = response.communities || [];
+
+                    if (allCommunities.length === 0) {
+                        if (noCommunitiesElement) noCommunitiesElement.classList.remove('hidden');
+                    } else {
+                        renderCommunityCards(allCommunities, communitiesContainer);
+                    }
+                } else {
+                    showNotification('Failed to load communities: ' + (response.message || 'Unknown error'), 'error');
+                }
+            } catch (error) {
+                console.error('Error loading communities:', error);
+                showNotification('Failed to load communities: ' + (error.message || 'Network error'), 'error');
+            } finally {
+                if (loadingElement) loadingElement.classList.add('hidden');
+            }
+        }
+
+        async function loadMyCommunities() {
+            const loadingElement = document.getElementById('myCommunitiesLoading');
+            const noCommunitiesElement = document.getElementById('noMyCommunities');
+            const communitiesContainer = document.getElementById('myCommunitiesList');
+
+            if (loadingElement) loadingElement.classList.remove('hidden');
+            if (noCommunitiesElement) noCommunitiesElement.classList.add('hidden');
+            if (communitiesContainer) communitiesContainer.innerHTML = '';
+
+            try {
+                const response = await api.getMyCommunities();
+
+                if (response.success) {
+                    myCommunities = response.communities || [];
+
+                    if (myCommunities.length === 0) {
+                        if (noCommunitiesElement) noCommunitiesElement.classList.remove('hidden');
+                    } else {
+                        renderCommunityCards(myCommunities, communitiesContainer, true);
+                    }
+                } else {
+                    showNotification('Failed to load your communities: ' + (response.message || 'Unknown error'), 'error');
+                }
+            } catch (error) {
+                console.error('Error loading my communities:', error);
+                showNotification('Failed to load your communities: ' + (error.message || 'Network error'), 'error');
+            } finally {
+                if (loadingElement) loadingElement.classList.add('hidden');
+            }
+        }
+
+        async function loadPendingRequests() {
+            const pendingBadge = document.getElementById('pendingBadge');
+            const pendingRequestsList = document.getElementById('pendingRequestsList');
+            const noPendingRequests = document.getElementById('noPendingRequests');
+
+            if (pendingRequestsList) pendingRequestsList.innerHTML = '<div class="text-center py-4"><i class="fas fa-spinner fa-spin text-gray-400 text-2xl"></i></div>';
+            if (noPendingRequests) noPendingRequests.classList.add('hidden');
+
+            try {
+                // Get user data to check which communities they admin
+                const user = getUserData();
+
+                // Fetch all communities where user is admin
+                const response = await api.getMyCommunities();
+
+                if (response.success) {
+                    const allMyCommunities = response.communities || [];
+
+                    // Filter to only communities where user is admin
+                    const adminCommunities = allMyCommunities.filter(community =>
+                        community.admin && community.admin._id === user.id
+                    );
+
+                    // Count total pending requests
+                    let totalPendingCount = 0;
+                    const communitiesWithRequests = [];
+
+                    // For each admin community, fetch full details to get pending requests
+                    for (const community of adminCommunities) {
+                        const detailResponse = await api.getCommunity(community._id);
+                        if (detailResponse.success && detailResponse.community.pendingRequests && detailResponse.community.pendingRequests.length > 0) {
+                            communitiesWithRequests.push(detailResponse.community);
+                            totalPendingCount += detailResponse.community.pendingRequests.length;
+                        }
+                    }
+
+                    // Update badge
+                    if (pendingBadge) {
+                        if (totalPendingCount > 0) {
+                            pendingBadge.textContent = totalPendingCount;
+                            pendingBadge.classList.remove('hidden');
+                        } else {
+                            pendingBadge.classList.add('hidden');
+                        }
+                    }
+
+                    // Render pending requests
+                    if (pendingRequestsList) {
+                        pendingRequestsList.innerHTML = '';
+
+                        if (communitiesWithRequests.length === 0) {
+                            if (noPendingRequests) noPendingRequests.classList.remove('hidden');
+                        } else {
+                            communitiesWithRequests.forEach(community => {
+                                renderPendingRequestsForCommunity(community, pendingRequestsList);
+                            });
+                        }
+                    }
+                }
+            } catch (error) {
+                console.error('Error loading pending requests:', error);
+                if (pendingRequestsList) {
+                    pendingRequestsList.innerHTML = '<div class="text-center py-4 text-red-600"><i class="fas fa-exclamation-circle mr-2"></i>Failed to load pending requests</div>';
+                }
+            }
+        }
+
+        function renderPendingRequestsForCommunity(community, container) {
+            const communitySection = document.createElement('div');
+            communitySection.className = 'mb-6 last:mb-0';
+
+            const pendingRequests = community.pendingRequests || [];
+
+            communitySection.innerHTML = `
+                <div class="border-b pb-2 mb-4">
+                    <h4 class="font-semibold text-gray-900">${community.name}</h4>
+                    <p class="text-sm text-gray-600">${pendingRequests.length} pending request${pendingRequests.length !== 1 ? 's' : ''}</p>
+                </div>
+                <div class="space-y-4" id="requests-${community._id}"></div>
+            `;
+
+            container.appendChild(communitySection);
+
+            const requestsContainer = communitySection.querySelector(`#requests-${community._id}`);
+
+            pendingRequests.forEach(user => {
+                const requestCard = document.createElement('div');
+                requestCard.className = 'flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition duration-200';
+                requestCard.id = `request-${community._id}-${user._id}`;
+
+                const profileImage = user.profileImage || 'https://ui-avatars.com/api/?name=' + encodeURIComponent(user.name || 'User') + '&background=86efac&color=166534';
+
+                requestCard.innerHTML = `
+                    <div class="flex items-center space-x-4">
+                        <img src="${profileImage}" 
+                             alt="${user.name}" 
+                             class="w-12 h-12 rounded-full object-cover border-2 border-white shadow">
+                        <div>
+                            <h5 class="font-semibold text-gray-900">${user.name || 'Unknown User'}</h5>
+                            <p class="text-sm text-gray-600">${user.email || 'No email'}</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-3">
+                        <button class="approve-btn bg-green-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-green-700 transition duration-300 flex items-center"
+                                data-community-id="${community._id}" 
+                                data-user-id="${user._id}">
+                            <i class="fas fa-check mr-2"></i>Approve
+                        </button>
+                        <button class="reject-btn bg-red-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-red-700 transition duration-300 flex items-center"
+                                data-community-id="${community._id}" 
+                                data-user-id="${user._id}">
+                            <i class="fas fa-times mr-2"></i>Reject
+                        </button>
+                    </div>
+                `;
+
+                requestsContainer.appendChild(requestCard);
+
+                // Add event listeners
+                const approveBtn = requestCard.querySelector('.approve-btn');
+                const rejectBtn = requestCard.querySelector('.reject-btn');
+
+                if (approveBtn) {
+                    approveBtn.addEventListener('click', () => approveMember(community._id, user._id, user.name));
+                }
+                if (rejectBtn) {
+                    rejectBtn.addEventListener('click', () => rejectRequest(community._id, user._id, user.name));
+                }
+            });
+        }
+
+        async function approveMember(communityId, userId, userName) {
+            try {
+                const requestCard = document.getElementById(`request-${communityId}-${userId}`);
+                if (!requestCard) return;
+
+                // Show loading state
+                const approveBtn = requestCard.querySelector('.approve-btn');
+                const rejectBtn = requestCard.querySelector('.reject-btn');
+                const originalApproveHtml = approveBtn.innerHTML;
+
+                approveBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Approving...';
+                approveBtn.disabled = true;
+                if (rejectBtn) rejectBtn.disabled = true;
+
+                // Call API to approve
+                const response = await api.approveJoinRequest(communityId, userId);
+
+                if (response.success) {
+                    // Remove the request card with animation
+                    requestCard.style.opacity = '0';
+                    requestCard.style.transform = 'translateX(20px)';
+                    requestCard.style.transition = 'all 0.3s ease';
+
+                    setTimeout(() => {
+                        requestCard.remove();
+
+                        // Check if this was the last request for this community
+                        const requestsContainer = document.getElementById(`requests-${communityId}`);
+                        if (requestsContainer && requestsContainer.children.length === 0) {
+                            // Remove the entire community section
+                            const communitySection = requestsContainer.closest('.mb-6');
+                            if (communitySection) communitySection.remove();
+
+                            // Check if there are any more communities with requests
+                            const pendingRequestsList = document.getElementById('pendingRequestsList');
+                            if (pendingRequestsList && pendingRequestsList.children.length === 0) {
+                                const noPendingRequests = document.getElementById('noPendingRequests');
+                                if (noPendingRequests) noPendingRequests.classList.remove('hidden');
+                            }
+                        }
+
+                        // Update badge count
+                        updatePendingBadgeCount();
+                    }, 300);
+
+                    showNotification(`${userName || 'User'} has been approved and added to the community`, 'success');
+                } else {
+                    approveBtn.innerHTML = originalApproveHtml;
+                    approveBtn.disabled = false;
+                    if (rejectBtn) rejectBtn.disabled = false;
+                    showNotification(response.message || 'Failed to approve request', 'error');
+                }
+            } catch (error) {
+                console.error('Error approving member:', error);
+                showNotification('Failed to approve request: ' + (error.message || 'Network error'), 'error');
+
+                // Reset button states
+                const requestCard = document.getElementById(`request-${communityId}-${userId}`);
+                if (requestCard) {
+                    const approveBtn = requestCard.querySelector('.approve-btn');
+                    const rejectBtn = requestCard.querySelector('.reject-btn');
+                    if (approveBtn) {
+                        approveBtn.innerHTML = '<i class="fas fa-check mr-2"></i>Approve';
+                        approveBtn.disabled = false;
+                    }
+                    if (rejectBtn) {
+                        rejectBtn.disabled = false;
+                    }
+                }
+            }
+        }
+
+        async function rejectRequest(communityId, userId, userName) {
+            try {
+                const requestCard = document.getElementById(`request-${communityId}-${userId}`);
+                if (!requestCard) return;
+
+                // Show loading state
+                const approveBtn = requestCard.querySelector('.approve-btn');
+                const rejectBtn = requestCard.querySelector('.reject-btn');
+                const originalRejectHtml = rejectBtn.innerHTML;
+
+                rejectBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Rejecting...';
+                rejectBtn.disabled = true;
+                if (approveBtn) approveBtn.disabled = true;
+
+                // Call API to reject (using removeMember endpoint)
+                const response = await api.removeMember(communityId, userId);
+
+                if (response.success) {
+                    // Remove the request card with animation
+                    requestCard.style.opacity = '0';
+                    requestCard.style.transform = 'translateX(-20px)';
+                    requestCard.style.transition = 'all 0.3s ease';
+
+                    setTimeout(() => {
+                        requestCard.remove();
+
+                        // Check if this was the last request for this community
+                        const requestsContainer = document.getElementById(`requests-${communityId}`);
+                        if (requestsContainer && requestsContainer.children.length === 0) {
+                            // Remove the entire community section
+                            const communitySection = requestsContainer.closest('.mb-6');
+                            if (communitySection) communitySection.remove();
+
+                            // Check if there are any more communities with requests
+                            const pendingRequestsList = document.getElementById('pendingRequestsList');
+                            if (pendingRequestsList && pendingRequestsList.children.length === 0) {
+                                const noPendingRequests = document.getElementById('noPendingRequests');
+                                if (noPendingRequests) noPendingRequests.classList.remove('hidden');
+                            }
+                        }
+
+                        // Update badge count
+                        updatePendingBadgeCount();
+                    }, 300);
+
+                    showNotification(`Request from ${userName || 'User'} has been rejected`, 'success');
+                } else {
+                    rejectBtn.innerHTML = originalRejectHtml;
+                    rejectBtn.disabled = false;
+                    if (approveBtn) approveBtn.disabled = false;
+                    showNotification(response.message || 'Failed to reject request', 'error');
+                }
+            } catch (error) {
+                console.error('Error rejecting request:', error);
+                showNotification('Failed to reject request: ' + (error.message || 'Network error'), 'error');
+
+                // Reset button states
+                const requestCard = document.getElementById(`request-${communityId}-${userId}`);
+                if (requestCard) {
+                    const approveBtn = requestCard.querySelector('.approve-btn');
+                    const rejectBtn = requestCard.querySelector('.reject-btn');
+                    if (rejectBtn) {
+                        rejectBtn.innerHTML = '<i class="fas fa-times mr-2"></i>Reject';
+                        rejectBtn.disabled = false;
+                    }
+                    if (approveBtn) {
+                        approveBtn.disabled = false;
+                    }
+                }
+            }
+        }
+
+        function updatePendingBadgeCount() {
+            const pendingRequestsList = document.getElementById('pendingRequestsList');
+            const pendingBadge = document.getElementById('pendingBadge');
+
+            if (!pendingRequestsList || !pendingBadge) return;
+
+            // Count all remaining request cards
+            const requestCards = pendingRequestsList.querySelectorAll('[id^="request-"]');
+            const count = requestCards.length;
+
+            if (count > 0) {
+                pendingBadge.textContent = count;
+                pendingBadge.classList.remove('hidden');
+            } else {
+                pendingBadge.classList.add('hidden');
+            }
+        }
+
+        function renderCommunityCards(communities, container, isMyCommunity = false) {
+            if (!container) return;
+
+            container.innerHTML = '';
+
+            const currentUser = getUserData();
+            const userId = currentUser ? currentUser.id : null;
+
+            communities.forEach(community => {
+                const card = createCommunityCard(community, isMyCommunity, userId);
+                container.appendChild(card);
+            });
+        }
+
+        function createCommunityCard(community, isMember = false, userId = null) {
+            const card = document.createElement('div');
+            card.className = 'bg-white rounded-xl shadow-md overflow-hidden hover-card transition-all duration-300';
+            card.dataset.id = community._id;
+
+            // Determine if user is already a member or has pending request
+            const members = community.members || [];
+            const pendingRequests = community.pendingRequests || [];
+            
+            let buttonHtml = '';
+            if (isMember) {
+                buttonHtml = `
+                    <a href="community-chat.html?community=${community._id}" 
+                       class="block w-full bg-primary-600 text-white py-2 rounded-lg font-medium text-center hover:bg-primary-700 transition duration-300">
+                       <i class="fas fa-comments mr-2"></i>Enter Community
+                    </a>
+                `;
+            } else if (userId && members.some(member => member._id === userId || member === userId)) {
+                buttonHtml = `
+                    <button class="w-full bg-gray-100 text-gray-700 py-2 rounded-lg font-medium cursor-not-allowed" disabled>
+                        <i class="fas fa-check mr-2"></i>Already a Member
+                    </button>
+                `;
+            } else if (userId && pendingRequests.some(request => request._id === userId || request === userId)) {
+                buttonHtml = `
+                    <button class="w-full bg-yellow-100 text-yellow-700 py-2 rounded-lg font-medium cursor-not-allowed" disabled>
+                        <i class="fas fa-clock mr-2"></i>Request Pending
+                    </button>
+                `;
+            } else {
+                buttonHtml = `
+                    <button class="w-full bg-primary-600 text-white py-2 rounded-lg font-medium hover:bg-primary-700 transition duration-300 join-community-btn">
+                        <i class="fas fa-user-plus mr-2"></i>Join Community
+                    </button>
+                `;
+            }
+
+            // Get member count
+            const memberCount = members.length;
+
+            card.innerHTML = `
+                <div class="p-6">
+                    <div class="flex justify-between items-start mb-4">
+                        <div>
+                            <h3 class="text-xl font-bold text-gray-900 mb-1">${community.name || 'Unnamed Community'}</h3>
+                            <div class="flex items-center space-x-2 mb-2">
+                                <span class="bg-primary-100 text-primary-700 px-2 py-1 rounded text-xs font-medium">
+                                    ${community.category || 'general'}
+                                </span>
+                                <span class="bg-gray-100 text-gray-700 px-2 py-1 rounded text-xs font-medium">
+                                    <i class="fas fa-users mr-1"></i>${memberCount}
+                                </span>
+                                <span class="bg-blue-100 text-blue-700 px-2 py-1 rounded text-xs font-medium">
+                                    <i class="fas fa-${community.visibility === 'private' ? 'lock' : 'globe'} mr-1"></i>
+                                    ${community.visibility || 'public'}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <p class="text-gray-600 mb-4 line-clamp-2">${community.description || 'No description available.'}</p>
+                    
+                    ${buttonHtml}
+                </div>
+            `;
+
+            // Add join functionality if needed
+            if (!isMember && userId && 
+                !members.some(member => member._id === userId || member === userId) && 
+                !pendingRequests.some(request => request._id === userId || request === userId)) {
+                const joinBtn = card.querySelector('.join-community-btn');
+                if (joinBtn) {
+                    joinBtn.addEventListener('click', () => joinCommunity(community._id, card));
+                }
+            }
+
+            return card;
+        }
+
+        async function joinCommunity(communityId, cardElement) {
+            try {
+                // Update button to show loading
+                const button = cardElement.querySelector('button');
+                if (!button) return;
+
+                const originalHtml = button.innerHTML;
+                button.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Requesting...';
+                button.disabled = true;
+
+                // Send join request
+                const response = await api.requestToJoinCommunity(communityId);
+
+                if (response.success) {
+                    // Update button to show pending
+                    button.className = 'w-full bg-yellow-100 text-yellow-700 py-2 rounded-lg font-medium cursor-not-allowed';
+                    button.innerHTML = '<i class="fas fa-clock mr-2"></i>Request Pending';
+                    button.disabled = true;
+
+                    showNotification('Join request sent successfully', 'success');
+                    
+                    // Refresh pending requests count
+                    updatePendingBadgeCount();
+                } else {
+                    button.innerHTML = originalHtml;
+                    button.disabled = false;
+                    showNotification(response.message || 'Failed to send join request', 'error');
+                }
+            } catch (error) {
+                console.error('Error joining community:', error);
+                showNotification('Failed to send join request: ' + (error.message || 'Network error'), 'error');
+                
+                // Reset button
+                const button = cardElement.querySelector('button');
+                if (button) {
+                    button.innerHTML = '<i class="fas fa-user-plus mr-2"></i>Join Community';
+                    button.disabled = false;
+                }
+            }
+        }
+
+        function showError(elementId, message) {
+            const element = document.getElementById(elementId);
+            if (element) {
+                element.textContent = message;
+                element.classList.remove('hidden');
+            }
+        }
+
+        function resetErrors() {
+            const errorElements = document.querySelectorAll('[id$="Error"]');
+            errorElements.forEach(el => {
+                el.textContent = '';
+                el.classList.add('hidden');
+            });
+        }
+
+        function showMessage(elementId, message, type) {
+            const element = document.getElementById(elementId);
+            if (element) {
+                element.textContent = message;
+                element.className = 'p-3 rounded-lg text-center';
+
+                if (type === 'success') {
+                    element.classList.add('bg-green-100', 'text-green-700', 'border', 'border-green-200');
+                } else if (type === 'error') {
+                    element.classList.add('bg-red-100', 'text-red-700', 'border', 'border-red-200');
+                } else if (type === 'warning') {
+                    element.classList.add('bg-yellow-100', 'text-yellow-700', 'border', 'border-yellow-200');
+                } else {
+                    element.classList.add('bg-blue-100', 'text-blue-700', 'border', 'border-blue-200');
+                }
+
+                element.classList.remove('hidden');
+            }
+        }
+
+        function hideMessage(elementId) {
+            const element = document.getElementById(elementId);
+            if (element) {
+                element.classList.add('hidden');
+            }
+        }
+
+        // Debounce function
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
+
+        // Helper function to show notification
+        function showNotification(message, type = 'info') {
+            // Create notification element
+            const notification = document.createElement('div');
+            notification.className = `fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg max-w-sm transform transition-transform duration-300 translate-x-full`;
+            
+            // Set styles based on type
+            if (type === 'success') {
+                notification.classList.add('bg-green-100', 'text-green-800', 'border', 'border-green-200');
+            } else if (type === 'error') {
+                notification.classList.add('bg-red-100', 'text-red-800', 'border', 'border-red-200');
+            } else if (type === 'warning') {
+                notification.classList.add('bg-yellow-100', 'text-yellow-800', 'border', 'border-yellow-200');
+            } else {
+                notification.classList.add('bg-blue-100', 'text-blue-800', 'border', 'border-blue-200');
+            }
+            
+            // Add content
+            notification.innerHTML = `
+                <div class="flex items-start">
+                    <div class="flex-shrink-0">
+                        ${type === 'success' ? '✅' : type === 'error' ? '❌' : type === 'warning' ? '⚠️' : 'ℹ️'}
+                    </div>
+                    <div class="ml-3">
+                        <p class="text-sm font-medium">${message}</p>
+                    </div>
+                    <button class="close-notification ml-auto -mx-1.5 -my-1.5 rounded-lg p-1.5 hover:bg-opacity-30 focus:outline-none">
+                        <span class="sr-only">Dismiss</span>
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                        </svg>
+                    </button>
+                </div>
+            `;
+            
+            // Add to DOM
+            document.body.appendChild(notification);
+            
+            // Animate in
+            setTimeout(() => {
+                notification.classList.remove('translate-x-full');
+            }, 10);
+            
+            // Add dismiss button functionality
+            const dismissButton = notification.querySelector('.close-notification');
+            if (dismissButton) {
+                dismissButton.addEventListener('click', () => {
+                    notification.classList.add('translate-x-full');
+                    setTimeout(() => {
+                        if (notification.parentNode) {
+                            notification.remove();
+                        }
+                    }, 300);
+                });
+            }
+            
+            // Auto dismiss after 5 seconds
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.classList.add('translate-x-full');
+                    setTimeout(() => {
+                        if (notification.parentNode) {
+                            notification.remove();
+                        }
+                    }, 300);
+                }
+            }, 5000);
+        }
+    </script>
+</body>
+</html>

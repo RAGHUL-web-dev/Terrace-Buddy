@@ -1,0 +1,1041 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Knowledge Hub - Terrace Buddy</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Custom Tailwind Configuration -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            200: '#bbf7d0',
+                            300: '#86efac',
+                            400: '#4ade80',
+                            500: '#22c55e',
+                            600: '#16a34a',
+                            700: '#15803d',
+                            800: '#166534',
+                            900: '#14532d',
+                        }
+                    },
+                    fontFamily: {
+                        'sans': ['Inter', 'system-ui', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Inter Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="font-sans bg-gray-50 min-h-screen">
+    <!-- Navigation -->
+    <nav id="navbar" class="bg-white shadow-md">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo -->
+                <div class="flex items-center space-x-2">
+                    <a href="dashboard.html" class="flex items-center space-x-2">
+                        <i class="fas fa-seedling text-primary-600 text-2xl"></i>
+                        <span class="text-xl font-bold text-gray-800">Terrace Buddy</span>
+                    </a>
+                </div>
+
+                <!-- User Menu -->
+                <div class="relative">
+                    <button id="userMenuButton" 
+                            class="flex items-center space-x-2 text-gray-700 hover:text-primary-600 font-medium">
+                        <i class="fas fa-user-circle text-2xl"></i>
+                        <span id="userName">Loading...</span>
+                        <i class="fas fa-chevron-down text-sm"></i>
+                    </button>
+                    
+                    <!-- Dropdown Menu -->
+                    <div id="dropdownMenu" 
+                         class="hidden absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-10 border">
+                        <a href="dashboard.html" 
+                           class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
+                           <i class="fas fa-tachometer-alt mr-2"></i>Dashboard
+                        </a>
+                        <a href="communities.html" 
+                           class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
+                           <i class="fas fa-users mr-2"></i>Communities
+                        </a>
+                        <a href="marketplace.html" 
+                           class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
+                           <i class="fas fa-store mr-2"></i>Marketplace
+                        </a>
+                        <a href="knowledge.html" 
+                           class="block px-4 py-2 text-gray-700 hover:bg-gray-100 bg-primary-50">
+                           <i class="fas fa-book mr-2"></i>Knowledge Hub
+                        </a>
+                        <a href="plants.html" 
+                           class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
+                           <i class="fas fa-plant mr-2"></i>My Plants
+                        </a>
+                        <hr class="my-1">
+                        <button id="logoutButton" 
+                                class="block w-full text-left px-4 py-2 text-red-600 hover:bg-gray-100">
+                           <i class="fas fa-sign-out-alt mr-2"></i>Logout
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8">
+        <div class="max-w-7xl mx-auto">
+            <!-- Header -->
+            <div class="mb-8">
+                <div class="text-center mb-8">
+                    <h1 class="text-4xl font-bold text-gray-900 mb-4">Knowledge Hub</h1>
+                    <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                        Learn everything about terrace gardening with our comprehensive guides, tutorials, and expert advice.
+                    </p>
+                </div>
+                
+                <!-- Search Bar -->
+                <div class="max-w-3xl mx-auto mb-8">
+                    <div class="relative">
+                        <input type="text" 
+                               id="knowledgeSearch"
+                               placeholder="Search articles, guides, or ask a question..."
+                               class="w-full pl-12 pr-4 py-4 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent text-lg">
+                        <i class="fas fa-search absolute left-4 top-4.5 text-gray-400 text-xl"></i>
+                        <button id="searchButton" 
+                                class="absolute right-2 top-2 bg-primary-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-primary-700 transition duration-300">
+                            Search
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Categories -->
+            <div class="mb-12">
+                <h2 class="text-2xl font-bold text-gray-900 mb-6">Browse by Category</h2>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <button class="category-btn bg-primary-50 text-primary-700 p-6 rounded-xl hover:bg-primary-100 transition duration-300"
+                            data-category="beginner">
+                        <i class="fas fa-seedling text-3xl mb-3"></i>
+                        <h3 class="font-bold text-lg mb-1">Beginner</h3>
+                        <p class="text-sm">Getting started guides</p>
+                    </button>
+                    
+                    <button class="category-btn bg-blue-50 text-blue-700 p-6 rounded-xl hover:bg-blue-100 transition duration-300"
+                            data-category="intermediate">
+                        <i class="fas fa-leaf text-3xl mb-3"></i>
+                        <h3 class="font-bold text-lg mb-1">Intermediate</h3>
+                        <p class="text-sm">Advanced techniques</p>
+                    </button>
+                    
+                    <button class="category-btn bg-green-50 text-green-700 p-6 rounded-xl hover:bg-green-100 transition duration-300"
+                            data-category="advanced">
+                        <i class="fas fa-tree text-3xl mb-3"></i>
+                        <h3 class="font-bold text-lg mb-1">Advanced</h3>
+                        <p class="text-sm">Expert-level content</p>
+                    </button>
+                    
+                    <button class="category-btn bg-purple-50 text-purple-700 p-6 rounded-xl hover:bg-purple-100 transition duration-300"
+                            data-category="">
+                        <i class="fas fa-video text-3xl mb-3"></i>
+                        <h3 class="font-bold text-lg mb-1">Video Tutorials</h3>
+                        <p class="text-sm">Watch and learn</p>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Featured Articles -->
+            <div class="mb-12">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl font-bold text-gray-900">Featured Articles</h2>
+                    <a href="#all-articles" class="text-primary-600 hover:text-primary-700 font-medium">
+                        View all →
+                    </a>
+                </div>
+                
+                <div id="featuredArticles" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- Featured articles will be loaded here -->
+                </div>
+            </div>
+            
+            <!-- Tabs -->
+            <div class="border-b mb-8">
+                <nav class="flex space-x-8">
+                    <button id="articlesTab" 
+                            class="px-4 py-3 font-medium text-primary-600 border-b-2 border-primary-600">
+                        Articles & Guides
+                    </button>
+                    <button id="faqTab" 
+                            class="px-4 py-3 font-medium text-gray-600 hover:text-primary-600">
+                        FAQ Chatbot
+                    </button>
+                    <button id="videosTab" 
+                            class="px-4 py-3 font-medium text-gray-600 hover:text-primary-600">
+                        Video Tutorials
+                    </button>
+                    <button id="seasonalTab" 
+                            class="px-4 py-3 font-medium text-gray-600 hover:text-primary-600">
+                        Seasonal Tips
+                    </button>
+                </nav>
+            </div>
+            
+            <!-- Content Area -->
+            <div>
+                <!-- Articles Tab -->
+                <div id="articlesContent">
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                        <!-- Left Column - Filters -->
+                        <div class="lg:col-span-1">
+                            <div class="bg-white rounded-xl shadow-md p-6 sticky top-4">
+                                <h3 class="font-bold text-gray-900 mb-4">Filters</h3>
+                                
+                                <div class="space-y-4">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-2">Difficulty</label>
+                                        <div class="space-y-2">
+                                            <label class="flex items-center">
+                                                <input type="checkbox" class="rounded border-gray-300 text-primary-600 focus:ring-primary-500" value="easy">
+                                                <span class="ml-2 text-gray-700">Easy</span>
+                                            </label>
+                                            <label class="flex items-center">
+                                                <input type="checkbox" class="rounded border-gray-300 text-primary-600 focus:ring-primary-500" value="medium">
+                                                <span class="ml-2 text-gray-700">Medium</span>
+                                            </label>
+                                            <label class="flex items-center">
+                                                <input type="checkbox" class="rounded border-gray-300 text-primary-600 focus:ring-primary-500" value="hard">
+                                                <span class="ml-2 text-gray-700">Hard</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-2">Sunlight</label>
+                                        <select class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                                            <option value="">All</option>
+                                            <option value="full">Full Sun</option>
+                                            <option value="partial">Partial Sun</option>
+                                            <option value="shade">Shade</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-2">Season</label>
+                                        <select class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                                            <option value="">All Seasons</option>
+                                            <option value="spring">Spring</option>
+                                            <option value="summer">Summer</option>
+                                            <option value="monsoon">Monsoon</option>
+                                            <option value="winter">Winter</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <button id="applyFilters" 
+                                            class="w-full bg-primary-600 text-white py-2 rounded-lg font-medium hover:bg-primary-700 transition duration-300">
+                                        Apply Filters
+                                    </button>
+                                    
+                                    <button id="clearAllFilters" 
+                                            class="w-full bg-white text-gray-700 py-2 rounded-lg font-medium border border-gray-300 hover:bg-gray-50 transition duration-300">
+                                        Clear All
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Right Column - Articles -->
+                        <div class="lg:col-span-2">
+                            <div id="articlesList" class="space-y-6">
+                                <!-- Articles will be loaded here -->
+                            </div>
+                            
+                            <!-- Loading State -->
+                            <div id="articlesLoading" class="text-center py-12">
+                                <div class="spinner mx-auto mb-4"></div>
+                                <p class="text-gray-600">Loading articles...</p>
+                            </div>
+                            
+                            <!-- Empty State -->
+                            <div id="noArticles" class="text-center py-12 hidden">
+                                <i class="fas fa-book-open text-gray-300 text-6xl mb-4"></i>
+                                <h3 class="text-xl font-semibold text-gray-900 mb-2">No articles found</h3>
+                                <p class="text-gray-600">Try adjusting your search or filters</p>
+                            </div>
+                            
+                            <!-- Load More -->
+                            <div id="loadMoreContainer" class="text-center mt-8 hidden">
+                                <button id="loadMoreArticles" 
+                                        class="bg-white text-primary-600 px-6 py-3 rounded-lg font-medium border border-primary-600 hover:bg-primary-50 transition duration-300">
+                                    Load More Articles
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- FAQ Chatbot Tab -->
+                <div id="faqContent" class="hidden">
+                    <div class="bg-white rounded-xl shadow-md p-6">
+                        <div class="text-center mb-8">
+                            <div class="w-20 h-20 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <i class="fas fa-robot text-primary-600 text-3xl"></i>
+                            </div>
+                            <h3 class="text-2xl font-bold text-gray-900 mb-2">Gardening Assistant</h3>
+                            <p class="text-gray-600">Ask me anything about gardening. I'm here to help 24/7!</p>
+                        </div>
+                        
+                        <div class="max-w-3xl mx-auto">
+                            <!-- Chat Container -->
+                            <div id="chatContainer" class="h-96 overflow-y-auto mb-4 p-4 border rounded-lg bg-gray-50">
+                                <!-- Chat messages will appear here -->
+                                <div class="text-center text-gray-500">
+                                    <p>Start a conversation by typing your question below</p>
+                                </div>
+                            </div>
+                            
+                            <!-- Quick Questions -->
+                            <div class="mb-6">
+                                <p class="text-sm font-medium text-gray-700 mb-2">Quick questions:</p>
+                                <div class="flex flex-wrap gap-2">
+                                    <button class="quick-question bg-gray-100 text-gray-700 px-3 py-2 rounded-lg text-sm hover:bg-gray-200 transition duration-300">
+                                        How often to water plants?
+                                    </button>
+                                    <button class="quick-question bg-gray-100 text-gray-700 px-3 py-2 rounded-lg text-sm hover:bg-gray-200 transition duration-300">
+                                        Best soil for vegetables?
+                                    </button>
+                                    <button class="quick-question bg-gray-100 text-gray-700 px-3 py-2 rounded-lg text-sm hover:bg-gray-200 transition duration-300">
+                                        How to control pests?
+                                    </button>
+                                    <button class="quick-question bg-gray-100 text-gray-700 px-3 py-2 rounded-lg text-sm hover:bg-gray-200 transition duration-300">
+                                        When to harvest tomatoes?
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <!-- Input Area -->
+                            <div class="flex space-x-4">
+                                <input type="text" 
+                                       id="chatInput"
+                                       placeholder="Type your gardening question..."
+                                       class="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                                <button id="sendChat" 
+                                        class="bg-primary-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-primary-700 transition duration-300">
+                                    Send
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Video Tutorials Tab -->
+                <div id="videosContent" class="hidden">
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <!-- Video cards will be loaded here -->
+                    </div>
+                    
+                    <div id="noVideos" class="text-center py-12 hidden">
+                        <i class="fas fa-video text-gray-300 text-6xl mb-4"></i>
+                        <h3 class="text-xl font-semibold text-gray-900 mb-2">No video tutorials available</h3>
+                        <p class="text-gray-600">Check back later for new video content</p>
+                    </div>
+                </div>
+                
+                <!-- Seasonal Tips Tab -->
+                <div id="seasonalContent" class="hidden">
+                    <div class="bg-gradient-to-r from-primary-500 to-primary-600 rounded-xl shadow-md p-8 text-white mb-8">
+                        <div class="flex items-center justify-between mb-4">
+                            <div>
+                                <h3 class="text-2xl font-bold mb-2">Current Season: <span id="currentSeason">Spring</span></h3>
+                                <p class="text-primary-100">Get tailored gardening advice for this season</p>
+                            </div>
+                            <i class="fas fa-cloud-sun text-4xl"></i>
+                        </div>
+                    </div>
+                    
+                    <div id="seasonalTipsList" class="space-y-6">
+                        <!-- Seasonal tips will be loaded here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Article Detail Modal -->
+    <div id="articleDetailModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+            <!-- Article details will be loaded here -->
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-8">
+        <div class="container mx-auto px-4 text-center">
+            <p class="text-gray-400">© 2024 Terrace Buddy. Urban Gardening Made Easy.</p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="./js/utils.js"></script>
+    <script src="./js/api.js"></script>
+    <script src="./js/auth.js"></script>
+    
+    <script>
+        let currentTab = 'articles';
+        let articles = [];
+        let currentPage = 1;
+        const itemsPerPage = 6;
+        
+        document.addEventListener('DOMContentLoaded', async function() {
+            // Check authentication
+            if (!checkAuthStatus()) {
+                window.location.href = 'login.html';
+                return;
+            }
+            
+            // Load user data
+            const user = getUserData();
+            if (user && user.name) {
+                document.getElementById('userName').textContent = user.name;
+            }
+            
+            // Initialize user dropdown
+            const userMenuButton = document.getElementById('userMenuButton');
+            const dropdownMenu = document.getElementById('dropdownMenu');
+            
+            if (userMenuButton && dropdownMenu) {
+                userMenuButton.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    dropdownMenu.classList.toggle('hidden');
+                });
+                
+                document.addEventListener('click', function() {
+                    dropdownMenu.classList.add('hidden');
+                });
+            }
+            
+            // Logout functionality
+            const logoutButton = document.getElementById('logoutButton');
+            if (logoutButton) {
+                logoutButton.addEventListener('click', function() {
+                    logoutUser();
+                });
+            }
+            
+            // Tab functionality
+            const articlesTab = document.getElementById('articlesTab');
+            const faqTab = document.getElementById('faqTab');
+            const videosTab = document.getElementById('videosTab');
+            const seasonalTab = document.getElementById('seasonalTab');
+            
+            articlesTab.addEventListener('click', () => switchTab('articles'));
+            faqTab.addEventListener('click', () => switchTab('faq'));
+            videosTab.addEventListener('click', () => switchTab('videos'));
+            seasonalTab.addEventListener('click', () => switchTab('seasonal'));
+            
+            // Category buttons
+            document.querySelectorAll('.category-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const category = this.dataset.category;
+                    switchTab('articles');
+                    
+                    if (category) {
+                        // Set category filter and load articles
+                        document.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+                            if (cb.value === category) {
+                                cb.checked = true;
+                            }
+                        });
+                        loadArticles();
+                    }
+                });
+            });
+            
+            // Search functionality
+            const searchButton = document.getElementById('searchButton');
+            const searchInput = document.getElementById('knowledgeSearch');
+            
+            searchButton.addEventListener('click', performSearch);
+            searchInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') performSearch();
+            });
+            
+            // Filter functionality
+            document.getElementById('applyFilters').addEventListener('click', loadArticles);
+            document.getElementById('clearAllFilters').addEventListener('click', clearFilters);
+            
+            // FAQ Chat functionality
+            initializeChatbot();
+            
+            // Load initial data
+            await Promise.all([
+                loadFeaturedArticles(),
+                loadArticles(),
+                loadSeasonalTips()
+            ]);
+        });
+        
+        function switchTab(tab) {
+            // Update tab headers
+            const tabs = ['articlesTab', 'faqTab', 'videosTab', 'seasonalTab'];
+            const contents = ['articlesContent', 'faqContent', 'videosContent', 'seasonalContent'];
+            
+            tabs.forEach(tabId => {
+                const tabElement = document.getElementById(tabId);
+                tabElement.classList.remove('text-primary-600', 'border-primary-600', 'border-b-2');
+                tabElement.classList.add('text-gray-600', 'hover:text-primary-600');
+            });
+            
+            contents.forEach(contentId => {
+                document.getElementById(contentId).classList.add('hidden');
+            });
+            
+            // Activate selected tab
+            document.getElementById(`${tab}Tab`).classList.add('text-primary-600', 'border-primary-600', 'border-b-2');
+            document.getElementById(`${tab}Content`).classList.remove('hidden');
+            
+            currentTab = tab;
+            
+            // Load data for tab if needed
+            if (tab === 'videos') {
+                loadVideoTutorials();
+            }
+        }
+        
+        async function loadFeaturedArticles() {
+            try {
+                const response = await api.getKnowledgeArticles({
+                    category: 'beginner',
+                    limit: 3
+                });
+                
+                if (response.success && response.knowledge && response.knowledge.length > 0) {
+                    const container = document.getElementById('featuredArticles');
+                    container.innerHTML = '';
+                    
+                    response.knowledge.slice(0, 3).forEach(article => {
+                        const card = createArticleCard(article, true);
+                        container.appendChild(card);
+                    });
+                }
+            } catch (error) {
+                console.error('Error loading featured articles:', error);
+            }
+        }
+        
+        async function loadArticles() {
+            const loadingElement = document.getElementById('articlesLoading');
+            const noArticlesElement = document.getElementById('noArticles');
+            const articlesContainer = document.getElementById('articlesList');
+            const loadMoreContainer = document.getElementById('loadMoreContainer');
+            
+            loadingElement.classList.remove('hidden');
+            noArticlesElement.classList.add('hidden');
+            loadMoreContainer.classList.add('hidden');
+            
+            if (currentPage === 1) {
+                articlesContainer.innerHTML = '';
+            }
+            
+            try {
+                // Get filters
+                const filters = {};
+                const difficultyCheckboxes = document.querySelectorAll('input[type="checkbox"]:checked');
+                const sunlightSelect = document.querySelector('select:nth-of-type(1)');
+                const seasonSelect = document.querySelector('select:nth-of-type(2)');
+                
+                if (difficultyCheckboxes.length > 0) {
+                    filters.difficulty = Array.from(difficultyCheckboxes).map(cb => cb.value).join(',');
+                }
+                
+                if (sunlightSelect.value) {
+                    filters.sunlight = sunlightSelect.value;
+                }
+                
+                // if (seasonSelect.value) {
+                //     filters.season = seasonSelect.value;
+                // }
+                
+                filters.page = currentPage;
+                filters.limit = itemsPerPage;
+                
+                // Fetch articles
+                const response = await api.getKnowledgeArticles(filters);
+                
+                if (response.success) {
+                    const newArticles = response.knowledge || [];
+                    
+                    if (currentPage === 1) {
+                        articles = newArticles;
+                    } else {
+                        articles = [...articles, ...newArticles];
+                    }
+                    
+                    if (articles.length === 0 && currentPage === 1) {
+                        noArticlesElement.classList.remove('hidden');
+                    } else {
+                        renderArticles(articlesContainer);
+                        
+                        // Show load more button if there are more articles
+                        if (newArticles.length === itemsPerPage) {
+                            loadMoreContainer.classList.remove('hidden');
+                        }
+                    }
+                }
+            } catch (error) {
+                console.error('Error loading articles:', error);
+                showNotification('Failed to load articles', 'error');
+            } finally {
+                loadingElement.classList.add('hidden');
+            }
+        }
+        
+        function renderArticles(container) {
+            if (currentPage === 1) {
+                container.innerHTML = '';
+            }
+            
+            const startIndex = (currentPage - 1) * itemsPerPage;
+            const articlesToShow = articles.slice(startIndex, startIndex + itemsPerPage);
+            
+            articlesToShow.forEach(article => {
+                const card = createArticleCard(article);
+                container.appendChild(card);
+            });
+        }
+        
+        function createArticleCard(article, isFeatured = false) {
+            const card = document.createElement('div');
+            card.className = isFeatured ? 'bg-white rounded-xl shadow-md overflow-hidden hover-card' : 'bg-white rounded-xl shadow-sm p-6 hover:shadow-md transition duration-300';
+            card.dataset.id = article._id;
+            
+            // Format date
+            const date = new Date(article.createdAt).toLocaleDateString();
+            
+            // Difficulty badge color
+            const difficultyColors = {
+                easy: 'bg-green-100 text-green-700',
+                medium: 'bg-yellow-100 text-yellow-700',
+                hard: 'bg-red-100 text-red-700'
+            };
+            
+            if (isFeatured) {
+                card.innerHTML = `
+                    <img src="https://via.placeholder.com/400x200/86efac/22c55e?text=Gardening+Guide" 
+                         alt="${article.title}" 
+                         class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <div class="flex items-center space-x-2 mb-3">
+                            <span class="${difficultyColors[article.difficulty] || 'bg-gray-100 text-gray-700'} px-2 py-1 rounded text-xs font-medium">
+                                ${article.difficulty || 'Easy'}
+                            </span>
+                            <span class="text-sm text-gray-500">• ${date}</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-900 mb-3">${article.title}</h3>
+                        <p class="text-gray-600 mb-4 line-clamp-2">${article.content.substring(0, 150)}...</p>
+                        <button class="w-full view-article-btn bg-primary-600 text-white py-2 rounded-lg font-medium hover:bg-primary-700 transition duration-300">
+                            Read Article
+                        </button>
+                    </div>
+                `;
+            } else {
+                card.innerHTML = `
+                    <div class="flex justify-between items-start mb-3">
+                        <div>
+                            <h3 class="text-lg font-bold text-gray-900 mb-2">${article.title}</h3>
+                            <div class="flex items-center space-x-2">
+                                <span class="${difficultyColors[article.difficulty] || 'bg-gray-100 text-gray-700'} px-2 py-1 rounded text-xs font-medium">
+                                    ${article.difficulty || 'Easy'}
+                                </span>
+                                ${article.sunlight ? `
+                                    <span class="bg-blue-100 text-blue-700 px-2 py-1 rounded text-xs font-medium">
+                                        <i class="fas fa-sun mr-1"></i>${article.sunlight}
+                                    </span>
+                                ` : ''}
+                                ${article.season && article.season !== 'all' ? `
+                                    <span class="bg-purple-100 text-purple-700 px-2 py-1 rounded text-xs font-medium">
+                                        <i class="fas fa-calendar mr-1"></i>${article.season}
+                                    </span>
+                                ` : ''}
+                            </div>
+                        </div>
+                        <span class="text-sm text-gray-500">${date}</span>
+                    </div>
+                    
+                    <p class="text-gray-600 mb-4 line-clamp-3">${article.content.substring(0, 200)}...</p>
+                    
+                    <div class="flex justify-between items-center">
+                        <button class="view-article-btn text-primary-600 hover:text-primary-700 font-medium">
+                            Read More →
+                        </button>
+                        <div class="flex items-center text-gray-500 text-sm">
+                            <i class="fas fa-eye mr-1"></i>
+                            <span>${article.views || 0} views</span>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            // Add click event
+            const viewBtn = card.querySelector('.view-article-btn');
+            viewBtn.addEventListener('click', () => showArticleDetail(article._id));
+            
+            return card;
+        }
+        
+        async function showArticleDetail(articleId) {
+            try {
+                const response = await api.getKnowledgeArticle(articleId);
+                
+                if (response.success) {
+                    const article = response.knowledge;
+                    const modal = document.getElementById('articleDetailModal');
+                    const modalContent = modal.querySelector('div');
+                    
+                    // Format date
+                    const date = new Date(article.createdAt).toLocaleDateString();
+                    
+                    // Difficulty badge color
+                    const difficultyColors = {
+                        easy: 'bg-green-100 text-green-700',
+                        medium: 'bg-yellow-100 text-yellow-700',
+                        hard: 'bg-red-100 text-red-700'
+                    };
+                    
+                    modalContent.innerHTML = `
+                        <div class="p-8">
+                            <div class="flex justify-between items-start mb-6">
+                                <div class="flex-1">
+                                    <h3 class="text-3xl font-bold text-gray-900 mb-4">${article.title}</h3>
+                                    <div class="flex flex-wrap gap-2 mb-4">
+                                        <span class="${difficultyColors[article.difficulty] || 'bg-gray-100 text-gray-700'} px-3 py-1 rounded text-sm font-medium">
+                                            ${article.difficulty || 'Easy'} Level
+                                        </span>
+                                        ${article.category ? `
+                                            <span class="bg-primary-100 text-primary-700 px-3 py-1 rounded text-sm font-medium">
+                                                ${article.category}
+                                            </span>
+                                        ` : ''}
+                                        ${article.sunlight ? `
+                                            <span class="bg-blue-100 text-blue-700 px-3 py-1 rounded text-sm font-medium">
+                                                <i class="fas fa-sun mr-1"></i>${article.sunlight} Sunlight
+                                            </span>
+                                        ` : ''}
+                                        ${article.season && article.season !== 'all' ? `
+                                            <span class="bg-purple-100 text-purple-700 px-3 py-1 rounded text-sm font-medium">
+                                                <i class="fas fa-calendar mr-1"></i>${article.season}
+                                            </span>
+                                        ` : ''}
+                                    </div>
+                                </div>
+                                <button id="closeArticleModal" class="text-gray-400 hover:text-gray-600 ml-4">
+                                    <i class="fas fa-times text-xl"></i>
+                                </button>
+                            </div>
+                            
+                            <div class="flex items-center text-gray-600 mb-8">
+                                <i class="fas fa-calendar mr-2"></i>
+                                <span class="mr-4">${date}</span>
+                                <i class="fas fa-eye mr-2"></i>
+                                <span>${article.views || 0} views</span>
+                            </div>
+                            
+                            <div class="prose max-w-none mb-8">
+                                ${article.content.replace(/\n/g, '<br>')}
+                            </div>
+                            
+                            ${article.tags && article.tags.length > 0 ? `
+                                <div class="border-t pt-6">
+                                    <h4 class="font-bold text-gray-900 mb-3">Tags</h4>
+                                    <div class="flex flex-wrap gap-2">
+                                        ${article.tags.map(tag => `
+                                            <span class="bg-gray-100 text-gray-700 px-3 py-1 rounded text-sm">
+                                                ${tag}
+                                            </span>
+                                        `).join('')}
+                                    </div>
+                                </div>
+                            ` : ''}
+                        </div>
+                    `;
+                    
+                    // Show modal
+                    modal.classList.remove('hidden');
+                    
+                    // Close button
+                    modal.querySelector('#closeArticleModal').addEventListener('click', () => {
+                        modal.classList.add('hidden');
+                    });
+                }
+            } catch (error) {
+                console.error('Error loading article details:', error);
+                showNotification('Failed to load article details', 'error');
+            }
+        }
+        
+        async function loadVideoTutorials() {
+            const container = document.querySelector('#videosContent .grid');
+            const noVideosElement = document.getElementById('noVideos');
+            
+            container.innerHTML = '';
+            noVideosElement.classList.add('hidden');
+            
+            // Mock video data (in real app, fetch from API)
+            const videos = [
+                {
+                    id: 1,
+                    title: "Beginner's Guide to Terrace Gardening",
+                    description: "Learn the basics of starting your own terrace garden",
+                    thumbnail: "https://via.placeholder.com/400x225/86efac/22c55e?text=Video+1",
+                    duration: "15:30",
+                    views: "1.2K"
+                },
+                {
+                    id: 2,
+                    title: "Organic Pest Control Methods",
+                    description: "Natural ways to protect your plants from pests",
+                    thumbnail: "https://via.placeholder.com/400x225/86efac/22c55e?text=Video+2",
+                    duration: "12:45",
+                    views: "890"
+                },
+                {
+                    id: 3,
+                    title: "Composting for Beginners",
+                    description: "Turn kitchen waste into nutrient-rich compost",
+                    thumbnail: "https://via.placeholder.com/400x225/86efac/22c55e?text=Video+3",
+                    duration: "18:20",
+                    views: "1.5K"
+                }
+            ];
+            
+            if (videos.length === 0) {
+                noVideosElement.classList.remove('hidden');
+                return;
+            }
+            
+            videos.forEach(video => {
+                const card = document.createElement('div');
+                card.className = 'bg-white rounded-xl shadow-md overflow-hidden hover-card';
+                
+                card.innerHTML = `
+                    <div class="relative">
+                        <img src="${video.thumbnail}" 
+                             alt="${video.title}" 
+                             class="w-full h-48 object-cover">
+                        <div class="absolute bottom-2 right-2 bg-black bg-opacity-75 text-white px-2 py-1 rounded text-sm">
+                            ${video.duration}
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="font-bold text-gray-900 mb-2">${video.title}</h3>
+                        <p class="text-gray-600 text-sm mb-3">${video.description}</p>
+                        <div class="flex justify-between items-center text-sm text-gray-500">
+                            <span><i class="fas fa-eye mr-1"></i> ${video.views} views</span>
+                            <button class="text-primary-600 hover:text-primary-700 font-medium">
+                                Watch Now
+                            </button>
+                        </div>
+                    </div>
+                `;
+                
+                container.appendChild(card);
+            });
+        }
+        
+        async function loadSeasonalTips() {
+            const container = document.getElementById('seasonalTipsList');
+            
+            try {
+                const response = await api.getSeasonalTips();
+                
+                if (response.success) {
+                    container.innerHTML = '';
+                    
+                    // Update current season
+                    document.getElementById('currentSeason').textContent = 
+                        response.season.charAt(0).toUpperCase() + response.season.slice(1);
+                    
+                    if (response.tips && response.tips.length > 0) {
+                        response.tips.forEach(tip => {
+                            const tipElement = document.createElement('div');
+                            tipElement.className = 'bg-white rounded-xl shadow-md p-6';
+                            
+                            tipElement.innerHTML = `
+                                <h3 class="text-xl font-bold text-gray-900 mb-3">${tip.title}</h3>
+                                <p class="text-gray-700 mb-4">${tip.content}</p>
+                                <div class="flex flex-wrap gap-2">
+                                    ${tip.tags && tip.tags.map(tag => `
+                                        <span class="bg-gray-100 text-gray-700 px-3 py-1 rounded text-sm">
+                                            ${tag}
+                                        </span>
+                                    `).join('')}
+                                </div>
+                            `;
+                            
+                            container.appendChild(tipElement);
+                        });
+                    }
+                }
+            } catch (error) {
+                console.error('Error loading seasonal tips:', error);
+            }
+        }
+        
+        function initializeChatbot() {
+            const chatContainer = document.getElementById('chatContainer');
+            const chatInput = document.getElementById('chatInput');
+            const sendChat = document.getElementById('sendChat');
+            const quickQuestions = document.querySelectorAll('.quick-question');
+            
+            // Chat history
+            const chatHistory = [];
+            
+            // Add initial bot message
+            addChatMessage('bot', 'Hello! I\'m your gardening assistant. How can I help you today?');
+            
+            // Send message on button click
+            sendChat.addEventListener('click', sendChatMessage);
+            
+            // Send message on Enter key
+            chatInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') sendChatMessage();
+            });
+            
+            // Quick questions
+            quickQuestions.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const question = this.textContent;
+                    chatInput.value = question;
+                    sendChatMessage();
+                });
+            });
+            
+            async function sendChatMessage() {
+                const message = chatInput.value.trim();
+                if (!message) return;
+                
+                // Add user message
+                addChatMessage('user', message);
+                chatInput.value = '';
+                
+                // Scroll to bottom
+                chatContainer.scrollTop = chatContainer.scrollHeight;
+                
+                try {
+                    // Search FAQ for answer
+                    const response = await api.searchFAQ(message);
+                    
+                    if (response.success && response.faqs && response.faqs.length > 0) {
+                        // Show first matching FAQ
+                        const answer = response.faqs[0].answer;
+                        setTimeout(() => {
+                            addChatMessage('bot', answer);
+                        }, 1000);
+                    } else {
+                        // No FAQ found
+                        setTimeout(() => {
+                            addChatMessage('bot', "I'm not sure about that. Would you like me to connect you with a gardening expert from the community?");
+                        }, 1000);
+                    }
+                } catch (error) {
+                    console.error('Chatbot error:', error);
+                    setTimeout(() => {
+                        addChatMessage('bot', "I'm having trouble connecting right now. Please try asking in the community chat or check our articles section.");
+                    }, 1000);
+                }
+            }
+            
+            function addChatMessage(sender, message) {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `flex ${sender === 'user' ? 'justify-end' : 'justify-start'} mb-4`;
+                
+                messageDiv.innerHTML = `
+                    <div class="max-w-[80%]">
+                        <div class="${sender === 'user' ? 'bg-primary-600 text-white' : 'bg-gray-200 text-gray-800'} rounded-2xl p-4">
+                            <p>${message}</p>
+                        </div>
+                        <div class="text-xs text-gray-500 mt-1 ${sender === 'user' ? 'text-right' : ''}">
+                            ${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                        </div>
+                    </div>
+                `;
+                
+                chatContainer.appendChild(messageDiv);
+                
+                // Remove initial placeholder if present
+                const placeholder = chatContainer.querySelector('.text-center');
+                if (placeholder) placeholder.remove();
+                
+                // Scroll to bottom
+                chatContainer.scrollTop = chatContainer.scrollHeight;
+                
+                // Save to history
+                chatHistory.push({ sender, message, timestamp: new Date() });
+            }
+        }
+        
+        function performSearch() {
+            const query = document.getElementById('knowledgeSearch').value.trim();
+            
+            if (!query) {
+                showNotification('Please enter a search term', 'warning');
+                return;
+            }
+            
+            // Switch to articles tab
+            switchTab('articles');
+            
+            // Clear articles and search
+            currentPage = 1;
+            articles = [];
+            
+            // In a real app, you would pass the search query to the API
+            // For now, we'll just show a notification
+            showNotification(`Searching for "${query}"...`, 'info');
+            
+            // Clear search input
+            document.getElementById('knowledgeSearch').value = '';
+            
+            // Simulate search results
+            setTimeout(() => {
+                showNotification('Search feature coming soon!', 'info');
+            }, 1000);
+        }
+        
+        function clearFilters() {
+            document.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+                cb.checked = false;
+            });
+            
+            document.querySelectorAll('select').forEach(select => {
+                select.value = '';
+            });
+            
+            currentPage = 1;
+            loadArticles();
+        }
+        
+        // Load more articles
+        document.getElementById('loadMoreArticles')?.addEventListener('click', function() {
+            currentPage++;
+            loadArticles();
+        });
+    </script>
+</body>
+</html>
