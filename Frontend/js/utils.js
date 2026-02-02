@@ -180,33 +180,7 @@ function generateId() {
 function handleApiError(error) {
     console.error('API Error:', error);
     
-    if (error.response) {
-        // The request was made and the server responded with a status code
-        // that falls out of the range of 2xx
-        const { status, data } = error.response;
-        
-        if (status === 401) {
-            // Unauthorized - clear local storage and redirect to login
-            localStorage.removeItem('token');
-            localStorage.removeItem('user');
-            window.location.href = 'login.html';
-            return 'Session expired. Please login again.';
-        } else if (status === 400) {
-            return data.message || 'Bad request. Please check your input.';
-        } else if (status === 404) {
-            return 'Resource not found.';
-        } else if (status === 500) {
-            return 'Server error. Please try again later.';
-        } else {
-            return data.message || `Error ${status}: ${data.message || 'Unknown error'}`;
-        }
-    } else if (error.request) {
-        // The request was made but no response was received
-        return 'Network error. Please check your connection.';
-    } else {
-        // Something happened in setting up the request that triggered an Error
-        return error.message || 'Unknown error occurred.';
-    }
+    
 }
 
 // Parse query parameters from URL
@@ -323,6 +297,9 @@ function timeAgo(date) {
     
     return "just now";
 }
+
+
+
 
 // Export functions
 window.utils = {

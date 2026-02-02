@@ -34,7 +34,7 @@ app.use(helmet({
       scriptSrc: ["'self'"],
       imgSrc: ["'self'", "data:", "https:"],
       connectSrc: ["'self'", process.env.FRONTEND_URL]
-    }
+    } 
   }
 }));
 
