@@ -49,52 +49,46 @@
         <div class="container mx-auto px-4">
             <div class="flex justify-between items-center h-16">
                 <!-- Logo -->
-                <div class="flex items-center space-x-2">
-                    <a href="dashboard.html" class="flex items-center space-x-2">
-                        <i class="fas fa-seedling text-primary-600 text-2xl"></i>
-                        <span class="text-xl font-bold text-gray-800">Terrace Buddy</span>
-                    </a>
-                </div>
+                <a href="index.html" class="flex items-center space-x-2">
+                    <i class="fas fa-seedling text-primary-600 text-2xl"></i>
+                    <span class="text-xl font-bold text-gray-800">Terrace Buddy</span>
+                </a>
 
-                <!-- User Menu -->
-                <div class="relative">
-                    <button id="userMenuButton" 
+                <!-- Desktop Navigation -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="dashboard.html" class="text-gray-700 hover:text-primary-600 font-medium">Dashboard</a>
+                    <a href="plants.html" class="text-gray-700 hover:text-primary-600 font-medium">My Plants</a>
+                    <a href="communities.html" class="text-gray-700 hover:text-primary-600 font-medium">Communities</a>
+                    <a href="marketplace.html" class="text-gray-700 hover:text-primary-600 font-medium">Marketplace</a>
+                    <a href="weather.html" class="text-primary-600 font-bold border-b-2 border-primary-600">Weather</a>
+
+                    <!-- User Menu -->
+                    <div id="userMenu" class="relative">
+                        <button id="userMenuButton"
                             class="flex items-center space-x-2 text-gray-700 hover:text-primary-600 font-medium">
-                        <i class="fas fa-user-circle text-2xl"></i>
-                        <span id="userName">Loading...</span>
-                        <i class="fas fa-chevron-down text-sm"></i>
-                    </button>
-                    
-                    <!-- Dropdown Menu -->
-                    <div id="dropdownMenu" 
-                         class="hidden absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-10 border">
-                        <a href="dashboard.html" 
-                           class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
-                           <i class="fas fa-tachometer-alt mr-2"></i>Dashboard
-                        </a>
-                        <a href="communities.html" 
-                           class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
-                           <i class="fas fa-users mr-2"></i>Communities
-                        </a>
-                        <a href="marketplace.html" 
-                           class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
-                           <i class="fas fa-store mr-2"></i>Marketplace
-                        </a>
-                        <a href="knowledge.html" 
-                           class="block px-4 py-2 text-gray-700 hover:bg-gray-100 bg-primary-50">
-                           <i class="fas fa-book mr-2"></i>Knowledge Hub
-                        </a>
-                        <a href="plants.html" 
-                           class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
-                           <i class="fas fa-plant mr-2"></i>My Plants
-                        </a>
-                        <hr class="my-1">
-                        <button id="logoutButton" 
-                                class="block w-full text-left px-4 py-2 text-red-600 hover:bg-gray-100">
-                           <i class="fas fa-sign-out-alt mr-2"></i>Logout
+                            <i class="fas fa-user-circle text-2xl"></i>
+                            <span id="userName">Profile</span>
+                            <i class="fas fa-chevron-down text-sm"></i>
                         </button>
+
+                        <div id="dropdownMenu"
+                            class="hidden absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-10 border">
+                            <a href="profile.html" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
+                                <i class="fas fa-user mr-2"></i>Profile
+                            </a>
+                            <hr class="my-1">
+                            <button id="logoutButton"
+                                class="block w-full text-left px-4 py-2 text-red-600 hover:bg-gray-100">
+                                <i class="fas fa-sign-out-alt mr-2"></i>Logout
+                            </button>
+                        </div>
                     </div>
                 </div>
+
+                <!-- Mobile Menu Button -->
+                <button id="mobileMenuButton" class="md:hidden text-gray-700">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
             </div>
         </div>
     </nav>

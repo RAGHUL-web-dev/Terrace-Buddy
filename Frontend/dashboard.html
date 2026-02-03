@@ -1,13 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard - Terrace Buddy</title>
-    
+
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    
+
     <!-- Custom Tailwind Configuration -->
     <script>
         tailwind.config = {
@@ -34,31 +35,58 @@
             }
         }
     </script>
-    
+
     <!-- Inter Font -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
+
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+
     <style>
         .sidebar {
             transition: all 0.3s ease;
         }
-        
+
         @media (max-width: 768px) {
             .sidebar {
                 transform: translateX(-100%);
             }
-            
+
             .sidebar.active {
                 transform: translateX(0);
             }
         }
+
+        .loading-skeleton {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+        }
+
+        @keyframes loading {
+            0% {
+                background-position: 200% 0;
+            }
+
+            100% {
+                background-position: -200% 0;
+            }
+        }
+
+        .weather-icon {
+            font-size: 3rem;
+            opacity: 0.9;
+        }
+
+        .activity-date {
+            font-size: 0.75rem;
+            color: #6b7280;
+        }
     </style>
 </head>
+
 <body class="font-sans bg-gray-50">
     <!-- Navigation (Authenticated) -->
     <nav id="navbar" class="bg-white shadow-md">
@@ -80,34 +108,33 @@
                     <div class="relative">
                         <button id="notificationButton" class="text-gray-700 hover:text-primary-600 relative">
                             <i class="fas fa-bell text-xl"></i>
-                            <span id="notificationBadge" class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center hidden">3</span>
+                            <span id="notificationBadge"
+                                class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center hidden">3</span>
                         </button>
                     </div>
-                    
+
                     <!-- User Menu -->
                     <div id="userMenu" class="relative">
-                        <button id="userMenuButton" 
-                                class="flex items-center space-x-2 text-gray-700 hover:text-primary-600 font-medium">
+                        <button id="userMenuButton"
+                            class="flex items-center space-x-2 text-gray-700 hover:text-primary-600 font-medium">
                             <i class="fas fa-user-circle text-2xl"></i>
                             <span id="userName">Loading...</span>
                             <i class="fas fa-chevron-down text-sm"></i>
                         </button>
-                        
+
                         <!-- Dropdown Menu -->
-                        <div id="dropdownMenu" 
-                             class="hidden absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-10 border">
-                            <a href="dashboard.html" 
-                               class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
-                               <i class="fas fa-tachometer-alt mr-2"></i>Dashboard
+                        <div id="dropdownMenu"
+                            class="hidden absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-10 border">
+                            <a href="dashboard.html" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
+                                <i class="fas fa-tachometer-alt mr-2"></i>Dashboard
                             </a>
-                            <a href="profile.html" 
-                               class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
-                               <i class="fas fa-user mr-2"></i>Profile
+                            <a href="profile.html" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
+                                <i class="fas fa-user mr-2"></i>Profile
                             </a>
                             <hr class="my-1">
-                            <button id="logoutButton" 
-                                    class="block w-full text-left px-4 py-2 text-red-600 hover:bg-gray-100">
-                               <i class="fas fa-sign-out-alt mr-2"></i>Logout
+                            <button id="logoutButton"
+                                class="block w-full text-left px-4 py-2 text-red-600 hover:bg-gray-100">
+                                <i class="fas fa-sign-out-alt mr-2"></i>Logout
                             </button>
                         </div>
                     </div>
@@ -140,63 +167,52 @@
 
                 <!-- Navigation Links -->
                 <nav class="space-y-2">
-                    <a href="dashboard.html" 
-                       class="flex items-center space-x-3 p-3 rounded-lg bg-primary-50 text-primary-700 font-medium">
-                       <i class="fas fa-tachometer-alt"></i>
-                       <span>Dashboard</span>
+                    <a href="dashboard.html"
+                        class="flex items-center space-x-3 p-3 rounded-lg bg-primary-50 text-primary-700 font-medium">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span>Dashboard</span>
                     </a>
-                    
-                    <a href="./plants.html" 
-                       class="flex items-center space-x-3 p-3 rounded-lg text-gray-700 hover:bg-gray-100 font-medium">
-                       <i class="fas fa-plant"></i>
-                       <span>My Plants</span>
-                       <span class="ml-auto bg-primary-500 text-white text-xs px-2 py-1 rounded-full">5</span>
+
+                    <a href="./plants.html"
+                        class="flex items-center space-x-3 p-3 rounded-lg text-gray-700 hover:bg-gray-100 font-medium">
+                        <i class="fas fa-plant"></i>
+                        <span>My Plants</span>
+                        <span id="sidebarPlantsCount"
+                            class="ml-auto bg-primary-500 text-white text-xs px-2 py-1 rounded-full">0</span>
                     </a>
-                    
-                    <a href="#" 
-                       class="flex items-center space-x-3 p-3 rounded-lg text-gray-700 hover:bg-gray-100 font-medium">
-                       <i class="fas fa-users"></i>
-                       <span>Communities</span>
-                       <span class="ml-auto bg-primary-500 text-white text-xs px-2 py-1 rounded-full">3</span>
+
+                    <a href="./communities.html"
+                        class="flex items-center space-x-3 p-3 rounded-lg text-gray-700 hover:bg-gray-100 font-medium">
+                        <i class="fas fa-users"></i>
+                        <span>Communities</span>
+                        <span id="sidebarCommunitiesCount"
+                            class="ml-auto bg-primary-500 text-white text-xs px-2 py-1 rounded-full">0</span>
                     </a>
-                    
-                    <a href="./marketplace.html" 
-                       class="flex items-center space-x-3 p-3 rounded-lg text-gray-700 hover:bg-gray-100 font-medium">
-                       <i class="fas fa-store"></i>
-                       <span>Marketplace</span>
+
+                    <a href="./marketplace.html"
+                        class="flex items-center space-x-3 p-3 rounded-lg text-gray-700 hover:bg-gray-100 font-medium">
+                        <i class="fas fa-store"></i>
+                        <span>Marketplace</span>
                     </a>
-                    
-                    <a href="./knowledge.html" 
-                       class="flex items-center space-x-3 p-3 rounded-lg text-gray-700 hover:bg-gray-100 font-medium">
-                       <i class="fas fa-book"></i>
-                       <span>Knowledge Hub</span>
+
+                    <a href="./knowledge.html"
+                        class="flex items-center space-x-3 p-3 rounded-lg text-gray-700 hover:bg-gray-100 font-medium">
+                        <i class="fas fa-book"></i>
+                        <span>Knowledge Hub</span>
                     </a>
-                    
-                    <a href="#" 
-                       class="flex items-center space-x-3 p-3 rounded-lg text-gray-700 hover:bg-gray-100 font-medium">
-                       <i class="fas fa-cloud-sun"></i>
-                       <span>Weather</span>
+
+                    <a href="./weather.html"
+                        class="flex items-center space-x-3 p-3 rounded-lg text-gray-700 hover:bg-gray-100 font-medium">
+                        <i class="fas fa-cloud-sun"></i>
+                        <span>Weather</span>
                     </a>
-                    
-                    <a href="profile.html" 
-                       class="flex items-center space-x-3 p-3 rounded-lg text-gray-700 hover:bg-gray-100 font-medium">
-                       <i class="fas fa-cog"></i>
-                       <span>Settings</span>
+
+                    <a href="profile.html"
+                        class="flex items-center space-x-3 p-3 rounded-lg text-gray-700 hover:bg-gray-100 font-medium">
+                        <i class="fas fa-cog"></i>
+                        <span>Settings</span>
                     </a>
                 </nav>
-                
-                <!-- Quick Actions -->
-                <!-- <div class="mt-8 pt-4 border-t">
-                    <h4 class="font-bold text-gray-900 mb-3">Quick Actions</h4>
-                    <div class="space-y-2">
-                        <button class="w-full bg-primary-600 text-white py-2 rounded-lg font-medium hover:bg-primary-700 transition duration-300">
-                            <i class="fas fa-plus mr-2"></i>Add New Plant
-                        </button>
-                        <button class="w-full bg-white text-primary-600 py-2 rounded-lg font-medium border border-primary-600 hover:bg-primary-50 transition duration-300">
-                            <i class="fas fa-search mr-2"></i>Find Communities
-                        </button>
-                    </div>
-                </div> -->
             </div>
         </aside>
 
@@ -207,33 +223,35 @@
                 <h1 class="text-3xl font-bold text-gray-900 mb-2">
                     Welcome back, <span id="welcomeUserName">User</span>! 👋
                 </h1>
-                <p class="text-gray-600">Here's what's happening with your garden today.</p>
+                <p class="text-gray-600" id="currentDate">Here's what's happening with your garden today.</p>
             </div>
 
             <!-- Stats Grid -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                <!-- Plants Count Card -->
                 <div class="bg-white rounded-xl p-6 shadow-md">
                     <div class="flex items-center justify-between">
                         <div>
                             <p class="text-gray-600 text-sm">Total Plants</p>
-                            <h3 id="plantsCount" class="text-3xl font-bold text-gray-900">5</h3>
+                            <h3 id="plantsCount" class="text-3xl font-bold text-gray-900">Loading...</h3>
                         </div>
                         <div class="bg-primary-100 p-3 rounded-full">
                             <i class="fas fa-plant text-primary-600 text-2xl"></i>
                         </div>
                     </div>
                     <div class="mt-4">
-                        <a href="#" class="text-primary-600 hover:text-primary-700 font-medium text-sm">
+                        <a href="./plants.html" class="text-primary-600 hover:text-primary-700 font-medium text-sm">
                             View all plants →
                         </a>
                     </div>
                 </div>
-                
+
+                <!-- Communities Count Card -->
                 <div class="bg-white rounded-xl p-6 shadow-md">
                     <div class="flex items-center justify-between">
                         <div>
                             <p class="text-gray-600 text-sm">Communities</p>
-                            <h3 id="communitiesCount" class="text-3xl font-bold text-gray-900">3</h3>
+                            <h3 id="communitiesCount" class="text-3xl font-bold text-gray-900">Loading...</h3>
                         </div>
                         <div class="bg-blue-100 p-3 rounded-full">
                             <i class="fas fa-users text-blue-600 text-2xl"></i>
@@ -245,36 +263,39 @@
                         </a>
                     </div>
                 </div>
-                
+
+                <!-- Unread Messages Card -->
                 <div class="bg-white rounded-xl p-6 shadow-md">
                     <div class="flex items-center justify-between">
                         <div>
                             <p class="text-gray-600 text-sm">Unread Messages</p>
-                            <h3 id="messagesCount" class="text-3xl font-bold text-gray-900">12</h3>
+                            <h3 id="messagesCount" class="text-3xl font-bold text-gray-900">Loading...</h3>
                         </div>
                         <div class="bg-purple-100 p-3 rounded-full">
                             <i class="fas fa-comments text-purple-600 text-2xl"></i>
                         </div>
                     </div>
                     <div class="mt-4">
-                        <a href="#" class="text-purple-600 hover:text-purple-700 font-medium text-sm">
+                        <a href="./community-chat.html"
+                            class="text-purple-600 hover:text-purple-700 font-medium text-sm">
                             Check messages →
                         </a>
                     </div>
                 </div>
-                
+
+                <!-- Marketplace Items Card -->
                 <div class="bg-white rounded-xl p-6 shadow-md">
                     <div class="flex items-center justify-between">
                         <div>
                             <p class="text-gray-600 text-sm">Marketplace Items</p>
-                            <h3 id="marketplaceCount" class="text-3xl font-bold text-gray-900">2</h3>
+                            <h3 id="marketplaceCount" class="text-3xl font-bold text-gray-900">Loading...</h3>
                         </div>
                         <div class="bg-green-100 p-3 rounded-full">
                             <i class="fas fa-store text-green-600 text-2xl"></i>
                         </div>
                     </div>
                     <div class="mt-4">
-                        <a href="#" class="text-green-600 hover:text-green-700 font-medium text-sm">
+                        <a href="./marketplace.html" class="text-green-600 hover:text-green-700 font-medium text-sm">
                             Visit marketplace →
                         </a>
                     </div>
@@ -289,55 +310,34 @@
                     <div class="bg-white rounded-xl shadow-md p-6">
                         <div class="flex justify-between items-center mb-6">
                             <h2 class="text-xl font-bold text-gray-900">Recent Activity</h2>
-                            <a href="#" class="text-primary-600 hover:text-primary-700 font-medium text-sm">
-                                See all
-                            </a>
+                            <button id="refreshActivity"
+                                class="text-primary-600 hover:text-primary-700 font-medium text-sm">
+                                <i class="fas fa-sync-alt mr-1"></i> Refresh
+                            </button>
                         </div>
-                        
-                        <div class="space-y-4">
-                            <div class="flex items-start space-x-3 p-3 hover:bg-gray-50 rounded-lg">
-                                <div class="bg-primary-100 p-2 rounded-full">
-                                    <i class="fas fa-seedling text-primary-600"></i>
-                                </div>
-                                <div class="flex-1">
-                                    <p class="text-gray-900 font-medium">Tomato plant started flowering</p>
-                                    <p class="text-gray-600 text-sm">2 hours ago</p>
-                                </div>
-                            </div>
-                            
-                            <div class="flex items-start space-x-3 p-3 hover:bg-gray-50 rounded-lg">
-                                <div class="bg-blue-100 p-2 rounded-full">
-                                    <i class="fas fa-users text-blue-600"></i>
-                                </div>
-                                <div class="flex-1">
-                                    <p class="text-gray-900 font-medium">New message in Urban Gardeners community</p>
-                                    <p class="text-gray-600 text-sm">5 hours ago</p>
-                                </div>
-                            </div>
-                            
-                            <div class="flex items-start space-x-3 p-3 hover:bg-gray-50 rounded-lg">
-                                <div class="bg-green-100 p-2 rounded-full">
-                                    <i class="fas fa-cloud-sun text-green-600"></i>
-                                </div>
-                                <div class="flex-1">
-                                    <p class="text-gray-900 font-medium">Rain forecasted for tomorrow</p>
-                                    <p class="text-gray-600 text-sm">Yesterday</p>
+
+                        <div id="activityList" class="space-y-4">
+                            <!-- Activity items will be loaded here -->
+                            <div class="flex items-center justify-center py-8">
+                                <div class="text-center">
+                                    <i class="fas fa-spinner fa-spin text-primary-600 text-2xl mb-2"></i>
+                                    <p class="text-gray-600">Loading activities...</p>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    
+
                     <!-- Quick Tips -->
                     <div class="bg-gradient-to-r from-primary-500 to-primary-600 rounded-xl shadow-md p-6 text-white">
                         <h2 class="text-xl font-bold mb-4">Today's Gardening Tip</h2>
-                        <p class="mb-4">Water your plants early in the morning to prevent evaporation and give them time to absorb moisture before the heat of the day.</p>
+                        <p id="gardeningTip" class="mb-4">Loading gardening tip...</p>
                         <div class="flex items-center space-x-2 text-primary-100">
                             <i class="fas fa-lightbulb"></i>
-                            <span class="text-sm">Based on current weather conditions</span>
+                            <span id="tipSource" class="text-sm">Based on current weather conditions</span>
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- Right Column -->
                 <div class="space-y-8">
                     <!-- Weather Widget -->
@@ -346,67 +346,78 @@
                             <h2 class="text-xl font-bold text-gray-900">Weather</h2>
                             <div class="flex items-center space-x-2">
                                 <i class="fas fa-map-marker-alt text-gray-500"></i>
-                                <span class="text-gray-700 font-medium">Mumbai</span>
+                                <span id="weatherLocation" class="text-gray-700 font-medium">Loading...</span>
                             </div>
                         </div>
-                        
+
                         <div class="text-center mb-6">
-                            <div class="text-5xl font-bold text-gray-900 mb-2">28°C</div>
-                            <p class="text-gray-600">Partly Cloudy</p>
+                            <div id="weatherIcon" class="weather-icon mb-2">
+                                <i class="fas fa-sun text-yellow-500"></i>
+                            </div>
+                            <div id="weatherTemp" class="text-5xl font-bold text-gray-900 mb-2">Loading...</div>
+                            <p id="weatherCondition" class="text-gray-600">Loading...</p>
                         </div>
-                        
+
                         <div class="space-y-3">
                             <div class="flex justify-between items-center">
                                 <span class="text-gray-600">Humidity</span>
-                                <span class="font-medium">65%</span>
+                                <span id="weatherHumidity" class="font-medium">Loading...</span>
                             </div>
                             <div class="flex justify-between items-center">
                                 <span class="text-gray-600">Wind</span>
-                                <span class="font-medium">12 km/h</span>
+                                <span id="weatherWind" class="font-medium">Loading...</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-gray-600">Last Updated</span>
+                                <span id="weatherUpdated" class="font-medium text-sm">Just now</span>
                             </div>
                         </div>
-                        
+
                         <div class="mt-6 pt-6 border-t">
                             <h3 class="font-bold text-gray-900 mb-3">Gardening Suggestions</h3>
-                            <ul class="space-y-2">
+                            <ul id="weatherSuggestions" class="space-y-2">
                                 <li class="flex items-start space-x-2">
                                     <i class="fas fa-check-circle text-green-500 mt-1"></i>
-                                    <span class="text-sm">Good day for transplanting seedlings</span>
-                                </li>
-                                <li class="flex items-start space-x-2">
-                                    <i class="fas fa-check-circle text-green-500 mt-1"></i>
-                                    <span class="text-sm">Apply organic fertilizer to flowering plants</span>
+                                    <span class="text-sm">Loading suggestions...</span>
                                 </li>
                             </ul>
                         </div>
+
+                        <button id="refreshWeather"
+                            class="w-full mt-4 bg-primary-50 text-primary-700 py-2 rounded-lg font-medium hover:bg-primary-100 transition duration-300">
+                            <i class="fas fa-sync-alt mr-2"></i> Update Weather
+                        </button>
                     </div>
-                    
-                    <!-- Quick Links -->
-                    <!-- <div class="bg-white rounded-xl shadow-md p-6">
-                        <h2 class="text-xl font-bold text-gray-900 mb-6">Quick Links</h2>
+
+                    <!-- Quick Actions -->
+                    <div class="bg-white rounded-xl shadow-md p-6">
+                        <h2 class="text-xl font-bold text-gray-900 mb-6">Quick Actions</h2>
                         <div class="space-y-3">
-                            <a href="#" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-50 transition duration-300">
+                            <a href="./add-plant.html"
+                                class="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-50 transition duration-300">
                                 <div class="bg-primary-100 p-2 rounded-full">
                                     <i class="fas fa-plus text-primary-600"></i>
                                 </div>
                                 <span class="font-medium text-gray-900">Add New Plant</span>
                             </a>
-                            
-                            <a href="#" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-50 transition duration-300">
+
+                            <a href="./communities.html"
+                                class="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-50 transition duration-300">
                                 <div class="bg-blue-100 p-2 rounded-full">
                                     <i class="fas fa-comments text-blue-600"></i>
                                 </div>
                                 <span class="font-medium text-gray-900">Chat with Community</span>
                             </a>
-                            
-                            <a href="#" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-50 transition duration-300">
+
+                            <a href="./knowledge.html"
+                                class="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-50 transition duration-300">
                                 <div class="bg-green-100 p-2 rounded-full">
                                     <i class="fas fa-book text-green-600"></i>
                                 </div>
                                 <span class="font-medium text-gray-900">Read Articles</span>
                             </a>
                         </div>
-                    </div> -->
+                    </div>
                 </div>
             </div>
         </main>
@@ -416,81 +427,526 @@
     <script src="./js/utils.js"></script>
     <script src="./js/api.js"></script>
     <script src="./js/auth.js"></script>
-    
+
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             // Check authentication
             if (!checkAuthStatus()) {
                 window.location.href = 'login.html';
                 return;
             }
-            
-            // Load user data
-            loadUserData();
-            
+
+            // Set current date
+            const currentDate = new Date();
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            document.getElementById('currentDate').textContent = currentDate.toLocaleDateString('en-US', options);
+
+            // Initialize UI components
+            initUI();
+
+            // Load all data
+            loadDashboardData();
+        });
+
+        function initUI() {
             // Initialize sidebar toggle
             const sidebarToggle = document.getElementById('sidebarToggle');
             const sidebar = document.getElementById('sidebar');
             const mobileMenuOverlay = document.getElementById('mobileMenuOverlay');
-            
+
             if (sidebarToggle && sidebar) {
-                sidebarToggle.addEventListener('click', function() {
+                sidebarToggle.addEventListener('click', function () {
                     sidebar.classList.toggle('active');
                     mobileMenuOverlay.classList.toggle('hidden');
                 });
-                
-                mobileMenuOverlay.addEventListener('click', function() {
+
+                mobileMenuOverlay.addEventListener('click', function () {
                     sidebar.classList.remove('active');
                     mobileMenuOverlay.classList.add('hidden');
                 });
             }
-            
+
             // Initialize user dropdown
             const userMenuButton = document.getElementById('userMenuButton');
             const dropdownMenu = document.getElementById('dropdownMenu');
-            
+
             if (userMenuButton && dropdownMenu) {
-                userMenuButton.addEventListener('click', function(e) {
+                userMenuButton.addEventListener('click', function (e) {
                     e.stopPropagation();
                     dropdownMenu.classList.toggle('hidden');
                 });
-                
+
                 // Close dropdown when clicking outside
-                document.addEventListener('click', function() {
+                document.addEventListener('click', function () {
                     dropdownMenu.classList.add('hidden');
                 });
             }
-            
+
             // Logout functionality
             const logoutButton = document.getElementById('logoutButton');
             if (logoutButton) {
-                logoutButton.addEventListener('click', function() {
+                logoutButton.addEventListener('click', function () {
                     logoutUser();
                 });
             }
-        });
-        
-        function loadUserData() {
-            const user = JSON.parse(localStorage.getItem('user') || '{}');
-            
-            // Update user name in various places
-            if (user.name) {
-                document.getElementById('userName').textContent = user.name;
-                document.getElementById('sidebarUserName').textContent = user.name;
-                document.getElementById('welcomeUserName').textContent = user.name;
+
+            // Refresh buttons
+            document.getElementById('refreshActivity').addEventListener('click', loadActivityData);
+            document.getElementById('refreshWeather').addEventListener('click', loadWeatherData);
+        }
+
+        async function loadDashboardData() {
+            try {
+                // Load user data
+                const user = getCurrentUser();
+                if (user) {
+                    document.getElementById('userName').textContent = user.name;
+                    document.getElementById('sidebarUserName').textContent = user.name;
+                    document.getElementById('welcomeUserName').textContent = user.name;
+                    document.getElementById('sidebarUserEmail').textContent = user.email;
+                }
+
+                // Load all data in parallel
+                await Promise.all([
+                    loadUserStats(),
+                    loadWeatherData(),
+                    loadActivityData(),
+                    loadGardeningTip()
+                ]);
+
+            } catch (error) {
+                console.error('Error loading dashboard data:', error);
+                showNotification('Error loading dashboard data. Please try again.', 'error');
             }
-            
-            if (user.email) {
-                document.getElementById('sidebarUserEmail').textContent = user.email;
+        }
+
+        async function loadUserStats() {
+            try {
+                // Get user plants
+                const plantsResponse = await api.getUserPlants();
+                console.log('Plants response:', plantsResponse);
+                const plantsCount = plantsResponse?.plants?.length || 0;
+                document.getElementById('plantsCount').textContent = plantsCount;
+                document.getElementById('sidebarPlantsCount').textContent = plantsCount;
+
+                // Get user communities from API
+                const communitiesResponse = await api.getMyCommunities();
+                console.log('Communities response:', communitiesResponse);
+                const communitiesCount = communitiesResponse?.communities?.length || 0;
+                document.getElementById('communitiesCount').textContent = communitiesCount;
+                document.getElementById('sidebarCommunitiesCount').textContent = communitiesCount;
+
+                // Get marketplace items count
+                const marketplaceResponse = await api.getMarketplaceItems({ limit: 1 });
+                console.log('Marketplace response:', marketplaceResponse);
+                const marketplaceCount = marketplaceResponse?.count || 0;
+                document.getElementById('marketplaceCount').textContent = marketplaceCount;
+
+                // Get notifications count
+                const notificationsResponse = await api.getNotifications();
+                console.log('Notifications response:', notificationsResponse);
+                const unreadCount = notificationsResponse?.notifications?.filter(n => !n.isRead).length || 0;
+                document.getElementById('messagesCount').textContent = unreadCount;
+
+            } catch (error) {
+                console.error('Error loading user stats:', error);
+                document.getElementById('plantsCount').textContent = '0';
+                document.getElementById('communitiesCount').textContent = '0';
+                document.getElementById('marketplaceCount').textContent = '0';
+                document.getElementById('messagesCount').textContent = '0';
             }
-            
-            // Load user stats from API (mock for now)
-            // In real implementation, you would fetch from API
-            document.getElementById('plantsCount').textContent = '5';
-            document.getElementById('communitiesCount').textContent = '3';
-            document.getElementById('messagesCount').textContent = '12';
-            document.getElementById('marketplaceCount').textContent = '2';
+        }
+
+        async function loadWeatherData() {
+            const weatherWidget = document.querySelector('.bg-white.rounded-xl.shadow-md.p-6');
+            const refreshButton = document.getElementById('refreshWeather');
+
+            try {
+                // Show loading state
+                weatherWidget.classList.add('opacity-75');
+                refreshButton.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Updating...';
+                refreshButton.disabled = true;
+
+                // Get user location from profile or use default
+                const user = getCurrentUser();
+                const city = user?.location?.city || 'Mumbai';
+
+                // Fetch weather data from API
+                const response = await fetch(`http://localhost:5000/api/weather/${encodeURIComponent(city)}`);
+                const data = await response.json();
+
+                if (data.success && data.weather) {
+                    const weather = data.weather;
+
+                    // Update weather location
+                    document.getElementById('weatherLocation').textContent = weather.location || city;
+
+                    // Update weather icon based on condition
+                    const iconElement = document.getElementById('weatherIcon');
+                    iconElement.innerHTML = getWeatherIcon(weather.condition, weather.icon);
+
+                    // Update temperature
+                    document.getElementById('weatherTemp').textContent = `${weather.temperature}°C`;
+                    document.getElementById('weatherCondition').textContent = weather.condition;
+                    document.getElementById('weatherHumidity').textContent = `${weather.humidity}%`;
+                    document.getElementById('weatherWind').textContent = `${weather.windSpeed} km/h`;
+                    document.getElementById('weatherUpdated').textContent = 'Just now';
+
+                    // Update gardening suggestions
+                    const suggestionsList = document.getElementById('weatherSuggestions');
+                    suggestionsList.innerHTML = '';
+
+                    if (weather.recommendations && weather.recommendations.length > 0) {
+                        weather.recommendations.forEach(rec => {
+                            const icon = rec.type === 'warning' ? 'exclamation-triangle' : 'check-circle';
+                            const color = rec.type === 'warning' ? 'text-yellow-500' : 'text-green-500';
+
+                            const li = document.createElement('li');
+                            li.className = 'flex items-start space-x-2';
+                            li.innerHTML = `
+                                <i class="fas fa-${icon} ${color} mt-1"></i>
+                                <span class="text-sm">${rec.message}</span>
+                            `;
+                            suggestionsList.appendChild(li);
+                        });
+                    }
+
+                    showNotification('Weather data updated successfully!', 'success');
+                } else {
+                    throw new Error('Failed to fetch weather data');
+                }
+
+            } catch (error) {
+                console.error('Error loading weather data:', error);
+                showNotification('Unable to load weather data. Showing default information.', 'warning');
+
+                // Show default weather data
+                document.getElementById('weatherLocation').textContent = 'Mumbai';
+                document.getElementById('weatherTemp').textContent = '28°C';
+                document.getElementById('weatherCondition').textContent = 'Partly Cloudy';
+                document.getElementById('weatherHumidity').textContent = '65%';
+                document.getElementById('weatherWind').textContent = '12 km/h';
+
+            } finally {
+                // Restore normal state
+                weatherWidget.classList.remove('opacity-75');
+                refreshButton.innerHTML = '<i class="fas fa-sync-alt mr-2"></i> Update Weather';
+                refreshButton.disabled = false;
+            }
+        }
+
+        async function loadActivityData() {
+            const activityList = document.getElementById('activityList');
+            const refreshButton = document.getElementById('refreshActivity');
+
+            try {
+                // Show loading state
+                activityList.innerHTML = `
+                    <div class="flex items-center justify-center py-8">
+                        <div class="text-center">
+                            <i class="fas fa-spinner fa-spin text-primary-600 text-2xl mb-2"></i>
+                            <p class="text-gray-600">Loading activities...</p>
+                        </div>
+                    </div>
+                `;
+
+                refreshButton.innerHTML = '<i class="fas fa-spinner fa-spin mr-1"></i> Loading...';
+                refreshButton.disabled = true;
+
+                // Fetch multiple data sources for activity
+                const [plantsData, marketplaceData, notificationsData] = await Promise.all([
+                    api.getUserPlants(),
+                    api.getMarketplaceItems({ limit: 5 }),
+                    api.getNotifications()
+                ]);
+
+                // Combine and sort activities
+                const activities = [];
+
+                // Add plant activities
+                if (plantsData?.plants) {
+                    plantsData.plants.forEach(plant => {
+                        // Add planting activity
+                        activities.push({
+                            type: 'plant',
+                            icon: 'fas fa-seedling',
+                            color: 'primary',
+                            title: `Planted ${plant.name}`,
+                            description: `Started growing ${plant.type} on ${formatDate(plant.datePlanted)}`,
+                            time: plant.datePlanted,
+                            link: `plant-detail.html?id=${plant._id}`
+                        });
+
+                        // Add last watered activity
+                        if (plant.lastWatered) {
+                            activities.push({
+                                type: 'water',
+                                icon: 'fas fa-tint',
+                                color: 'blue',
+                                title: `Watered ${plant.name}`,
+                                description: 'Last watering completed',
+                                time: plant.lastWatered,
+                                link: `plant-detail.html?id=${plant._id}`
+                            });
+                        }
+                    });
+                }
+
+                // Add marketplace activities
+                if (marketplaceData?.items) {
+                    marketplaceData.items.forEach(item => {
+                        activities.push({
+                            type: 'marketplace',
+                            icon: 'fas fa-store',
+                            color: 'green',
+                            title: `New: ${item.title}`,
+                            description: `${item.type === 'sell' ? 'For sale' : item.type === 'buy' ? 'Looking for' : 'For exchange'} in marketplace`,
+                            time: item.createdAt,
+                            link: `marketplace-item.html?id=${item._id}`
+                        });
+                    });
+                }
+
+                // Add notification activities
+                if (notificationsData?.notifications) {
+                    notificationsData.notifications.slice(0, 3).forEach(notification => {
+                        activities.push({
+                            type: 'notification',
+                            icon: getNotificationIcon(notification.type),
+                            color: getNotificationColor(notification.type),
+                            title: notification.title,
+                            description: notification.message,
+                            time: notification.createdAt,
+                            link: getNotificationLink(notification)
+                        });
+                    });
+                }
+
+                // Sort by time (newest first) and take top 5
+                activities.sort((a, b) => new Date(b.time) - new Date(a.time));
+                const recentActivities = activities.slice(0, 5);
+
+                // Update activity list
+                if (recentActivities.length > 0) {
+                    activityList.innerHTML = '';
+
+                    recentActivities.forEach(activity => {
+                        const colorClass = `bg-${activity.color}-100`;
+                        const iconColorClass = `text-${activity.color}-600`;
+
+                        const activityElement = document.createElement('div');
+                        activityElement.className = 'flex items-start space-x-3 p-3 hover:bg-gray-50 rounded-lg transition duration-300';
+                        activityElement.innerHTML = `
+                            <div class="${colorClass} p-2 rounded-full">
+                                <i class="${activity.icon} ${iconColorClass}"></i>
+                            </div>
+                            <div class="flex-1">
+                                <p class="text-gray-900 font-medium">${activity.title}</p>
+                                <p class="text-gray-600 text-sm">${activity.description}</p>
+                                <p class="activity-date">${timeAgo(activity.time)}</p>
+                            </div>
+                            ${activity.link ? `<a href="${activity.link}" class="text-${activity.color}-600 hover:text-${activity.color}-700">
+                                <i class="fas fa-arrow-right"></i>
+                            </a>` : ''}
+                        `;
+
+                        activityList.appendChild(activityElement);
+                    });
+                } else {
+                    activityList.innerHTML = `
+                        <div class="text-center py-8">
+                            <i class="fas fa-inbox text-gray-400 text-3xl mb-2"></i>
+                            <p class="text-gray-600">No recent activities found</p>
+                        </div>
+                    `;
+                }
+
+                showNotification('Activities refreshed!', 'success');
+
+            } catch (error) {
+                console.error('Error loading activity data:', error);
+                activityList.innerHTML = `
+                    <div class="text-center py-8">
+                        <i class="fas fa-exclamation-triangle text-yellow-500 text-3xl mb-2"></i>
+                        <p class="text-gray-600">Unable to load activities</p>
+                        <p class="text-gray-500 text-sm">Please try again later</p>
+                    </div>
+                `;
+            } finally {
+                refreshButton.innerHTML = '<i class="fas fa-sync-alt mr-1"></i> Refresh';
+                refreshButton.disabled = false;
+            }
+        }
+
+        async function loadGardeningTip() {
+            try {
+                // Fetch seasonal tips from API
+                const response = await fetch('http://localhost:5000/api/guidance/seasonal-tips');
+                const data = await response.json();
+
+                if (data.success && data.tips && data.tips.length > 0) {
+                    // Get a random tip
+                    const randomTip = data.tips[Math.floor(Math.random() * data.tips.length)];
+                    document.getElementById('gardeningTip').textContent = randomTip.content || randomTip.title;
+                    document.getElementById('tipSource').textContent = `From: ${randomTip.title}`;
+                } else {
+                    // Fallback tips
+                    const fallbackTips = [
+                        "Water your plants early in the morning to prevent evaporation.",
+                        "Regular pruning encourages bushier growth in most plants.",
+                        "Use organic compost for healthier and more productive plants.",
+                        "Rotate your pots occasionally for even sunlight exposure.",
+                        "Check soil moisture with your finger before watering."
+                    ];
+                    const randomTip = fallbackTips[Math.floor(Math.random() * fallbackTips.length)];
+                    document.getElementById('gardeningTip').textContent = randomTip;
+                    document.getElementById('tipSource').textContent = "General gardening advice";
+                }
+
+            } catch (error) {
+                console.error('Error loading gardening tip:', error);
+                document.getElementById('gardeningTip').textContent = "Water your plants early in the morning to prevent evaporation and give them time to absorb moisture before the heat of the day.";
+                document.getElementById('tipSource').textContent = "Based on current weather conditions";
+            }
+        }
+
+        // Helper functions
+        function getWeatherIcon(condition, iconCode) {
+            const conditionLower = condition.toLowerCase();
+
+            if (conditionLower.includes('sun') || conditionLower.includes('clear')) {
+                return '<i class="fas fa-sun text-yellow-500"></i>';
+            } else if (conditionLower.includes('cloud')) {
+                return '<i class="fas fa-cloud text-gray-400"></i>';
+            } else if (conditionLower.includes('rain')) {
+                return '<i class="fas fa-cloud-rain text-blue-500"></i>';
+            } else if (conditionLower.includes('storm') || conditionLower.includes('thunder')) {
+                return '<i class="fas fa-bolt text-yellow-500"></i>';
+            } else if (conditionLower.includes('snow')) {
+                return '<i class="fas fa-snowflake text-blue-300"></i>';
+            } else if (conditionLower.includes('mist') || conditionLower.includes('fog')) {
+                return '<i class="fas fa-smog text-gray-300"></i>';
+            } else {
+                return '<i class="fas fa-cloud-sun text-gray-400"></i>';
+            }
+        }
+
+        function getNotificationIcon(type) {
+            switch (type) {
+                case 'community_join_request': return 'fas fa-user-plus';
+                case 'community_approved': return 'fas fa-check-circle';
+                case 'new_message': return 'fas fa-comment';
+                case 'marketplace_interest': return 'fas fa-store';
+                case 'weather_alert': return 'fas fa-cloud-sun';
+                default: return 'fas fa-bell';
+            }
+        }
+
+        function getNotificationColor(type) {
+            switch (type) {
+                case 'community_join_request': return 'blue';
+                case 'community_approved': return 'green';
+                case 'new_message': return 'purple';
+                case 'marketplace_interest': return 'orange';
+                case 'weather_alert': return 'yellow';
+                default: return 'gray';
+            }
+        }
+
+        function getNotificationLink(notification) {
+            if (!notification.relatedId || !notification.relatedType) return '#';
+
+            switch (notification.relatedType) {
+                case 'community': return `community.html?id=${notification.relatedId}`;
+                case 'message': return `chat.html`;
+                case 'marketplace': return `marketplace-item.html?id=${notification.relatedId}`;
+                default: return '#';
+            }
+        }
+
+        // Utility functions from utils.js
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric'
+            });
+        }
+
+        function timeAgo(dateString) {
+            const date = new Date(dateString);
+            const now = new Date();
+            const seconds = Math.floor((now - date) / 1000);
+
+            let interval = Math.floor(seconds / 31536000);
+            if (interval >= 1) {
+                return interval + ' year' + (interval === 1 ? '' : 's') + ' ago';
+            }
+
+            interval = Math.floor(seconds / 2592000);
+            if (interval >= 1) {
+                return interval + ' month' + (interval === 1 ? '' : 's') + ' ago';
+            }
+
+            interval = Math.floor(seconds / 86400);
+            if (interval >= 1) {
+                return interval + ' day' + (interval === 1 ? '' : 's') + ' ago';
+            }
+
+            interval = Math.floor(seconds / 3600);
+            if (interval >= 1) {
+                return interval + ' hour' + (interval === 1 ? '' : 's') + ' ago';
+            }
+
+            interval = Math.floor(seconds / 60);
+            if (interval >= 1) {
+                return interval + ' minute' + (interval === 1 ? '' : 's') + ' ago';
+            }
+
+            return 'just now';
+        }
+
+        function showNotification(message, type = 'info') {
+            // Simple notification implementation
+            const notification = document.createElement('div');
+            notification.className = `fixed top-4 right-4 z-50 px-6 py-4 rounded-lg shadow-lg transition-all duration-300`;
+
+            if (type === 'success') {
+                notification.classList.add('bg-green-100', 'text-green-800', 'border', 'border-green-200');
+            } else if (type === 'error') {
+                notification.classList.add('bg-red-100', 'text-red-800', 'border', 'border-red-200');
+            } else if (type === 'warning') {
+                notification.classList.add('bg-yellow-100', 'text-yellow-800', 'border', 'border-yellow-200');
+            } else {
+                notification.classList.add('bg-blue-100', 'text-blue-800', 'border', 'border-blue-200');
+            }
+
+            notification.innerHTML = `
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center">
+                        ${type === 'success' ? '<i class="fas fa-check-circle mr-3"></i>' : ''}
+                        ${type === 'error' ? '<i class="fas fa-exclamation-circle mr-3"></i>' : ''}
+                        ${type === 'warning' ? '<i class="fas fa-exclamation-triangle mr-3"></i>' : ''}
+                        ${type === 'info' ? '<i class="fas fa-info-circle mr-3"></i>' : ''}
+                        <span>${message}</span>
+                    </div>
+                    <button onclick="this.parentElement.parentElement.remove()" class="ml-4 text-gray-500 hover:text-gray-700">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            `;
+
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                if (notification.parentElement) {
+                    notification.classList.add('opacity-0', 'translate-x-full');
+                    setTimeout(() => notification.remove(), 300);
+                }
+            }, 5000);
         }
     </script>
 </body>
+
 </html>

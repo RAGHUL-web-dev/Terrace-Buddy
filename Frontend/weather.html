@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather & Gardening Guide - Terrace Buddy</title>
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Custom Tailwind Configuration -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            200: '#bbf7d0',
+                            300: '#86efac',
+                            400: '#4ade80',
+                            500: '#22c55e',
+                            600: '#16a34a',
+                            700: '#15803d',
+                            800: '#166534',
+                            900: '#14532d',
+                        }
+                    },
+                    fontFamily: {
+                        'sans': ['Inter', 'system-ui', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Inter Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        .weather-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .weather-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        .weather-icon-large {
+            font-size: 6rem;
+            opacity: 0.9;
+        }
+
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .sunny-gradient {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        .rainy-gradient {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+
+        .loading-pulse {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: .5;
+            }
+        }
+
+        .forecast-day {
+            transition: all 0.3s ease;
+        }
+
+        .forecast-day:hover {
+            background-color: #f0fdf4;
+            transform: scale(1.02);
+        }
+    </style>
+</head>
+
+<body class="font-sans bg-gray-50">
+    <!-- Navigation -->
+    <nav id="navbar" class="bg-white shadow-md">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo -->
+                <a href="index.html" class="flex items-center space-x-2">
+                    <i class="fas fa-seedling text-primary-600 text-2xl"></i>
+                    <span class="text-xl font-bold text-gray-800">Terrace Buddy</span>
+                </a>
+
+                <!-- Desktop Navigation -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="dashboard.html" class="text-gray-700 hover:text-primary-600 font-medium">Dashboard</a>
+                    <a href="plants.html" class="text-gray-700 hover:text-primary-600 font-medium">My Plants</a>
+                    <a href="communities.html" class="text-gray-700 hover:text-primary-600 font-medium">Communities</a>
+                    <a href="marketplace.html" class="text-gray-700 hover:text-primary-600 font-medium">Marketplace</a>
+                    <a href="weather.html" class="text-primary-600 font-bold border-b-2 border-primary-600">Weather</a>
+
+                    <!-- User Menu -->
+                    <div id="userMenu" class="relative">
+                        <button id="userMenuButton"
+                            class="flex items-center space-x-2 text-gray-700 hover:text-primary-600 font-medium">
+                            <i class="fas fa-user-circle text-2xl"></i>
+                            <span id="userName">Profile</span>
+                            <i class="fas fa-chevron-down text-sm"></i>
+                        </button>
+
+                        <div id="dropdownMenu"
+                            class="hidden absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-10 border">
+                            <a href="profile.html" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
+                                <i class="fas fa-user mr-2"></i>Profile
+                            </a>
+                            <hr class="my-1">
+                            <button id="logoutButton"
+                                class="block w-full text-left px-4 py-2 text-red-600 hover:bg-gray-100">
+                                <i class="fas fa-sign-out-alt mr-2"></i>Logout
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <button id="mobileMenuButton" class="md:hidden text-gray-700">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8">
+        <!-- Header -->
+        <div class="mb-8">
+            <div class="flex items-center justify-between mb-4">
+                <div>
+                    <h1 class="text-4xl font-bold text-gray-900 mb-2">
+                        <i class="fas fa-cloud-sun text-primary-600"></i> Weather & Gardening Guide
+                    </h1>
+                    <p class="text-gray-600">Plan your gardening activities based on current weather conditions</p>
+                </div>
+
+                <!-- Location Selector -->
+                <div class="flex items-center space-x-3">
+                    <div class="relative">
+                        <input type="text" id="cityInput" placeholder="Enter city name"
+                            class="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                        <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                    </div>
+                    <button id="updateWeatherBtn"
+                        class="bg-primary-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-primary-700 transition duration-300">
+                        <i class="fas fa-sync-alt mr-2"></i>Update
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Current Weather Section -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+            <!-- Main Weather Card -->
+            <div
+                class="lg:col-span-2 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl shadow-xl p-8 text-white">
+                <div class="flex justify-between items-start mb-6">
+                    <div>
+                        <h2 class="text-2xl font-bold mb-2">Current Weather</h2>
+                        <div class="flex items-center space-x-2">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span id="currentLocation" class="text-lg">Loading...</span>
+                        </div>
+                    </div>
+                    <div id="currentDate" class="text-right">
+                        <p class="text-sm opacity-90"></p>
+                    </div>
+                </div>
+
+                <div class="flex items-center justify-between">
+                    <div class="flex-1">
+                        <div id="currentWeatherIcon" class="weather-icon-large mb-4">
+                            <i class="fas fa-sun"></i>
+                        </div>
+                        <h3 id="currentTemp" class="text-6xl font-bold mb-2">--°C</h3>
+                        <p id="currentCondition" class="text-2xl opacity-90">Loading...</p>
+                    </div>
+
+                    <div class="space-y-4 text-right">
+                        <div class="bg-white bg-opacity-20 backdrop-blur-lg rounded-lg p-4">
+                            <div class="flex items-center justify-between space-x-4">
+                                <i class="fas fa-tint text-2xl"></i>
+                                <div>
+                                    <p class="text-sm opacity-75">Humidity</p>
+                                    <p id="currentHumidity" class="text-xl font-bold">--%</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-white bg-opacity-20 backdrop-blur-lg rounded-lg p-4">
+                            <div class="flex items-center justify-between space-x-4">
+                                <i class="fas fa-wind text-2xl"></i>
+                                <div>
+                                    <p class="text-sm opacity-75">Wind Speed</p>
+                                    <p id="currentWind" class="text-xl font-bold">-- km/h</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-white bg-opacity-20 backdrop-blur-lg rounded-lg p-4">
+                            <div class="flex items-center justify-between space-x-4">
+                                <i class="fas fa-temperature-high text-2xl"></i>
+                                <div>
+                                    <p class="text-sm opacity-75">Feels Like</p>
+                                    <p id="feelsLike" class="text-xl font-bold">--°C</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Additional Info Cards -->
+            <div class="space-y-6">
+                <!-- Sunrise/Sunset -->
+                <div class="bg-white rounded-xl shadow-md p-6">
+                    <h3 class="text-lg font-bold text-gray-900 mb-4">
+                        <i class="fas fa-sun text-yellow-500 mr-2"></i>Sun Times
+                    </h3>
+                    <div class="space-y-3">
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-600">Sunrise</span>
+                            <span id="sunrise" class="font-medium">6:30 AM</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-600">Sunset</span>
+                            <span id="sunset" class="font-medium">6:45 PM</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-600">Daylight</span>
+                            <span id="daylight" class="font-medium">12h 15m</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Air Quality -->
+                <div class="bg-white rounded-xl shadow-md p-6">
+                    <h3 class="text-lg font-bold text-gray-900 mb-4">
+                        <i class="fas fa-smog text-blue-500 mr-2"></i>Air Quality
+                    </h3>
+                    <div class="text-center">
+                        <div id="aqiValue" class="text-4xl font-bold text-green-600 mb-2">45</div>
+                        <p id="aqiStatus" class="text-sm text-gray-600">Good</p>
+                        <p class="text-xs text-gray-500 mt-2">Ideal for outdoor gardening</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Gardening Recommendations -->
+        <div class="bg-gradient-to-r from-primary-500 to-primary-600 rounded-2xl shadow-xl p-8 text-white mb-8">
+            <h2 class="text-2xl font-bold mb-6">
+                <i class="fas fa-leaf mr-2"></i>Today's Gardening Recommendations
+            </h2>
+            <div id="gardeningRecommendations" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div class="loading-pulse bg-white bg-opacity-20 backdrop-blur-lg rounded-lg p-4">
+                    <i class="fas fa-spinner fa-spin mr-2"></i> Loading recommendations...
+                </div>
+            </div>
+        </div>
+
+        <!-- 5-Day Forecast -->
+        <div class="bg-white rounded-2xl shadow-md p-8 mb-8">
+            <h2 class="text-2xl font-bold text-gray-900 mb-6">
+                <i class="fas fa-calendar-week text-primary-600 mr-2"></i>5-Day Forecast
+            </h2>
+            <div id="forecastContainer" class="grid grid-cols-1 md:grid-cols-5 gap-4">
+                <!-- Forecast cards will be inserted here -->
+                <div class="text-center p-4 rounded-lg bg-gray-50">
+                    <i class="fas fa-spinner fa-spin text-primary-600 text-2xl mb-2"></i>
+                    <p class="text-gray-600 text-sm">Loading...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Weather-Based Gardening Tips -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+            <!-- Best Times for Activities -->
+            <div class="bg-white rounded-xl shadow-md p-6">
+                <h3 class="text-xl font-bold text-gray-900 mb-4">
+                    <i class="fas fa-clock text-primary-600 mr-2"></i>Best Times Today
+                </h3>
+                <div class="space-y-4" id="bestTimes">
+                    <div class="flex items-start space-x-3 p-3 bg-green-50 rounded-lg">
+                        <i class="fas fa-tint text-blue-600 text-xl mt-1"></i>
+                        <div class="flex-1">
+                            <h4 class="font-medium text-gray-900">Watering</h4>
+                            <p class="text-sm text-gray-600">Best time: Early morning (6:00 AM - 8:00 AM)</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-start space-x-3 p-3 bg-yellow-50 rounded-lg">
+                        <i class="fas fa-seedling text-green-600 text-xl mt-1"></i>
+                        <div class="flex-1">
+                            <h4 class="font-medium text-gray-900">Planting</h4>
+                            <p class="text-sm text-gray-600">Best time: Late afternoon (4:00 PM - 6:00 PM)</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-start space-x-3 p-3 bg-purple-50 rounded-lg">
+                        <i class="fas fa-cut text-purple-600 text-xl mt-1"></i>
+                        <div class="flex-1">
+                            <h4 class="font-medium text-gray-900">Pruning</h4>
+                            <p class="text-sm text-gray-600">Best time: Morning (8:00 AM - 10:00 AM)</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Seasonal Tips -->
+            <div class="bg-white rounded-xl shadow-md p-6">
+                <h3 class="text-xl font-bold text-gray-900 mb-4">
+                    <i class="fas fa-calendar text-primary-600 mr-2"></i>Seasonal Gardening Tips
+                </h3>
+                <div id="seasonalTips" class="space-y-3">
+                    <div class="flex items-start space-x-2">
+                        <i class="fas fa-check-circle text-primary-600 mt-1"></i>
+                        <p class="text-gray-700 text-sm">Loading seasonal tips...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Weather Alerts -->
+        <div id="weatherAlerts" class="hidden bg-yellow-50 border-l-4 border-yellow-400 p-6 rounded-lg mb-8">
+            <div class="flex items-start">
+                <i class="fas fa-exclamation-triangle text-yellow-600 text-2xl mr-3"></i>
+                <div>
+                    <h3 class="text-lg font-bold text-yellow-800 mb-2">Weather Alert</h3>
+                    <p id="alertMessage" class="text-yellow-700"></p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Scripts -->
+    <script src="./js/utils.js"></script>
+    <script src="./js/api.js"></script>
+    <script src="./js/auth.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Check authentication
+            if (!checkAuthStatus()) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            // Initialize UI
+            initUI();
+
+            // Load weather data
+            loadWeatherData();
+
+            // Load seasonal tips
+            loadSeasonalTips();
+
+            // Set current date
+            updateCurrentDate();
+        });
+
+        function initUI() {
+            // User dropdown
+            const userMenuButton = document.getElementById('userMenuButton');
+            const dropdownMenu = document.getElementById('dropdownMenu');
+
+            if (userMenuButton && dropdownMenu) {
+                userMenuButton.addEventListener('click', function (e) {
+                    e.stopPropagation();
+                    dropdownMenu.classList.toggle('hidden');
+                });
+
+                document.addEventListener('click', function () {
+                    dropdownMenu.classList.add('hidden');
+                });
+            }
+
+            // Logout
+            const logoutButton = document.getElementById('logoutButton');
+            if (logoutButton) {
+                logoutButton.addEventListener('click', function () {
+                    logoutUser();
+                });
+            }
+
+            // Update weather button
+            document.getElementById('updateWeatherBtn').addEventListener('click', function () {
+                const city = document.getElementById('cityInput').value.trim();
+                if (city) {
+                    loadWeatherData(city);
+                } else {
+                    loadWeatherData();
+                }
+            });
+
+            // Enter key for city input
+            document.getElementById('cityInput').addEventListener('keypress', function (e) {
+                if (e.key === 'Enter') {
+                    const city = this.value.trim();
+                    if (city) {
+                        loadWeatherData(city);
+                    }
+                }
+            });
+
+            // Load user name
+            const user = getCurrentUser();
+            if (user) {
+                document.getElementById('userName').textContent = user.name;
+            }
+        }
+
+        function updateCurrentDate() {
+            const now = new Date();
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            document.getElementById('currentDate').innerHTML = `
+                <p class="text-sm opacity-90">${now.toLocaleDateString('en-US', options)}</p>
+                <p class="text-xs opacity-75">${now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}</p>
+            `;
+        }
+
+        async function loadWeatherData(city = null) {
+            try {
+                // Show loading state
+                showLoading();
+
+                // Get user location or use provided city
+                const user = getCurrentUser();
+                const targetCity = city || user?.location?.city || 'Mumbai';
+
+                // Update input field
+                document.getElementById('cityInput').value = targetCity;
+
+                // Fetch weather from API
+                const response = await api.getWeatherByCity(targetCity);
+                console.log('Weather response:', response);
+
+                if (response.success && response.weather) {
+                    displayWeatherData(response.weather);
+                } else {
+                    throw new Error('Failed to fetch weather data');
+                }
+
+            } catch (error) {
+                console.error('Error loading weather:', error);
+                showNotification('Unable to load weather data. Please try again.', 'error');
+                displayDefaultWeather();
+            }
+        }
+
+        function displayWeatherData(weather) {
+            // Current location
+            document.getElementById('currentLocation').textContent = weather.location || 'Unknown';
+
+            // Temperature
+            document.getElementById('currentTemp').textContent = `${weather.temperature}°C`;
+            document.getElementById('feelsLike').textContent = `${weather.temperature || weather.temperature}°C`;
+
+            // Condition
+            document.getElementById('currentCondition').textContent = weather.condition;
+
+            // Weather icon
+            const iconElement = document.getElementById('currentWeatherIcon');
+            iconElement.innerHTML = getWeatherIconLarge(weather.condition);
+
+            // Humidity and wind
+            document.getElementById('currentHumidity').textContent = `${weather.humidity}%`;
+            document.getElementById('currentWind').textContent = `${weather.windSpeed} km/h`;
+
+            // Gardening recommendations
+            displayGardeningRecommendations(weather.recommendations || []);
+
+            // Generate forecast (mock data for now)
+            displayForecast();
+
+            // Hide loading
+            hideLoading();
+        }
+
+        function displayGardeningRecommendations(recommendations) {
+            const container = document.getElementById('gardeningRecommendations');
+
+            if (!recommendations || recommendations.length === 0) {
+                recommendations = [
+                    { type: 'general', message: 'Perfect weather for gardening activities' },
+                    { type: 'general', message: 'Water your plants in the early morning' },
+                    { type: 'general', message: 'Check soil moisture before watering' }
+                ];
+            }
+
+            container.innerHTML = '';
+            recommendations.forEach(rec => {
+                const icon = rec.type === 'warning' ? 'exclamation-triangle' :
+                    rec.type === 'info' ? 'info-circle' : 'check-circle';
+                const color = rec.type === 'warning' ? 'yellow' : 'white';
+
+                const div = document.createElement('div');
+                div.className = 'bg-white bg-opacity-20 backdrop-blur-lg rounded-lg p-4';
+                div.innerHTML = `
+                    <div class="flex items-start space-x-3">
+                        <i class="fas fa-${icon} text-${color} text-xl mt-1"></i>
+                        <p class="text-sm">${rec.message}</p>
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function displayForecast() {
+            const container = document.getElementById('forecastContainer');
+            const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'];
+            const icons = ['sun', 'cloud-sun', 'cloud', 'cloud-rain', 'sun'];
+            const temps = [28, 29, 26, 24, 27];
+
+            container.innerHTML = '';
+
+            for (let i = 0; i < 5; i++) {
+                const div = document.createElement('div');
+                div.className = 'forecast-day text-center p-4 rounded-lg bg-gray-50 cursor-pointer';
+                div.innerHTML = `
+                    <p class="font-bold text-gray-900 mb-2">${days[i]}</p>
+                    <i class="fas fa-${icons[i]} text-3xl text-primary-600 mb-2"></i>
+                    <p class="text-2xl font-bold text-gray-900">${temps[i]}°C</p>
+                    <p class="text-sm text-gray-600 mt-1">Clear</p>
+                `;
+                container.appendChild(div);
+            }
+        }
+
+        async function loadSeasonalTips() {
+            try {
+                const response = await api.getSeasonalTips();
+                console.log('Seasonal tips:', response);
+
+                const container = document.getElementById('seasonalTips');
+                container.innerHTML = '';
+
+                if (response.success && response.tips && response.tips.length > 0) {
+                    response.tips.slice(0, 5).forEach(tip => {
+                        const div = document.createElement('div');
+                        div.className = 'flex items-start space-x-2';
+                        div.innerHTML = `
+                            <i class="fas fa-check-circle text-primary-600 mt-1"></i>
+                            <p class="text-gray-700 text-sm">${tip.content || tip.title}</p>
+                        `;
+                        container.appendChild(div);
+                    });
+                } else {
+                    // Fallback tips
+                    const fallbackTips = [
+                        'Monitor soil moisture regularly during hot weather',
+                        'Mulch around plants to retain moisture',
+                        'Prune dead or diseased branches',
+                        'Feed plants with organic fertilizer',
+                        'Check for pests and diseases regularly'
+                    ];
+
+                    fallbackTips.forEach(tip => {
+                        const div = document.createElement('div');
+                        div.className = 'flex items-start space-x-2';
+                        div.innerHTML = `
+                            <i class="fas fa-check-circle text-primary-600 mt-1"></i>
+                            <p class="text-gray-700 text-sm">${tip}</p>
+                        `;
+                        container.appendChild(div);
+                    });
+                }
+            } catch (error) {
+                console.error('Error loading seasonal tips:', error);
+            }
+        }
+
+        function displayDefaultWeather() {
+            document.getElementById('currentLocation').textContent = 'Mumbai';
+            document.getElementById('currentTemp').textContent = '28°C';
+            document.getElementById('currentCondition').textContent = 'Partly Cloudy';
+            document.getElementById('currentHumidity').textContent = '65%';
+            document.getElementById('currentWind').textContent = '12 km/h';
+            document.getElementById('feelsLike').textContent = '30°C';
+
+            displayGardeningRecommendations([]);
+            displayForecast();
+        }
+
+        function getWeatherIconLarge(condition) {
+            const conditionLower = condition.toLowerCase();
+
+            if (conditionLower.includes('sun') || conditionLower.includes('clear')) {
+                return '<i class="fas fa-sun text-yellow-300"></i>';
+            } else if (conditionLower.includes('cloud')) {
+                return '<i class="fas fa-cloud text-gray-200"></i>';
+            } else if (conditionLower.includes('rain')) {
+                return '<i class="fas fa-cloud-rain text-blue-300"></i>';
+            } else if (conditionLower.includes('storm') || conditionLower.includes('thunder')) {
+                return '<i class="fas fa-bolt text-yellow-300"></i>';
+            } else if (conditionLower.includes('snow')) {
+                return '<i class="fas fa-snowflake text-blue-200"></i>';
+            } else {
+                return '<i class="fas fa-cloud-sun text-gray-200"></i>';
+            }
+        }
+
+        function showLoading() {
+            document.getElementById('updateWeatherBtn').innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Loading...';
+            document.getElementById('updateWeatherBtn').disabled = true;
+        }
+
+        function hideLoading() {
+            document.getElementById('updateWeatherBtn').innerHTML = '<i class="fas fa-sync-alt mr-2"></i>Update';
+            document.getElementById('updateWeatherBtn').disabled = false;
+        }
+    </script>
+</body>
+
+</html>

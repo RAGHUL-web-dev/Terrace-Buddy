@@ -120,6 +120,7 @@ async function getUserProfile(userId) {
     return apiRequest(`/users/profile/${userId}`, 'GET');
 }
 
+// Get user dashboard data
 async function getUserDashboard() {
     return apiRequest('/users/dashboard', 'GET');
 }
@@ -142,6 +143,11 @@ async function getWeatherSuggestions() {
 
 async function updateUserSettings(settings) {
     return apiRequest('/users/settings', 'PUT', settings);
+}
+
+// Get user notifications
+async function getNotifications() {
+    return apiRequest('/users/notifications', 'GET');
 }
 
 // Community API Calls
@@ -179,10 +185,11 @@ async function createChannel(communityId, channelData) {
 }
 
 // Marketplace API Calls
-async function getMarketplaceItems(filters = {}) {
-    const queryParams = new URLSearchParams(filters).toString();
+async function getMarketplaceItems(params = {}) {
+    const queryParams = new URLSearchParams(params).toString();
     return apiRequest(`/marketplace${queryParams ? `?${queryParams}` : ''}`, 'GET');
 }
+
 
 async function getMarketplaceItem(itemId) {
     return apiRequest(`/marketplace/${itemId}`, 'GET');
@@ -238,6 +245,12 @@ async function getPlants() {
 async function getPlant(plantId) {
     return apiRequest(`/plants/${plantId}`, 'GET');
 }
+
+// Get user's plants
+async function getUserPlants() {
+    return apiRequest('/plants/my-plants', 'GET');
+}
+
 
 async function createPlant(plantData) {
     // For file uploads, use FormData
@@ -326,10 +339,12 @@ async function getDirectMessages(userId, params = {}) {
     return apiRequest(`/chat/direct/${userId}${queryParams ? `?${queryParams}` : ''}`, 'GET');
 }
 
-// Weather API Call
+// Weather API call
 async function getWeatherByCity(city) {
-    return apiRequest(`/weather/${city}`, 'GET', null, false);
+    return apiRequest(`/weather/${encodeURIComponent(city)}`, 'GET');
 }
+
+
 
 // Health Check
 async function checkServerHealth() {
@@ -388,6 +403,9 @@ window.api = {
     addPlantNote,
     deletePlant,
     getPlantStats,
+    getUserPlants,
+    getMyCommunities,
+
 
     // Knowledge
     getKnowledgeArticles,
@@ -402,7 +420,9 @@ window.api = {
 
     // Weather
     getWeatherByCity,
+    getNotifications,
 
     // System
-    checkServerHealth
+    checkServerHealth,
+    getNotifications,
 };
