@@ -33,13 +33,30 @@ app.use(helmet({
       styleSrc: ["'self'", "'unsafe-inline'"],
       scriptSrc: ["'self'"],
       imgSrc: ["'self'", "data:", "https:"],
-      connectSrc: ["'self'", process.env.FRONTEND_URL]
-    } 
+      connectSrc: [
+        "'self'",
+        process.env.FRONTEND_URL,
+        'http://localhost:5500',
+        'http://127.0.0.1:5500',
+        'http://localhost:5501',
+        'http://127.0.0.1:5501',
+        'http://localhost:5502',
+        'http://127.0.0.1:5502'
+      ]
+    }
   }
 }));
 
 app.use(cors({
-  origin: ['http://127.0.0.1:5500', 'http://localhost:5500'],
+  origin: [
+    'http://localhost:3000',
+    'http://localhost:5500',
+    'http://127.0.0.1:5500',
+    'http://localhost:5501',
+    'http://127.0.0.1:5501',
+    'http://localhost:5502',
+    'http://127.0.0.1:5502'
+  ],
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
 }));

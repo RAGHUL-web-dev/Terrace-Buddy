@@ -404,7 +404,6 @@ window.api = {
     deletePlant,
     getPlantStats,
     getUserPlants,
-    getMyCommunities,
 
 
     // Knowledge
@@ -420,7 +419,6 @@ window.api = {
 
     // Weather
     getWeatherByCity,
-    getNotifications,
 
     // System
     checkServerHealth,

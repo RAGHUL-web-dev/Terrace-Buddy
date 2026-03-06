@@ -20,11 +20,11 @@ connectDB();
 
 // Plant image URLs (using placeholder images)
 const PLANT_IMAGES = [
-    "https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=400&h=400&fit=crop",
-    "https://images.unsplash.com/photo-1517191434949-5e90cd67d2b6?w=400&h=400&fit=crop",
-    "https://images.unsplash.com/photo-1505801223264-8949dc7815e9?w-400&h=400&fit=crop",
-    "https://images.unsplash.com/photo-1566566716926-1d1ac4e0d1e1?w=400&h=400&fit=crop",
-    "https://images.unsplash.com/photo-1485955900006-10f4d324d411?w=400&h=400&fit=crop"
+    "https://images.unsplash.com/photo-1596547609652-9cf5d8d76921?w=800&q=80", // Aloe Vera
+    "https://images.unsplash.com/photo-1515514751945-8370163359db?w=800&q=80", // Rosemary
+    "https://images.unsplash.com/photo-1521334885634-9552fca9b7f4?w=800&q=80", // Succulent
+    "https://images.unsplash.com/photo-1585320149740-0ca91ee18931?w=800&q=80", // Snake Plant
+    "https://images.unsplash.com/photo-1459155203021-d740d7a22c54?w=800&q=80"  // Herb Garden
 ];
 
 const seedDatabase = async () => {
@@ -66,10 +66,10 @@ const seedDatabase = async () => {
                 email: 'rajesh@example.com',
                 password: await bcrypt.hash('User@123', 12),
                 gardeningLevel: 'beginner',
-                location: { 
-                    city: 'Delhi', 
-                    state: 'Delhi', 
-                    country: 'India' 
+                location: {
+                    city: 'Delhi',
+                    state: 'Delhi',
+                    country: 'India'
                 },
                 profileImage: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop'
             },
@@ -78,10 +78,10 @@ const seedDatabase = async () => {
                 email: 'priya@example.com',
                 password: await bcrypt.hash('User@123', 12),
                 gardeningLevel: 'intermediate',
-                location: { 
-                    city: 'Bangalore', 
-                    state: 'Karnataka', 
-                    country: 'India' 
+                location: {
+                    city: 'Bangalore',
+                    state: 'Karnataka',
+                    country: 'India'
                 },
                 profileImage: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=200&h=200&fit=crop'
             },
@@ -90,10 +90,10 @@ const seedDatabase = async () => {
                 email: 'amit@example.com',
                 password: await bcrypt.hash('User@123', 12),
                 gardeningLevel: 'intermediate',
-                location: { 
-                    city: 'Ahmedabad', 
-                    state: 'Gujarat', 
-                    country: 'India' 
+                location: {
+                    city: 'Ahmedabad',
+                    state: 'Gujarat',
+                    country: 'India'
                 },
                 profileImage: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&h=200&fit=crop'
             },
@@ -102,10 +102,10 @@ const seedDatabase = async () => {
                 email: 'sneha@example.com',
                 password: await bcrypt.hash('User@123', 12),
                 gardeningLevel: 'advanced',
-                location: { 
-                    city: 'Hyderabad', 
-                    state: 'Telangana', 
-                    country: 'India' 
+                location: {
+                    city: 'Hyderabad',
+                    state: 'Telangana',
+                    country: 'India'
                 },
                 profileImage: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&h=200&fit=crop'
             }
@@ -469,7 +469,7 @@ const seedDatabase = async () => {
 
         // Create plants for users
         const plants = [];
-        
+
         // Create plants for admin
         const adminPlants = await Plant.create([
             {
@@ -637,13 +637,30 @@ const seedDatabase = async () => {
         // Create marketplace items
         const marketplaceItems = await MarketplaceItem.create([
             {
+                title: 'Money Plant Cuttings',
+                description: 'Healthy money plant cuttings, great for indoor air purification. Easy to grow in water or soil.',
+                seller: users[3]._id,
+                category: 'plants',
+                type: 'sell',
+                price: 150,
+                images: ['https://images.unsplash.com/photo-1596547609652-9cf5d8d76921?w=800&q=80'],
+                location: {
+                    city: 'Bangalore',
+                    state: 'Karnataka'
+                },
+                status: 'available',
+                contactMethod: 'email',
+                workersNeeded: 1,
+                fertilizationDetails: 'Standard organic fertilizer once a month.'
+            },
+            {
                 title: 'Organic Tomato Seeds',
-                description: 'High-quality organic tomato seeds from my garden harvest. Germination rate 95%. Perfect for terrace gardening.',
+                description: 'High-yield heirloom tomato seeds. 100% organic and non-GMO.',
                 seller: adminUser._id,
                 category: 'seeds',
                 type: 'sell',
                 price: 50,
-                images: ['https://images.unsplash.com/photo-1592924357228-91a4daadcfea?w=400&h=300&fit=crop'],
+                images: ['https://images.unsplash.com/photo-1592924357228-91a4daadcfea?w=800&q=80'],
                 location: {
                     city: 'Mumbai',
                     state: 'Maharashtra'
@@ -652,13 +669,13 @@ const seedDatabase = async () => {
                 contactMethod: 'in-app'
             },
             {
-                title: 'Used Gardening Tools Set',
-                description: 'Complete gardening tool set including trowel, pruner, gloves, and watering can. Gently used, in good condition.',
+                title: 'Garden Tool Set',
+                description: '3-piece ergonomic garden tool set including trowel, transplanter, and cultivator.',
                 seller: users[0]._id,
                 category: 'tools',
                 type: 'sell',
-                price: 800,
-                images: ['https://images.unsplash.com/photo-1573164713988-8665fc963095?w=400&h=300&fit=crop'],
+                price: 899,
+                images: ['https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=800&q=80'],
                 location: {
                     city: 'Delhi',
                     state: 'Delhi'
@@ -667,49 +684,117 @@ const seedDatabase = async () => {
                 contactMethod: 'phone'
             },
             {
-                title: 'Vermicompost - 5kg Bag',
-                description: 'Fresh vermicompost from my worm farm. Rich in nutrients, perfect for organic terrace gardening.',
+                title: 'Vermicompost 5kg',
+                description: 'Premium quality organic vermicompost for healthy plant growth.',
                 seller: users[2]._id,
                 category: 'compost',
-                type: 'exchange',
-                price: 0,
-                images: ['https://images.unsplash.com/photo-1589923186741-7d1d6ccee3c3?w=400&h=300&fit=crop'],
+                type: 'sell',
+                price: 200,
+                images: ['https://m.media-amazon.com/images/I/61GuWzCTvSL._AC_UF1000,1000_QL80_.jpg'],
                 location: {
-                    city: 'Ahmedabad',
-                    state: 'Gujarat'
+                    city: 'Pune',
+                    state: 'Maharashtra'
                 },
                 status: 'available',
                 contactMethod: 'in-app'
             },
             {
-                title: 'Money Plant Cuttings',
-                description: 'Healthy money plant cuttings, ready to propagate. Free for fellow gardeners.',
-                seller: users[3]._id,
-                category: 'plants',
-                type: 'exchange',
-                price: 0,
-                images: ['https://images.unsplash.com/photo-1485955900006-10f4d324d411?w=400&h=300&fit=crop'],
+                title: 'Ceramic Flower Pots',
+                description: 'Set of 3 beautiful hand-painted ceramic pots for indoor plants.',
+                seller: adminUser._id,
+                category: 'pots',
+                type: 'sell',
+                price: 1200,
+                images: ['https://images.unsplash.com/photo-1485955900006-10f4d324d411?w=800&q=80'],
+                location: {
+                    city: 'Chennai',
+                    state: 'Tamil Nadu'
+                },
+                status: 'available',
+                contactMethod: 'in-app'
+            },
+            {
+                title: 'Neem Oil Spray',
+                description: 'Organic pest control solution. Safe for all plants.',
+                seller: users[2]._id,
+                category: 'other',
+                type: 'sell',
+                price: 350,
+                images: ['https://images.unsplash.com/photo-1563514227147-6d2ff665a6a0?w=800&q=80'],
                 location: {
                     city: 'Hyderabad',
                     state: 'Telangana'
                 },
                 status: 'available',
-                contactMethod: 'email'
+                contactMethod: 'in-app'
             },
             {
                 title: 'Looking for Tulsi Plant',
-                description: 'Want to buy or exchange for a healthy Tulsi (Holy Basil) plant for medicinal purposes.',
+                description: 'I am looking for a holy basil plant for my terrace garden. Willing to exchange for seeds.',
                 seller: users[1]._id,
                 category: 'plants',
                 type: 'buy',
-                price: 100,
-                images: ['https://images.unsplash.com/photo-1566385101042-1a0f0c126a96?w=400&h=300&fit=crop'],
+                price: 0,
+                images: ['https://www.plantclub.ca/cdn/shop/files/IMG-6103.png?v=1746233703&width=1445'],
                 location: {
-                    city: 'Bangalore',
-                    state: 'Karnataka'
+                    city: 'Kolkata',
+                    state: 'West Bengal'
                 },
                 status: 'available',
-                contactMethod: 'in-app'
+                contactMethod: 'in-app',
+                workersNeeded: 0,
+                fertilizationDetails: 'Natural compost only.'
+            },
+            {
+                title: 'Organic Aloe Vera Plant',
+                description: 'Mature aloe vera plant with medicinal properties. Great for skin and hair care.',
+                seller: adminUser._id,
+                category: 'plants',
+                type: 'sell',
+                price: 250,
+                images: ['https://images.unsplash.com/photo-1596547609652-9cf5d8d76921?w=800&q=80'],
+                location: {
+                    city: 'Ahmedabad',
+                    state: 'Gujarat'
+                },
+                status: 'available',
+                contactMethod: 'in-app',
+                workersNeeded: 1,
+                fertilizationDetails: 'Needs well-draining soil and minimal organic fertilizer.'
+            },
+            {
+                title: 'Rosemary Bush',
+                description: 'Fragrant rosemary bush, perfect for cooking and attractive in any garden.',
+                seller: users[1]._id,
+                category: 'plants',
+                type: 'sell',
+                price: 450,
+                images: ['https://cdn.shopify.com/s/files/1/0603/4892/4151/files/rosemary-landscape-fence.jpg'],
+                location: {
+                    city: 'Chandigarh',
+                    state: 'Punjab'
+                },
+                status: 'available',
+                contactMethod: 'phone',
+                workersNeeded: 1,
+                fertilizationDetails: 'Standard herb fertilizer twice a year.'
+            },
+            {
+                title: 'Lucky Bamboo',
+                description: 'Beautiful 2-layer lucky bamboo plant. Symbol of luck and prosperity.',
+                seller: users[0]._id,
+                category: 'plants',
+                type: 'sell',
+                price: 300,
+                images: ['https://cdn.dotpe.in/longtail/store-items/7985916/dhtdtC9R.jpeg'],
+                location: {
+                    city: 'Jaipur',
+                    state: 'Rajasthan'
+                },
+                status: 'available',
+                contactMethod: 'in-app',
+                workersNeeded: 0,
+                fertilizationDetails: 'Liquid bamboo fertilizer once a month.'
             }
         ]);
 
@@ -772,7 +857,7 @@ const seedDatabase = async () => {
 
         // Update users with joined communities
         await User.findByIdAndUpdate(users[0]._id, {
-            $push: { 
+            $push: {
                 joinedCommunities: {
                     $each: [
                         specialtyCommunities[0]._id,
@@ -783,7 +868,7 @@ const seedDatabase = async () => {
         });
 
         await User.findByIdAndUpdate(users[1]._id, {
-            $push: { 
+            $push: {
                 joinedCommunities: {
                     $each: [
                         specialtyCommunities[0]._id,
@@ -795,7 +880,7 @@ const seedDatabase = async () => {
         });
 
         await User.findByIdAndUpdate(users[2]._id, {
-            $push: { 
+            $push: {
                 joinedCommunities: {
                     $each: [
                         specialtyCommunities[0]._id,
@@ -806,7 +891,7 @@ const seedDatabase = async () => {
         });
 
         await User.findByIdAndUpdate(users[3]._id, {
-            $push: { 
+            $push: {
                 joinedCommunities: {
                     $each: [
                         specialtyCommunities[1]._id,

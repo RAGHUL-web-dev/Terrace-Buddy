@@ -46,6 +46,13 @@ const marketplaceItemSchema = new mongoose.Schema({
     enum: ['email', 'phone', 'in-app'],
     default: 'in-app'
   },
+  workersNeeded: {
+    type: Number,
+    default: 0
+  },
+  fertilizationDetails: {
+    type: String
+  },
   createdAt: {
     type: Date,
     default: Date.now

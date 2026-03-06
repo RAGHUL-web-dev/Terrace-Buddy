@@ -1,13 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Marketplace - Terrace Buddy</title>
-    
+
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    
+
     <!-- Custom Tailwind Configuration -->
     <script>
         tailwind.config = {
@@ -34,15 +35,16 @@
             }
         }
     </script>
-    
+
     <!-- Inter Font -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
+
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
+
 <body class="font-sans bg-gray-50 min-h-screen">
     <!-- Navigation -->
     <nav id="navbar" class="bg-white shadow-md">
@@ -59,8 +61,8 @@
                     <a href="dashboard.html" class="text-gray-700 hover:text-primary-600 font-medium">Dashboard</a>
                     <a href="plants.html" class="text-gray-700 hover:text-primary-600 font-medium">My Plants</a>
                     <a href="communities.html" class="text-gray-700 hover:text-primary-600 font-medium">Communities</a>
-                    <a href="marketplace.html" class="text-gray-700 hover:text-primary-600 font-medium">Marketplace</a>
-                    <a href="weather.html" class="text-primary-600 font-bold border-b-2 border-primary-600">Weather</a>
+                    <a href="marketplace.html" class="text-primary-600 font-bold border-b-2 border-primary-600">Marketplace</a>
+                    <a href="weather.html" class="text-gray-700 hover:text-primary-600 font-medium">Weather</a>
 
                     <!-- User Menu -->
                     <div id="userMenu" class="relative">
@@ -103,30 +105,28 @@
                         <h1 class="text-3xl font-bold text-gray-900 mb-2">Marketplace</h1>
                         <p class="text-gray-600">Buy, sell, or exchange gardening resources with local gardeners</p>
                     </div>
-                    <button id="createListingBtn" 
-                            class="mt-4 md:mt-0 bg-primary-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-700 transition duration-300 flex items-center">
+                    <button id="createListingBtn"
+                        class="mt-4 md:mt-0 bg-primary-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-700 transition duration-300 flex items-center">
                         <i class="fas fa-plus mr-2"></i> List an Item
                     </button>
                 </div>
-                
+
                 <!-- Search and Filter -->
                 <div class="bg-white rounded-xl shadow-md p-6 mb-6">
                     <div class="flex flex-col md:flex-row md:items-center space-y-4 md:space-y-0 md:space-x-4">
                         <!-- Search -->
                         <div class="flex-1">
                             <div class="relative">
-                                <input type="text" 
-                                       id="marketplaceSearch"
-                                       placeholder="Search items..."
-                                       class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                                <input type="text" id="marketplaceSearch" placeholder="Search items..."
+                                    class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent">
                                 <i class="fas fa-search absolute left-3 top-3.5 text-gray-400"></i>
                             </div>
                         </div>
-                        
+
                         <!-- Category Filter -->
                         <div>
-                            <select id="categoryFilter" 
-                                    class="w-full md:w-auto px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                            <select id="categoryFilter"
+                                class="w-full md:w-auto px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent">
                                 <option value="">All Categories</option>
                                 <option value="plants">Plants</option>
                                 <option value="seeds">Seeds</option>
@@ -137,71 +137,62 @@
                                 <option value="other">Other</option>
                             </select>
                         </div>
-                        
+
                         <!-- Type Filter -->
                         <div>
-                            <select id="typeFilter" 
-                                    class="w-full md:w-auto px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                            <select id="typeFilter"
+                                class="w-full md:w-auto px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent">
                                 <option value="">All Types</option>
                                 <option value="sell">For Sale</option>
                                 <option value="buy">Want to Buy</option>
                                 <option value="exchange">For Exchange</option>
                             </select>
                         </div>
-                        
+
                         <!-- Location Filter -->
                         <div>
-                            <input type="text" 
-                                   id="locationFilter"
-                                   placeholder="Location"
-                                   class="w-full md:w-auto px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                            <input type="text" id="locationFilter" placeholder="Location"
+                                class="w-full md:w-auto px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent">
                         </div>
-                        
+
                         <!-- Clear Filters -->
-                        <button id="clearFilters" 
-                                class="text-gray-600 hover:text-primary-600 font-medium">
+                        <button id="clearFilters" class="text-gray-600 hover:text-primary-600 font-medium">
                             Clear Filters
                         </button>
                     </div>
-                    
+
                     <!-- Price Range -->
                     <div class="mt-4 grid grid-cols-2 gap-4">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Min Price</label>
-                            <input type="number" 
-                                   id="minPrice"
-                                   placeholder="Min"
-                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                            <input type="number" id="minPrice" placeholder="Min"
+                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Max Price</label>
-                            <input type="number" 
-                                   id="maxPrice"
-                                   placeholder="Max"
-                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                            <input type="number" id="maxPrice" placeholder="Max"
+                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent">
                         </div>
                     </div>
                 </div>
             </div>
-            
+
             <!-- Tabs -->
             <div class="border-b mb-8">
                 <nav class="flex space-x-8">
-                    <button id="allItemsTab" 
-                            class="px-4 py-3 font-medium text-primary-600 border-b-2 border-primary-600">
+                    <button id="allItemsTab"
+                        class="px-4 py-3 font-medium text-primary-600 border-b-2 border-primary-600">
                         All Items
                     </button>
-                    <button id="myItemsTab" 
-                            class="px-4 py-3 font-medium text-gray-600 hover:text-primary-600">
+                    <button id="myItemsTab" class="px-4 py-3 font-medium text-gray-600 hover:text-primary-600">
                         My Listings
                     </button>
-                    <button id="savedItemsTab" 
-                            class="px-4 py-3 font-medium text-gray-600 hover:text-primary-600">
+                    <button id="savedItemsTab" class="px-4 py-3 font-medium text-gray-600 hover:text-primary-600">
                         Saved Items
                     </button>
                 </nav>
             </div>
-            
+
             <!-- Content Area -->
             <div>
                 <!-- All Items Tab -->
@@ -209,44 +200,44 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                         <!-- Item cards will be loaded here -->
                     </div>
-                    
+
                     <!-- Loading State -->
                     <div id="itemsLoading" class="text-center py-12">
                         <div class="spinner mx-auto mb-4"></div>
                         <p class="text-gray-600">Loading items...</p>
                     </div>
-                    
+
                     <!-- Empty State -->
                     <div id="noItems" class="text-center py-12 hidden">
                         <i class="fas fa-store text-gray-300 text-6xl mb-4"></i>
                         <h3 class="text-xl font-semibold text-gray-900 mb-2">No items found</h3>
                         <p class="text-gray-600 mb-6">Try adjusting your search or filters</p>
-                        <button id="createFirstListing" 
-                                class="bg-primary-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-700 transition duration-300">
+                        <button id="createFirstListing"
+                            class="bg-primary-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-700 transition duration-300">
                             List Your First Item
                         </button>
                     </div>
                 </div>
-                
+
                 <!-- My Items Tab -->
                 <div id="myItemsContent" class="hidden">
                     <div id="myItemsList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
-                    
+
                     <div id="noMyItems" class="text-center py-12 hidden">
                         <i class="fas fa-box-open text-gray-300 text-6xl mb-4"></i>
                         <h3 class="text-xl font-semibold text-gray-900 mb-2">You haven't listed any items yet</h3>
                         <p class="text-gray-600 mb-6">List items to share with the community</p>
-                        <button id="createMyFirstListing" 
-                                class="bg-primary-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-700 transition duration-300">
+                        <button id="createMyFirstListing"
+                            class="bg-primary-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-700 transition duration-300">
                             List Your First Item
                         </button>
                     </div>
                 </div>
-                
+
                 <!-- Saved Items Tab -->
                 <div id="savedItemsContent" class="hidden">
                     <div id="savedItemsList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
-                    
+
                     <div id="noSavedItems" class="text-center py-12 hidden">
                         <i class="fas fa-heart text-gray-300 text-6xl mb-4"></i>
                         <h3 class="text-xl font-semibold text-gray-900 mb-2">No saved items</h3>
@@ -258,7 +249,8 @@
     </main>
 
     <!-- Create Listing Modal -->
-    <div id="createListingModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+    <div id="createListingModal"
+        class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
         <div class="bg-white rounded-xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
             <div class="p-6">
                 <div class="flex justify-between items-center mb-6">
@@ -267,7 +259,7 @@
                         <i class="fas fa-times text-xl"></i>
                     </button>
                 </div>
-                
+
                 <form id="createListingForm" class="space-y-6">
                     <!-- Basic Information -->
                     <div class="grid md:grid-cols-2 gap-6">
@@ -275,23 +267,18 @@
                             <label for="itemTitle" class="block text-sm font-medium text-gray-700 mb-2">
                                 Title *
                             </label>
-                            <input type="text" 
-                                   id="itemTitle" 
-                                   name="title"
-                                   required
-                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition duration-300"
-                                   placeholder="e.g., Organic Tomato Seeds">
+                            <input type="text" id="itemTitle" name="title" required
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition duration-300"
+                                placeholder="e.g., Organic Tomato Seeds">
                             <div id="titleError" class="text-red-600 text-sm mt-1 hidden"></div>
                         </div>
-                        
+
                         <div>
                             <label for="itemCategory" class="block text-sm font-medium text-gray-700 mb-2">
                                 Category *
                             </label>
-                            <select id="itemCategory" 
-                                    name="category"
-                                    required
-                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                            <select id="itemCategory" name="category" required
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent">
                                 <option value="">Select Category</option>
                                 <option value="plants">Plants</option>
                                 <option value="seeds">Seeds</option>
@@ -304,17 +291,15 @@
                             <div id="categoryError" class="text-red-600 text-sm mt-1 hidden"></div>
                         </div>
                     </div>
-                    
+
                     <!-- Type and Price -->
                     <div class="grid md:grid-cols-2 gap-6">
                         <div>
                             <label for="itemType" class="block text-sm font-medium text-gray-700 mb-2">
                                 Listing Type *
                             </label>
-                            <select id="itemType" 
-                                    name="type"
-                                    required
-                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                            <select id="itemType" name="type" required
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent">
                                 <option value="">Select Type</option>
                                 <option value="sell">For Sale</option>
                                 <option value="buy">Want to Buy</option>
@@ -322,36 +307,29 @@
                             </select>
                             <div id="typeError" class="text-red-600 text-sm mt-1 hidden"></div>
                         </div>
-                        
+
                         <div id="priceField" class="hidden">
                             <label for="itemPrice" class="block text-sm font-medium text-gray-700 mb-2">
                                 Price (₹) *
                             </label>
-                            <input type="number" 
-                                   id="itemPrice" 
-                                   name="price"
-                                   min="0"
-                                   step="0.01"
-                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition duration-300"
-                                   placeholder="0.00">
+                            <input type="number" id="itemPrice" name="price" min="0" step="0.01"
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition duration-300"
+                                placeholder="0.00">
                             <div id="priceError" class="text-red-600 text-sm mt-1 hidden"></div>
                         </div>
                     </div>
-                    
+
                     <!-- Description -->
                     <div>
                         <label for="itemDescription" class="block text-sm font-medium text-gray-700 mb-2">
                             Description *
                         </label>
-                        <textarea id="itemDescription" 
-                                  name="description"
-                                  required
-                                  rows="4"
-                                  class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition duration-300"
-                                  placeholder="Describe your item in detail..."></textarea>
+                        <textarea id="itemDescription" name="description" required rows="4"
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition duration-300"
+                            placeholder="Describe your item in detail..."></textarea>
                         <div id="descriptionError" class="text-red-600 text-sm mt-1 hidden"></div>
                     </div>
-                    
+
                     <!-- Images -->
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">
@@ -359,74 +337,61 @@
                         </label>
                         <div class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
                             <div id="imagePreview" class="grid grid-cols-5 gap-2 mb-4"></div>
-                            <input type="file" 
-                                   id="itemImages"
-                                   name="images"
-                                   accept="image/*"
-                                   multiple
-                                   class="hidden"
-                                   onchange="previewImages(this)">
-                            <button type="button" 
-                                    onclick="document.getElementById('itemImages').click()"
-                                    class="bg-gray-100 text-gray-700 px-4 py-2 rounded-lg font-medium hover:bg-gray-200 transition duration-300">
+                            <input type="file" id="itemImages" name="images" accept="image/*" multiple class="hidden"
+                                onchange="previewImages(this)">
+                            <button type="button" onclick="document.getElementById('itemImages').click()"
+                                class="bg-gray-100 text-gray-700 px-4 py-2 rounded-lg font-medium hover:bg-gray-200 transition duration-300">
                                 <i class="fas fa-camera mr-2"></i>Upload Images
                             </button>
                             <p class="text-sm text-gray-500 mt-2">Upload up to 5 images. Max 5MB each.</p>
                         </div>
                     </div>
-                    
+
                     <!-- Location -->
                     <div class="grid md:grid-cols-2 gap-6">
                         <div>
                             <label for="itemCity" class="block text-sm font-medium text-gray-700 mb-2">
                                 City
                             </label>
-                            <input type="text" 
-                                   id="itemCity" 
-                                   name="city"
-                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition duration-300"
-                                   placeholder="Your city">
+                            <input type="text" id="itemCity" name="city"
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition duration-300"
+                                placeholder="Your city">
                         </div>
-                        
+
                         <div>
                             <label for="itemState" class="block text-sm font-medium text-gray-700 mb-2">
                                 State
                             </label>
-                            <input type="text" 
-                                   id="itemState" 
-                                   name="state"
-                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition duration-300"
-                                   placeholder="Your state">
+                            <input type="text" id="itemState" name="state"
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition duration-300"
+                                placeholder="Your state">
                         </div>
                     </div>
-                    
+
                     <!-- Contact Method -->
                     <div>
                         <label for="contactMethod" class="block text-sm font-medium text-gray-700 mb-2">
                             Contact Method
                         </label>
-                        <select id="contactMethod" 
-                                name="contactMethod"
-                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                        <select id="contactMethod" name="contactMethod"
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent">
                             <option value="in-app">In-app messaging</option>
                             <option value="email">Email</option>
                             <option value="phone">Phone</option>
                         </select>
                     </div>
-                    
+
                     <!-- Message -->
                     <div id="createListingMessage" class="hidden p-3 rounded-lg text-center"></div>
-                    
+
                     <!-- Submit Buttons -->
                     <div class="flex space-x-4">
-                        <button type="submit" 
-                                id="createListingSubmit"
-                                class="flex-1 bg-primary-600 text-white py-3 rounded-lg font-semibold hover:bg-primary-700 transition duration-300">
+                        <button type="submit" id="createListingSubmit"
+                            class="flex-1 bg-primary-600 text-white py-3 rounded-lg font-semibold hover:bg-primary-700 transition duration-300">
                             List Item
                         </button>
-                        <button type="button" 
-                                id="cancelListing"
-                                class="flex-1 bg-white text-gray-700 py-3 rounded-lg font-semibold border border-gray-300 hover:bg-gray-50 transition duration-300">
+                        <button type="button" id="cancelListing"
+                            class="flex-1 bg-white text-gray-700 py-3 rounded-lg font-semibold border border-gray-300 hover:bg-gray-50 transition duration-300">
                             Cancel
                         </button>
                     </div>
@@ -436,9 +401,141 @@
     </div>
 
     <!-- Item Detail Modal -->
-    <div id="itemDetailModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+    <div id="itemDetailModal"
+        class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
         <div class="bg-white rounded-xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
             <!-- Item details will be loaded here -->
+        </div>
+    </div>
+
+    <!-- Email Modal -->
+    <div id="emailModal"
+        class="hidden fixed inset-0 bg-black bg-opacity-50 z-[60] flex items-center justify-center p-4 backdrop-blur-sm">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full overflow-hidden transform transition-all duration-300">
+            <div class="p-8">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-2xl font-bold text-gray-900 border-l-4 border-primary-500 pl-4">Send Email to Seller</h3>
+                    <button id="closeEmailModal" class="text-gray-400 hover:text-gray-600 transition-colors">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+
+                <form id="emailForm" class="space-y-6">
+                    <input type="hidden" id="emailItemId">
+                    <input type="hidden" id="emailSellerEmail">
+                    <input type="hidden" id="emailSellerName">
+                    
+                    <div>
+                        <label for="emailSubject" class="block text-sm font-semibold text-gray-700 mb-2">
+                            Subject *
+                        </label>
+                        <input type="text" id="emailSubject" required
+                            class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none transition-all"
+                            placeholder="e.g., Interested in your plant listing">
+                    </div>
+
+                    <div>
+                        <label for="emailBody" class="block text-sm font-semibold text-gray-700 mb-2">
+                            Message *
+                        </label>
+                        <textarea id="emailBody" rows="6" required
+                            class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none transition-all"
+                            placeholder="Write your message here..."></textarea>
+                    </div>
+
+                    <div class="bg-blue-50 rounded-xl p-4 border border-blue-100">
+                        <div class="flex items-start space-x-2">
+                            <i class="fas fa-info-circle text-blue-600 mt-1"></i>
+                            <p class="text-sm text-blue-800">
+                                This will open your default email application. Make sure to check your sent items folder.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="flex space-x-4">
+                        <button type="submit"
+                            class="flex-1 bg-primary-600 hover:bg-primary-700 text-white py-4 rounded-xl font-bold shadow-lg shadow-primary-200 transition-all hover:-translate-y-1 active:scale-[0.98]">
+                            Open Email Client
+                        </button>
+                        <button type="button" id="cancelEmail"
+                            class="flex-1 bg-white text-gray-700 py-4 rounded-xl font-bold border border-gray-300 hover:bg-gray-50 transition-all">
+                            Cancel
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Booking Modal -->
+    <div id="bookingModal"
+        class="hidden fixed inset-0 bg-black bg-opacity-50 z-[60] flex items-center justify-center p-4 backdrop-blur-sm">
+        <div
+            class="bg-white rounded-2xl shadow-2xl max-w-lg w-full overflow-hidden transform transition-all duration-300">
+            <div class="p-8">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-2xl font-bold text-gray-900 border-l-4 border-primary-500 pl-4">Book Your Plant</h3>
+                    <button id="closeBookingModal" class="text-gray-400 hover:text-gray-600 transition-colors">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+
+                <form id="bookingForm" class="space-y-6">
+                    <input type="hidden" id="bookingItemId">
+
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">How many plants do you
+                                need?</label>
+                            <div class="relative">
+                                <i class="fas fa-leaf absolute left-4 top-1/2 -translate-y-1/2 text-primary-500"></i>
+                                <input type="number" id="numPlants" min="1" value="1" required
+                                    class="w-full pl-11 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none transition-all">
+                            </div>
+                        </div>
+
+                        <div class="flex items-center p-4 bg-primary-50 rounded-xl border border-primary-100">
+                            <input type="checkbox" id="helperNeeded"
+                                class="w-5 h-5 text-primary-600 rounded focus:ring-primary-500 cursor-pointer">
+                            <label for="helperNeeded" class="ml-3 text-sm font-medium text-primary-900 cursor-pointer">
+                                I need a helper for planting and setup
+                            </label>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Fertilization
+                                Preferences</label>
+                            <textarea id="fertilizationPrefs" rows="3"
+                                placeholder="Any specific fertilizers or organic preferences? (e.g., Only Vermicompost)"
+                                class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none transition-all"></textarea>
+                        </div>
+                    </div>
+
+                    <button type="submit"
+                        class="w-full bg-primary-600 hover:bg-primary-700 text-white py-4 rounded-xl font-bold font-sans shadow-lg shadow-primary-200 transition-all hover:-translate-y-1 active:scale-[0.98]">
+                        Confirm Booking
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Booking Success Modal -->
+    <div id="bookingSuccessModal"
+        class="hidden fixed inset-0 bg-black bg-opacity-60 z-[70] flex items-center justify-center p-4 backdrop-blur-sm">
+        <div
+            class="bg-white rounded-3xl shadow-2xl max-w-sm w-full p-8 text-center transform transition-all duration-300 scale-100">
+            <div
+                class="w-20 h-20 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-6 animate-pulse">
+                <i class="fas fa-check text-4xl"></i>
+            </div>
+            <h3 class="text-2xl font-black text-gray-900 mb-2">Plant Booked!</h3>
+            <p class="text-gray-600 mb-8 leading-relaxed">Your request has been sent to the seller. They will contact
+                you shortly to finalize the details.</p>
+            <button id="closeSuccessModal"
+                class="w-full bg-gray-900 hover:bg-black text-white py-4 rounded-2xl font-bold transition-all shadow-lg hover:shadow-xl">
+                Great!
+            </button>
         </div>
     </div>
 
@@ -453,79 +550,120 @@
     <script src="./js/utils.js"></script>
     <script src="./js/api.js"></script>
     <script src="./js/auth.js"></script>
-    
+
     <script>
         let allItems = [];
         let myItems = [];
         let savedItems = [];
         let selectedImages = [];
-        
-        document.addEventListener('DOMContentLoaded', async function() {
+
+        document.addEventListener('DOMContentLoaded', async function () {
             // Check authentication
             if (!checkAuthStatus()) {
                 window.location.href = 'login.html';
                 return;
             }
-            
+
             // Load user data
             const user = getUserData();
             if (user && user.name) {
                 document.getElementById('userName').textContent = user.name;
             }
-            
+
             // Initialize user dropdown
             const userMenuButton = document.getElementById('userMenuButton');
             const dropdownMenu = document.getElementById('dropdownMenu');
-            
+
             if (userMenuButton && dropdownMenu) {
-                userMenuButton.addEventListener('click', function(e) {
+                userMenuButton.addEventListener('click', function (e) {
                     e.stopPropagation();
                     dropdownMenu.classList.toggle('hidden');
                 });
-                
-                document.addEventListener('click', function() {
+
+                document.addEventListener('click', function () {
                     dropdownMenu.classList.add('hidden');
                 });
             }
-            
+
             // Logout functionality
             const logoutButton = document.getElementById('logoutButton');
             if (logoutButton) {
-                logoutButton.addEventListener('click', function() {
+                logoutButton.addEventListener('click', function () {
                     logoutUser();
                 });
             }
-            
+
             // Tab functionality
             const allItemsTab = document.getElementById('allItemsTab');
             const myItemsTab = document.getElementById('myItemsTab');
             const savedItemsTab = document.getElementById('savedItemsTab');
-            
+
             allItemsTab.addEventListener('click', () => switchTab('allItems'));
             myItemsTab.addEventListener('click', () => switchTab('myItems'));
             savedItemsTab.addEventListener('click', () => switchTab('savedItems'));
-            
+
             // Create listing modal
             const createListingBtn = document.getElementById('createListingBtn');
             const createListingModal = document.getElementById('createListingModal');
             const closeListingModal = document.getElementById('closeListingModal');
             const cancelListing = document.getElementById('cancelListing');
-            
+
             createListingBtn.addEventListener('click', () => {
                 createListingModal.classList.remove('hidden');
                 resetListingForm();
             });
-            
+
             closeListingModal.addEventListener('click', () => {
                 createListingModal.classList.add('hidden');
             });
-            
+
             cancelListing.addEventListener('click', () => {
                 createListingModal.classList.add('hidden');
             });
+
+            // Email Modal Close Buttons
+            const closeEmailModal = document.getElementById('closeEmailModal');
+            const cancelEmail = document.getElementById('cancelEmail');
             
+            if (closeEmailModal) {
+                closeEmailModal.addEventListener('click', () => {
+                    document.getElementById('emailModal').classList.add('hidden');
+                });
+            }
+            
+            if (cancelEmail) {
+                cancelEmail.addEventListener('click', () => {
+                    document.getElementById('emailModal').classList.add('hidden');
+                });
+            }
+
+            // Email Form Submit
+            const emailForm = document.getElementById('emailForm');
+            if (emailForm) {
+                emailForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    
+                    const sellerEmail = document.getElementById('emailSellerEmail').value;
+                    const sellerName = document.getElementById('emailSellerName').value;
+                    const subject = encodeURIComponent(document.getElementById('emailSubject').value);
+                    const body = encodeURIComponent(document.getElementById('emailBody').value);
+                    
+                    // Create mailto link
+                    const mailtoLink = `mailto:${sellerEmail}?subject=${subject}&body=${body}`;
+                    
+                    // Open default email client
+                    window.location.href = mailtoLink;
+                    
+                    // Close modal
+                    document.getElementById('emailModal').classList.add('hidden');
+                    
+                    // Show notification
+                    showNotification('Email client opened successfully!', 'success');
+                });
+            }
+
             // Show price field when type is "sell"
-            document.getElementById('itemType').addEventListener('change', function() {
+            document.getElementById('itemType').addEventListener('change', function () {
                 const priceField = document.getElementById('priceField');
                 if (this.value === 'sell') {
                     priceField.classList.remove('hidden');
@@ -533,12 +671,12 @@
                     priceField.classList.add('hidden');
                 }
             });
-            
+
             // Create listing form
             const createListingForm = document.getElementById('createListingForm');
-            createListingForm.addEventListener('submit', async function(e) {
+            createListingForm.addEventListener('submit', async function (e) {
                 e.preventDefault();
-                
+
                 const title = document.getElementById('itemTitle').value;
                 const category = document.getElementById('itemCategory').value;
                 const type = document.getElementById('itemType').value;
@@ -547,41 +685,41 @@
                 const city = document.getElementById('itemCity').value;
                 const state = document.getElementById('itemState').value;
                 const contactMethod = document.getElementById('contactMethod').value;
-                
+
                 // Reset errors
                 resetErrors();
                 hideMessage('createListingMessage');
-                
+
                 // Validate
                 let valid = true;
-                
+
                 if (!title) {
                     showError('titleError', 'Title is required');
                     valid = false;
                 }
-                
+
                 if (!category) {
                     showError('categoryError', 'Category is required');
                     valid = false;
                 }
-                
+
                 if (!type) {
                     showError('typeError', 'Listing type is required');
                     valid = false;
                 }
-                
+
                 if (type === 'sell' && (!price || parseFloat(price) <= 0)) {
                     showError('priceError', 'Price is required for sale items');
                     valid = false;
                 }
-                
+
                 if (!description) {
                     showError('descriptionError', 'Description is required');
                     valid = false;
                 }
-                
+
                 if (!valid) return;
-                
+
                 // Prepare data
                 const itemData = {
                     title,
@@ -590,35 +728,35 @@
                     description,
                     contactMethod
                 };
-                
+
                 if (type === 'sell') {
                     itemData.price = parseFloat(price);
                 }
-                
+
                 if (city || state) {
                     itemData.location = JSON.stringify({
                         city: city || '',
                         state: state || ''
                     });
                 }
-                
+
                 // Add images
                 if (selectedImages.length > 0) {
                     itemData.images = selectedImages;
                 }
-                
+
                 try {
                     // Show loading
                     const submitBtn = document.getElementById('createListingSubmit');
                     submitBtn.disabled = true;
                     submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Creating...';
-                    
+
                     // Create listing
                     const response = await api.createMarketplaceItem(itemData);
-                    
+
                     if (response.success) {
                         showMessage('createListingMessage', 'Item listed successfully!', 'success');
-                        
+
                         // Close modal and reload items after 1 second
                         setTimeout(() => {
                             createListingModal.classList.add('hidden');
@@ -639,7 +777,7 @@
                     submitBtn.textContent = 'List Item';
                 }
             });
-            
+
             // Search and filter
             const searchInput = document.getElementById('marketplaceSearch');
             const categoryFilter = document.getElementById('categoryFilter');
@@ -648,16 +786,16 @@
             const minPrice = document.getElementById('minPrice');
             const maxPrice = document.getElementById('maxPrice');
             const clearFiltersBtn = document.getElementById('clearFilters');
-            
+
             const debouncedSearch = debounce(loadAllItems, 500);
-            
+
             searchInput.addEventListener('input', debouncedSearch);
             categoryFilter.addEventListener('change', loadAllItems);
             typeFilter.addEventListener('change', loadAllItems);
             locationFilter.addEventListener('input', debouncedSearch);
             minPrice.addEventListener('input', debouncedSearch);
             maxPrice.addEventListener('input', debouncedSearch);
-            
+
             clearFiltersBtn.addEventListener('click', () => {
                 searchInput.value = '';
                 categoryFilter.value = '';
@@ -667,55 +805,55 @@
                 maxPrice.value = '';
                 loadAllItems();
             });
-            
+
             // Create first listing buttons
             document.getElementById('createFirstListing').addEventListener('click', () => {
                 createListingModal.classList.remove('hidden');
             });
-            
+
             document.getElementById('createMyFirstListing').addEventListener('click', () => {
                 createListingModal.classList.remove('hidden');
             });
-            
+
             // Initial load
             await Promise.all([
                 loadAllItems(),
                 loadMyItems(),
                 loadSavedItems()
             ]);
-            
+
             switchTab('allItems');
         });
-        
+
         function switchTab(tab) {
             // Update tab headers
             const tabs = ['allItemsTab', 'myItemsTab', 'savedItemsTab'];
             const contents = ['allItemsContent', 'myItemsContent', 'savedItemsContent'];
-            
+
             tabs.forEach(tabId => {
                 const tabElement = document.getElementById(tabId);
                 tabElement.classList.remove('text-primary-600', 'border-primary-600', 'border-b-2');
                 tabElement.classList.add('text-gray-600', 'hover:text-primary-600');
             });
-            
+
             contents.forEach(contentId => {
                 document.getElementById(contentId).classList.add('hidden');
             });
-            
+
             // Activate selected tab
             document.getElementById(`${tab}Tab`).classList.add('text-primary-600', 'border-primary-600', 'border-b-2');
             document.getElementById(`${tab}Content`).classList.remove('hidden');
         }
-        
+
         async function loadAllItems() {
             const loadingElement = document.getElementById('itemsLoading');
             const noItemsElement = document.getElementById('noItems');
             const itemsContainer = document.querySelector('#allItemsContent .grid');
-            
+
             loadingElement.classList.remove('hidden');
             noItemsElement.classList.add('hidden');
             itemsContainer.innerHTML = '';
-            
+
             try {
                 // Get filters
                 const filters = {};
@@ -725,20 +863,20 @@
                 const location = document.getElementById('locationFilter').value;
                 const min = document.getElementById('minPrice').value;
                 const max = document.getElementById('maxPrice').value;
-                
+
                 if (search) filters.search = search;
                 if (category) filters.category = category;
                 if (type) filters.type = type;
                 if (location) filters.location = location;
                 if (min) filters.minPrice = min;
                 if (max) filters.maxPrice = max;
-                
+
                 // Fetch items
                 const response = await api.getMarketplaceItems(filters);
-                
+
                 if (response.success) {
                     allItems = response.items || [];
-                    
+
                     if (allItems.length === 0) {
                         noItemsElement.classList.remove('hidden');
                     } else {
@@ -752,20 +890,20 @@
                 loadingElement.classList.add('hidden');
             }
         }
-        
+
         async function loadMyItems() {
             const noItemsElement = document.getElementById('noMyItems');
             const itemsContainer = document.getElementById('myItemsList');
-            
+
             noItemsElement.classList.add('hidden');
             itemsContainer.innerHTML = '';
-            
+
             try {
                 const response = await api.getMyMarketplaceItems();
-                
+
                 if (response.success) {
                     myItems = response.items || [];
-                    
+
                     if (myItems.length === 0) {
                         noItemsElement.classList.remove('hidden');
                     } else {
@@ -777,18 +915,18 @@
                 showNotification('Failed to load your items', 'error');
             }
         }
-        
+
         async function loadSavedItems() {
             const noItemsElement = document.getElementById('noSavedItems');
             const itemsContainer = document.getElementById('savedItemsList');
-            
+
             noItemsElement.classList.add('hidden');
             itemsContainer.innerHTML = '';
-            
+
             try {
                 // Load saved items from localStorage (in real app, fetch from API)
                 savedItems = JSON.parse(localStorage.getItem('savedItems') || '[]');
-                
+
                 if (savedItems.length === 0) {
                     noItemsElement.classList.remove('hidden');
                 } else {
@@ -798,33 +936,33 @@
                 console.error('Error loading saved items:', error);
             }
         }
-        
+
         function renderItemCards(items, container, isMyItem = false, isSaved = false) {
             container.innerHTML = '';
-            
+
             items.forEach(item => {
                 const card = createItemCard(item, isMyItem, isSaved);
                 container.appendChild(card);
             });
         }
-        
+
         function createItemCard(item, isMyItem = false, isSaved = false) {
             const card = document.createElement('div');
             card.className = 'bg-white rounded-xl shadow-md overflow-hidden hover-card';
             card.dataset.id = item._id;
-            
+
             // Get first image or placeholder
-            const imageUrl = item.images && item.images.length > 0 
-                ? item.images[0] 
+            const imageUrl = item.images && item.images.length > 0
+                ? item.images[0]
                 : 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgZmlsbD0iI2YwZmRmNCIvPjx0ZXh0IHg9IjIwMCIgeT0iMTUwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMjQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiMyMmM1NWUiPk5vIEltYWdlPC90ZXh0Pjwvc3ZnPg==';
-            
+
             // Format price
-            const price = item.type === 'sell' 
-                ? `₹${item.price.toFixed(2)}` 
-                : item.type === 'buy' 
-                    ? 'Want to Buy' 
+            const price = item.type === 'sell'
+                ? `₹${item.price?.toFixed(2) || '0.00'}`
+                : item.type === 'buy'
+                    ? 'Want to Buy'
                     : 'For Exchange';
-            
+
             // Status badge
             const statusColors = {
                 available: 'bg-green-100 text-green-700',
@@ -832,7 +970,7 @@
                 sold: 'bg-red-100 text-red-700',
                 exchanged: 'bg-blue-100 text-blue-700'
             };
-            
+
             card.innerHTML = `
                 <div class="relative">
                     <img src="${imageUrl}" 
@@ -890,45 +1028,45 @@
                     `}
                 </div>
             `;
-            
+
             // Add event listeners
             const viewButtons = card.querySelectorAll('.view-item-btn');
             viewButtons.forEach(btn => {
                 btn.addEventListener('click', () => showItemDetail(item._id));
             });
-            
+
             if (!isMyItem) {
                 const saveBtn = card.querySelector('.save-item-btn');
                 saveBtn.addEventListener('click', () => toggleSaveItem(item, card));
             }
-            
+
             if (isMyItem) {
                 const editBtn = card.querySelector('.edit-item-btn');
                 const deleteBtn = card.querySelector('.delete-item-btn');
-                
+
                 editBtn.addEventListener('click', () => editItem(item._id));
                 deleteBtn.addEventListener('click', () => deleteItem(item._id, card));
             }
-            
+
             return card;
         }
-        
+
         async function showItemDetail(itemId) {
             try {
                 const response = await api.getMarketplaceItem(itemId);
-                
+
                 if (response.success) {
                     const item = response.item;
                     const modal = document.getElementById('itemDetailModal');
                     const modalContent = modal.querySelector('div');
-                    
+
                     // Format price
-                    const price = item.type === 'sell' 
-                        ? `₹${item.price.toFixed(2)}` 
-                        : item.type === 'buy' 
-                            ? 'Want to Buy' 
+                    const price = item.type === 'sell'
+                        ? `₹${item.price?.toFixed(2) || '0.00'}`
+                        : item.type === 'buy'
+                            ? 'Want to Buy'
                             : 'For Exchange';
-                    
+
                     modalContent.innerHTML = `
                         <div class="p-6">
                             <div class="flex justify-between items-start mb-6">
@@ -991,48 +1129,127 @@
                                 ` : ''}
                             </div>
                             
-                            <!-- Contact -->
+                            <!-- Contact Section -->
                             <div class="border-t pt-6">
                                 <h4 class="font-bold text-gray-900 mb-4">Contact Seller</h4>
                                 <div class="flex space-x-4">
-                                    <button class="flex-1 bg-primary-600 text-white py-3 rounded-lg font-medium hover:bg-primary-700 transition duration-300">
-                                        <i class="fas fa-comment mr-2"></i>Send Message
+                                    <!-- Email Button -->
+                                    <button class="flex-1 bg-blue-600 text-white py-3 rounded-lg font-medium hover:bg-blue-700 transition duration-300 email-seller-btn">
+                                        <i class="fas fa-envelope mr-2"></i>Send Email
                                     </button>
+                                    
+                                    ${item.category === 'plants' ? `
+                                        <button class="flex-1 bg-primary-600 text-white py-3 rounded-lg font-medium hover:bg-primary-700 transition duration-300 book-plant-btn">
+                                            <i class="fas fa-calendar-check mr-2"></i>Book Plant
+                                        </button>
+                                    ` : ''}
+                                    
                                     ${item.contactMethod === 'phone' && item.seller?.phone ? `
                                         <a href="tel:${item.seller.phone}" 
                                            class="flex-1 bg-green-600 text-white py-3 rounded-lg font-medium hover:bg-green-700 transition duration-300 text-center">
                                            <i class="fas fa-phone mr-2"></i>Call Seller
                                         </a>
                                     ` : ''}
-                                    ${item.contactMethod === 'email' && item.seller?.email ? `
-                                        <a href="mailto:${item.seller.email}" 
-                                           class="flex-1 bg-blue-600 text-white py-3 rounded-lg font-medium hover:bg-blue-700 transition duration-300 text-center">
-                                           <i class="fas fa-envelope mr-2"></i>Email Seller
-                                        </a>
-                                    ` : ''}
                                 </div>
                             </div>
                         </div>
                     `;
-                    
+
                     // Show modal
                     modal.classList.remove('hidden');
-                    
+
                     // Close button
                     modal.querySelector('#closeDetailModal').addEventListener('click', () => {
                         modal.classList.add('hidden');
                     });
+
+                    // Handle Email Button
+                    const emailBtn = modal.querySelector('.email-seller-btn');
+                    if (emailBtn) {
+                        emailBtn.addEventListener('click', () => {
+                            modal.classList.add('hidden');
+                            openEmailModal(item);
+                        });
+                    }
+
+                    // Handle Booking Button (for plants)
+                    const bookBtn = modal.querySelector('.book-plant-btn');
+                    if (bookBtn) {
+                        bookBtn.addEventListener('click', () => {
+                            modal.classList.add('hidden');
+                            openBookingModal(item);
+                        });
+                    }
                 }
             } catch (error) {
                 console.error('Error loading item details:', error);
                 showNotification('Failed to load item details', 'error');
             }
         }
-        
+
+        // Email Modal Function
+        function openEmailModal(item) {
+            const emailModal = document.getElementById('emailModal');
+            const emailSubject = document.getElementById('emailSubject');
+            const emailBody = document.getElementById('emailBody');
+            
+            // Set hidden fields
+            document.getElementById('emailItemId').value = item._id;
+            document.getElementById('emailSellerEmail').value = item.seller?.email || '';
+            document.getElementById('emailSellerName').value = item.seller?.name || '';
+            
+            // Set default subject
+            emailSubject.value = `Interested in your listing: ${item.title}`;
+            
+            // Set default body
+            const user = getUserData();
+            emailBody.value = `Hello ${item.seller?.name || 'Seller'},
+
+I'm interested in your listing: "${item.title}"
+
+Please let me know if this is still available and provide more details.
+
+Thank you,
+${user?.name || 'Gardener'}`;
+            
+            emailModal.classList.remove('hidden');
+        }
+
+        // Booking Modal Functions
+        function openBookingModal(item) {
+            const bookingModal = document.getElementById('bookingModal');
+            document.getElementById('bookingItemId').value = item._id;
+            document.getElementById('bookingForm').reset();
+            bookingModal.classList.remove('hidden');
+        }
+
+        document.getElementById('closeBookingModal').addEventListener('click', () => {
+            document.getElementById('bookingModal').classList.add('hidden');
+        });
+
+        document.getElementById('bookingForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const itemId = document.getElementById('bookingItemId').value;
+            const numPlants = document.getElementById('numPlants').value;
+            const helperNeeded = document.getElementById('helperNeeded').checked;
+            const fertilizationPrefs = document.getElementById('fertilizationPrefs').value;
+
+            // In a real app, you'd call an API here
+            console.log('Booking submitted:', { itemId, numPlants, helperNeeded, fertilizationPrefs });
+
+            // Show success popup
+            document.getElementById('bookingModal').classList.add('hidden');
+            document.getElementById('bookingSuccessModal').classList.remove('hidden');
+        });
+
+        document.getElementById('closeSuccessModal').addEventListener('click', () => {
+            document.getElementById('bookingSuccessModal').classList.add('hidden');
+        });
+
         function toggleSaveItem(item, cardElement) {
             let savedItems = JSON.parse(localStorage.getItem('savedItems') || '[]');
             const isSaved = savedItems.some(saved => saved._id === item._id);
-            
+
             if (isSaved) {
                 // Remove from saved
                 savedItems = savedItems.filter(saved => saved._id !== item._id);
@@ -1042,9 +1259,9 @@
                 savedItems.push(item);
                 showNotification('Item saved', 'success');
             }
-            
+
             localStorage.setItem('savedItems', JSON.stringify(savedItems));
-            
+
             // Update button icon
             const saveBtn = cardElement.querySelector('.save-item-btn i');
             if (isSaved) {
@@ -1054,27 +1271,27 @@
                 saveBtn.classList.remove('fa-heart-o');
                 saveBtn.classList.add('fa-heart');
             }
-            
+
             // Reload saved items tab if active
             if (document.getElementById('savedItemsTab').classList.contains('text-primary-600')) {
                 loadSavedItems();
             }
         }
-        
+
         async function editItem(itemId) {
             showNotification('Edit feature coming soon!', 'info');
         }
-        
+
         async function deleteItem(itemId, cardElement) {
             if (!confirm('Are you sure you want to delete this item?')) return;
-            
+
             try {
                 const response = await api.deleteMarketplaceItem(itemId);
-                
+
                 if (response.success) {
                     cardElement.remove();
                     showNotification('Item deleted successfully', 'success');
-                    
+
                     // Reload lists
                     loadAllItems();
                     loadMyItems();
@@ -1086,38 +1303,38 @@
                 showNotification('Failed to delete item', 'error');
             }
         }
-        
+
         function previewImages(input) {
             const preview = document.getElementById('imagePreview');
             preview.innerHTML = '';
             selectedImages = [];
-            
+
             if (input.files.length > 5) {
                 showNotification('Maximum 5 images allowed', 'error');
                 input.value = '';
                 return;
             }
-            
+
             Array.from(input.files).forEach((file, index) => {
                 if (file.size > 5 * 1024 * 1024) {
                     showNotification(`Image ${index + 1} is too large (max 5MB)`, 'error');
                     return;
                 }
-                
+
                 const reader = new FileReader();
-                reader.onload = function(e) {
+                reader.onload = function (e) {
                     const img = document.createElement('img');
                     img.src = e.target.result;
                     img.className = 'w-full h-20 object-cover rounded-lg';
                     preview.appendChild(img);
-                    
+
                     // Store file for upload
                     selectedImages.push(file);
                 }
                 reader.readAsDataURL(file);
             });
         }
-        
+
         function resetListingForm() {
             document.getElementById('createListingForm').reset();
             selectedImages = [];
@@ -1126,7 +1343,7 @@
             resetErrors();
             hideMessage('createListingMessage');
         }
-        
+
         function showError(elementId, message) {
             const element = document.getElementById(elementId);
             if (element) {
@@ -1134,7 +1351,7 @@
                 element.classList.remove('hidden');
             }
         }
-        
+
         function resetErrors() {
             const errorElements = document.querySelectorAll('[id$="Error"]');
             errorElements.forEach(el => {
@@ -1142,32 +1359,32 @@
                 el.classList.add('hidden');
             });
         }
-        
+
         function showMessage(elementId, message, type) {
             const element = document.getElementById(elementId);
             if (element) {
                 element.textContent = message;
                 element.className = 'p-3 rounded-lg text-center';
-                
+
                 if (type === 'success') {
                     element.classList.add('bg-green-100', 'text-green-700');
                 } else if (type === 'error') {
                     element.classList.add('bg-red-100', 'text-red-700');
                 }
-                
+
                 element.classList.remove('hidden');
             }
         }
-        
+
         function hideMessage(elementId) {
             const element = document.getElementById(elementId);
             if (element) {
                 element.classList.add('hidden');
             }
         }
-        
+
         // Image viewer function
-        window.viewImage = function(src) {
+        window.viewImage = function (src) {
             const viewer = document.createElement('div');
             viewer.className = 'fixed inset-0 bg-black bg-opacity-90 z-50 flex items-center justify-center';
             viewer.innerHTML = `
@@ -1181,7 +1398,7 @@
             `;
             document.body.appendChild(viewer);
         };
-        
+
         // Debounce function
         function debounce(func, wait) {
             let timeout;
@@ -1194,6 +1411,83 @@
                 timeout = setTimeout(later, wait);
             };
         }
+
+        // Get user data from localStorage
+        function getUserData() {
+            const user = localStorage.getItem('user');
+            if (!user) return null;
+            
+            try {
+                return JSON.parse(user);
+            } catch (error) {
+                return null;
+            }
+        }
+
+        // Check authentication status
+        function checkAuthStatus() {
+            const token = localStorage.getItem('token');
+            const user = localStorage.getItem('user');
+            
+            if (!token || !user) {
+                return false;
+            }
+            
+            try {
+                JSON.parse(user);
+                return true;
+            } catch (error) {
+                return false;
+            }
+        }
+
+        // Logout function
+        function logoutUser() {
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            window.location.href = 'index.html';
+        }
+
+        // Show notification
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `fixed top-4 right-4 z-50 px-6 py-4 rounded-lg shadow-lg transition-all duration-300`;
+            
+            if (type === 'success') {
+                notification.classList.add('bg-green-100', 'text-green-800', 'border', 'border-green-200');
+            } else if (type === 'error') {
+                notification.classList.add('bg-red-100', 'text-red-800', 'border', 'border-red-200');
+            } else if (type === 'warning') {
+                notification.classList.add('bg-yellow-100', 'text-yellow-800', 'border', 'border-yellow-200');
+            } else {
+                notification.classList.add('bg-blue-100', 'text-blue-800', 'border', 'border-blue-200');
+            }
+            
+            notification.innerHTML = `
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center">
+                        ${type === 'success' ? '<i class="fas fa-check-circle mr-3"></i>' : ''}
+                        ${type === 'error' ? '<i class="fas fa-exclamation-circle mr-3"></i>' : ''}
+                        ${type === 'warning' ? '<i class="fas fa-exclamation-triangle mr-3"></i>' : ''}
+                        ${type === 'info' ? '<i class="fas fa-info-circle mr-3"></i>' : ''}
+                        <span>${message}</span>
+                    </div>
+                    <button onclick="this.parentElement.parentElement.remove()" class="ml-4 text-gray-500 hover:text-gray-700">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                if (notification.parentElement) {
+                    notification.classList.add('opacity-0', 'translate-x-full');
+                    setTimeout(() => notification.remove(), 300);
+                }
+            }, 5000);
+        }
     </script>
 </body>
+
 </html>

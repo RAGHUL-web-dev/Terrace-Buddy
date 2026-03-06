@@ -20,29 +20,29 @@ function getUserData() {
 function updateNavbar() {
     const isAuthenticated = checkAuthStatus();
     const user = getUserData();
-    
+
     // Desktop navbar
     const authLinks = document.getElementById('authLinks');
     const userMenu = document.getElementById('userMenu');
     const userNameElement = document.getElementById('userName');
-    
+
     // Mobile navbar
     const mobileAuthLinks = document.getElementById('mobileAuthLinks');
     const mobileUserMenu = document.getElementById('mobileUserMenu');
-    
+
     if (isAuthenticated && user) {
         // Hide auth links, show user menu
         if (authLinks) authLinks.classList.add('hidden');
         if (userMenu) userMenu.classList.remove('hidden');
         if (userNameElement) userNameElement.textContent = user.name;
-        
+
         if (mobileAuthLinks) mobileAuthLinks.classList.add('hidden');
         if (mobileUserMenu) mobileUserMenu.classList.remove('hidden');
     } else {
         // Show auth links, hide user menu
         if (authLinks) authLinks.classList.remove('hidden');
         if (userMenu) userMenu.classList.add('hidden');
-        
+
         if (mobileAuthLinks) mobileAuthLinks.classList.remove('hidden');
         if (mobileUserMenu) mobileUserMenu.classList.add('hidden');
     }
@@ -63,7 +63,7 @@ function showNotification(message, type = 'info') {
     // Create notification element
     const notification = document.createElement('div');
     notification.className = `fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg max-w-sm transform transition-transform duration-300 translate-x-full`;
-    
+
     // Set styles based on type
     if (type === 'success') {
         notification.classList.add('bg-green-100', 'text-green-800', 'border', 'border-green-200');
@@ -74,7 +74,7 @@ function showNotification(message, type = 'info') {
     } else {
         notification.classList.add('bg-blue-100', 'text-blue-800', 'border', 'border-blue-200');
     }
-    
+
     // Add content
     notification.innerHTML = `
         <div class="flex items-start">
@@ -92,15 +92,15 @@ function showNotification(message, type = 'info') {
             </button>
         </div>
     `;
-    
+
     // Add to DOM
     document.body.appendChild(notification);
-    
+
     // Animate in
     setTimeout(() => {
         notification.classList.remove('translate-x-full');
     }, 10);
-    
+
     // Add dismiss button functionality
     const dismissButton = notification.querySelector('button');
     dismissButton.addEventListener('click', () => {
@@ -109,7 +109,7 @@ function showNotification(message, type = 'info') {
             notification.remove();
         }, 300);
     });
-    
+
     // Auto dismiss after 5 seconds
     setTimeout(() => {
         if (notification.parentNode) {
@@ -132,7 +132,7 @@ function isValidEmail(email) {
 // Validate password strength
 function validatePassword(password) {
     const errors = [];
-    
+
     if (password.length < 6) {
         errors.push('Password must be at least 6 characters');
     }
@@ -145,7 +145,7 @@ function validatePassword(password) {
     if (!/(?=.*\d)/.test(password)) {
         errors.push('Password must contain at least one number');
     }
-    
+
     return errors;
 }
 
@@ -179,8 +179,8 @@ function generateId() {
 // Handle API errors
 function handleApiError(error) {
     console.error('API Error:', error);
-    
-    
+
+
 }
 
 // Parse query parameters from URL
@@ -188,14 +188,14 @@ function getQueryParams() {
     const params = {};
     const queryString = window.location.search.substring(1);
     const pairs = queryString.split('&');
-    
+
     for (const pair of pairs) {
         const [key, value] = pair.split('=');
         if (key) {
             params[decodeURIComponent(key)] = decodeURIComponent(value || '');
         }
     }
-    
+
     return params;
 }
 
@@ -204,7 +204,7 @@ function setQueryParams(params) {
     const queryString = Object.keys(params)
         .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(params[key])}`)
         .join('&');
-    
+
     const newUrl = window.location.pathname + (queryString ? `?${queryString}` : '');
     window.history.replaceState({}, '', newUrl);
 }
@@ -269,32 +269,32 @@ function getTimestamp() {
 // Calculate time ago
 function timeAgo(date) {
     const seconds = Math.floor((new Date() - new Date(date)) / 1000);
-    
+
     let interval = Math.floor(seconds / 31536000);
     if (interval >= 1) {
         return interval + " year" + (interval > 1 ? "s" : "") + " ago";
     }
-    
+
     interval = Math.floor(seconds / 2592000);
     if (interval >= 1) {
         return interval + " month" + (interval > 1 ? "s" : "") + " ago";
     }
-    
+
     interval = Math.floor(seconds / 86400);
     if (interval >= 1) {
         return interval + " day" + (interval > 1 ? "s" : "") + " ago";
     }
-    
+
     interval = Math.floor(seconds / 3600);
     if (interval >= 1) {
         return interval + " hour" + (interval > 1 ? "s" : "") + " ago";
     }
-    
+
     interval = Math.floor(seconds / 60);
     if (interval >= 1) {
         return interval + " minute" + (interval > 1 ? "s" : "") + " ago";
     }
-    
+
     return "just now";
 }
 
@@ -302,6 +302,31 @@ function timeAgo(date) {
 
 
 // Export functions
+window.getToken = getToken;
+window.checkAuthStatus = checkAuthStatus;
+window.getUserData = getUserData;
+window.updateNavbar = updateNavbar;
+window.formatDate = formatDate;
+window.showNotification = showNotification;
+window.isValidEmail = isValidEmail;
+window.validatePassword = validatePassword;
+window.debounce = debounce;
+window.formatFileSize = formatFileSize;
+window.generateId = generateId;
+window.handleApiError = handleApiError;
+window.getQueryParams = getQueryParams;
+window.setQueryParams = setQueryParams;
+window.isEmpty = isEmpty;
+window.deepClone = deepClone;
+window.capitalizeWords = capitalizeWords;
+window.truncateText = truncateText;
+window.toggleElement = toggleElement;
+window.showLoading = showLoading;
+window.hideLoading = hideLoading;
+window.formatNumber = formatNumber;
+window.getTimestamp = getTimestamp;
+window.timeAgo = timeAgo;
+
 window.utils = {
     getToken,
     checkAuthStatus,
