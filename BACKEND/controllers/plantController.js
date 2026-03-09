@@ -53,6 +53,38 @@ exports.getUserPlants = async (req, res) => {
   }
 };
 
+// Get single plant by ID
+exports.getPlantById = async (req, res) => {
+  try {
+    const plant = await Plant.findById(req.params.id);
+
+    if (!plant) {
+      return res.status(404).json({
+        success: false,
+        message: 'Plant not found'
+      });
+    }
+
+    // Check ownership
+    if (plant.user.toString() !== req.userId) {
+      return res.status(403).json({
+        success: false,
+        message: 'Not authorized to view this plant'
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      plant
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message
+    });
+  }
+};
+
 // Update plant
 exports.updatePlant = async (req, res) => {
   try {

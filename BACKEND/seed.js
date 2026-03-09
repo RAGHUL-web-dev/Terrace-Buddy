@@ -643,7 +643,7 @@ const seedDatabase = async () => {
                 category: 'plants',
                 type: 'sell',
                 price: 150,
-                images: ['https://images.unsplash.com/photo-1596547609652-9cf5d8d76921?w=800&q=80'],
+                images: ['https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRAvGW1NOBvINXp0Iu2pWmXxm9OJ7Fbw2Y8Vw&s'],
                 location: {
                     city: 'Bangalore',
                     state: 'Karnataka'
