@@ -15,12 +15,23 @@ function initAuth() {
     }
     
     // Check auth status on protected pages
-    const protectedPages = ['dashboard.html', 'profile.html'];
+    const protectedPages = ['dashboard.html', 'profile.html', 'admin-dashboard.html'];
     const currentPage = window.location.pathname.split('/').pop();
     
-    if (protectedPages.includes(currentPage) && !checkAuthStatus()) {
-        window.location.href = 'login.html';
-        return false;
+    if (protectedPages.includes(currentPage)) {
+        if (!checkAuthStatus()) {
+            window.location.href = 'login.html';
+            return false;
+        }
+        
+        // Additional check for admin dashboard
+        if (currentPage === 'admin-dashboard.html') {
+            const user = getUserData();
+            if (!user || user.role !== 'platform_admin') {
+                window.location.href = 'dashboard.html';
+                return false;
+            }
+        }
     }
       
     return true;

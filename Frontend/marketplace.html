@@ -61,7 +61,8 @@
                     <a href="dashboard.html" class="text-gray-700 hover:text-primary-600 font-medium">Dashboard</a>
                     <a href="plants.html" class="text-gray-700 hover:text-primary-600 font-medium">My Plants</a>
                     <a href="communities.html" class="text-gray-700 hover:text-primary-600 font-medium">Communities</a>
-                    <a href="marketplace.html" class="text-primary-600 font-bold border-b-2 border-primary-600">Marketplace</a>
+                    <a href="marketplace.html"
+                        class="text-primary-600 font-bold border-b-2 border-primary-600">Marketplace</a>
                     <a href="weather.html" class="text-gray-700 hover:text-primary-600 font-medium">Weather</a>
 
                     <!-- User Menu -->
@@ -411,10 +412,12 @@
     <!-- Email Modal -->
     <div id="emailModal"
         class="hidden fixed inset-0 bg-black bg-opacity-50 z-[60] flex items-center justify-center p-4 backdrop-blur-sm">
-        <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full overflow-hidden transform transition-all duration-300">
+        <div
+            class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full overflow-hidden transform transition-all duration-300">
             <div class="p-8">
                 <div class="flex justify-between items-center mb-6">
-                    <h3 class="text-2xl font-bold text-gray-900 border-l-4 border-primary-500 pl-4">Send Email to Seller</h3>
+                    <h3 class="text-2xl font-bold text-gray-900 border-l-4 border-primary-500 pl-4">Send Email to Seller
+                    </h3>
                     <button id="closeEmailModal" class="text-gray-400 hover:text-gray-600 transition-colors">
                         <i class="fas fa-times text-xl"></i>
                     </button>
@@ -424,7 +427,7 @@
                     <input type="hidden" id="emailItemId">
                     <input type="hidden" id="emailSellerEmail">
                     <input type="hidden" id="emailSellerName">
-                    
+
                     <div>
                         <label for="emailSubject" class="block text-sm font-semibold text-gray-700 mb-2">
                             Subject *
@@ -447,7 +450,8 @@
                         <div class="flex items-start space-x-2">
                             <i class="fas fa-info-circle text-blue-600 mt-1"></i>
                             <p class="text-sm text-blue-800">
-                                This will open your default email application. Make sure to check your sent items folder.
+                                This will open your default email application. Make sure to check your sent items
+                                folder.
                             </p>
                         </div>
                     </div>
@@ -624,13 +628,13 @@
             // Email Modal Close Buttons
             const closeEmailModal = document.getElementById('closeEmailModal');
             const cancelEmail = document.getElementById('cancelEmail');
-            
+
             if (closeEmailModal) {
                 closeEmailModal.addEventListener('click', () => {
                     document.getElementById('emailModal').classList.add('hidden');
                 });
             }
-            
+
             if (cancelEmail) {
                 cancelEmail.addEventListener('click', () => {
                     document.getElementById('emailModal').classList.add('hidden');
@@ -640,23 +644,23 @@
             // Email Form Submit
             const emailForm = document.getElementById('emailForm');
             if (emailForm) {
-                emailForm.addEventListener('submit', function(e) {
+                emailForm.addEventListener('submit', function (e) {
                     e.preventDefault();
-                    
+
                     const sellerEmail = document.getElementById('emailSellerEmail').value;
                     const sellerName = document.getElementById('emailSellerName').value;
                     const subject = encodeURIComponent(document.getElementById('emailSubject').value);
                     const body = encodeURIComponent(document.getElementById('emailBody').value);
-                    
+
                     // Create mailto link
                     const mailtoLink = `mailto:${sellerEmail}?subject=${subject}&body=${body}`;
-                    
+
                     // Open default email client
                     window.location.href = mailtoLink;
-                    
+
                     // Close modal
                     document.getElementById('emailModal').classList.add('hidden');
-                    
+
                     // Show notification
                     showNotification('Email client opened successfully!', 'success');
                 });
@@ -1133,23 +1137,25 @@
                             <div class="border-t pt-6">
                                 <h4 class="font-bold text-gray-900 mb-4">Contact Seller</h4>
                                 <div class="flex space-x-4">
-                                    <!-- Email Button -->
-                                    <button class="flex-1 bg-blue-600 text-white py-3 rounded-lg font-medium hover:bg-blue-700 transition duration-300 email-seller-btn">
-                                        <i class="fas fa-envelope mr-2"></i>Send Email
-                                    </button>
-                                    
-                                    ${item.category === 'plants' ? `
+                                    ${item.category?.toLowerCase() === 'plants' ? `
                                         <button class="flex-1 bg-primary-600 text-white py-3 rounded-lg font-medium hover:bg-primary-700 transition duration-300 book-plant-btn">
                                             <i class="fas fa-calendar-check mr-2"></i>Book Plant
                                         </button>
-                                    ` : ''}
-                                    
-                                    ${item.contactMethod === 'phone' && item.seller?.phone ? `
-                                        <a href="tel:${item.seller.phone}" 
-                                           class="flex-1 bg-green-600 text-white py-3 rounded-lg font-medium hover:bg-green-700 transition duration-300 text-center">
-                                           <i class="fas fa-phone mr-2"></i>Call Seller
-                                        </a>
-                                    ` : ''}
+                                    ` : `
+                                        <!-- Email Button -->
+                                        <button class="flex-1 bg-blue-600 text-white py-3 rounded-lg font-medium hover:bg-blue-700 transition duration-300 email-seller-btn">
+                                            <i class="fas fa-envelope mr-2"></i>Send Email
+                                        </button>
+                                        
+                                       
+                                        
+                                        ${item.contactMethod === 'phone' && item.seller?.phone ? `
+                                            <a href="tel:${item.seller.phone}" 
+                                               class="flex-1 bg-green-600 text-white py-3 rounded-lg font-medium hover:bg-green-700 transition duration-300 text-center">
+                                               <i class="fas fa-phone mr-2"></i>Call Seller
+                                            </a>
+                                        ` : ''}
+                                    `}
                                 </div>
                             </div>
                         </div>
@@ -1192,15 +1198,15 @@
             const emailModal = document.getElementById('emailModal');
             const emailSubject = document.getElementById('emailSubject');
             const emailBody = document.getElementById('emailBody');
-            
+
             // Set hidden fields
             document.getElementById('emailItemId').value = item._id;
             document.getElementById('emailSellerEmail').value = item.seller?.email || '';
             document.getElementById('emailSellerName').value = item.seller?.name || '';
-            
+
             // Set default subject
             emailSubject.value = `Interested in your listing: ${item.title}`;
-            
+
             // Set default body
             const user = getUserData();
             emailBody.value = `Hello ${item.seller?.name || 'Seller'},
@@ -1211,7 +1217,7 @@ Please let me know if this is still available and provide more details.
 
 Thank you,
 ${user?.name || 'Gardener'}`;
-            
+
             emailModal.classList.remove('hidden');
         }
 
@@ -1416,7 +1422,7 @@ ${user?.name || 'Gardener'}`;
         function getUserData() {
             const user = localStorage.getItem('user');
             if (!user) return null;
-            
+
             try {
                 return JSON.parse(user);
             } catch (error) {
@@ -1428,11 +1434,11 @@ ${user?.name || 'Gardener'}`;
         function checkAuthStatus() {
             const token = localStorage.getItem('token');
             const user = localStorage.getItem('user');
-            
+
             if (!token || !user) {
                 return false;
             }
-            
+
             try {
                 JSON.parse(user);
                 return true;
@@ -1452,7 +1458,7 @@ ${user?.name || 'Gardener'}`;
         function showNotification(message, type = 'info') {
             const notification = document.createElement('div');
             notification.className = `fixed top-4 right-4 z-50 px-6 py-4 rounded-lg shadow-lg transition-all duration-300`;
-            
+
             if (type === 'success') {
                 notification.classList.add('bg-green-100', 'text-green-800', 'border', 'border-green-200');
             } else if (type === 'error') {
@@ -1462,7 +1468,7 @@ ${user?.name || 'Gardener'}`;
             } else {
                 notification.classList.add('bg-blue-100', 'text-blue-800', 'border', 'border-blue-200');
             }
-            
+
             notification.innerHTML = `
                 <div class="flex items-center justify-between">
                     <div class="flex items-center">
@@ -1477,9 +1483,9 @@ ${user?.name || 'Gardener'}`;
                     </button>
                 </div>
             `;
-            
+
             document.body.appendChild(notification);
-            
+
             setTimeout(() => {
                 if (notification.parentElement) {
                     notification.classList.add('opacity-0', 'translate-x-full');

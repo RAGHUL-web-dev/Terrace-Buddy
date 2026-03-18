@@ -18,6 +18,7 @@ const marketplaceRoutes = require('./routes/marketplaceRoutes');
 const knowledgeRoutes = require('./routes/knowledgeRoutes');
 const plantRoutes = require('./routes/plantRoutes');
 const chatRoutes = require('./routes/chatRoutes');
+const adminRoutes = require('./routes/adminRoutes');
 
 // Import controllers for additional routes
 const knowledgeController = require('./controllers/knowledgeController');
@@ -97,6 +98,7 @@ app.use('/api/marketplace', marketplaceRoutes);
 app.use('/api/knowledge', knowledgeRoutes);
 app.use('/api/plants', plantRoutes);
 app.use('/api/chat', chatRoutes);
+app.use('/api/admin', adminRoutes);
 
 // Additional routes
 app.get('/api/faq/search', knowledgeController.searchFAQ);

@@ -198,8 +198,12 @@
             console.log('Login result:', result);
             
             if (result && result.success) {
-                // Success - redirect to dashboard
-                window.location.href = 'dashboard.html';
+                // Success - redirect based on role
+                if (result.user && result.user.role === 'platform_admin') {
+                    window.location.href = 'admin-dashboard.html';
+                } else {
+                    window.location.href = 'dashboard.html';
+                }
             } else {
                 // Show error
                 alert(result?.message || 'Login failed');

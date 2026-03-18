@@ -43,11 +43,10 @@ const seedDatabase = async () => {
         console.log('🗑️  Cleared existing data');
 
         // Create admin user
-        const adminPassword = await bcrypt.hash('Admin@123', 12);
         const adminUser = await User.create({
             name: 'Admin User',
             email: 'admin@terracebuddy.com',
-            password: adminPassword,
+            password: 'Admin@123',
             gardeningLevel: 'advanced',
             role: 'platform_admin',
             location: {
@@ -64,7 +63,7 @@ const seedDatabase = async () => {
             {
                 name: 'Rajesh Kumar',
                 email: 'rajesh@example.com',
-                password: await bcrypt.hash('User@123', 12),
+                password: 'User@123',
                 gardeningLevel: 'beginner',
                 location: {
                     city: 'Delhi',
@@ -76,7 +75,7 @@ const seedDatabase = async () => {
             {
                 name: 'Priya Sharma',
                 email: 'priya@example.com',
-                password: await bcrypt.hash('User@123', 12),
+                password: 'User@123',
                 gardeningLevel: 'intermediate',
                 location: {
                     city: 'Bangalore',
@@ -88,7 +87,7 @@ const seedDatabase = async () => {
             {
                 name: 'Amit Patel',
                 email: 'amit@example.com',
-                password: await bcrypt.hash('User@123', 12),
+                password: 'User@123',
                 gardeningLevel: 'intermediate',
                 location: {
                     city: 'Ahmedabad',
@@ -100,7 +99,7 @@ const seedDatabase = async () => {
             {
                 name: 'Sneha Reddy',
                 email: 'sneha@example.com',
-                password: await bcrypt.hash('User@123', 12),
+                password: 'User@123',
                 gardeningLevel: 'advanced',
                 location: {
                     city: 'Hyderabad',
